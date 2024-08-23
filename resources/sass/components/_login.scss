@@ -1,0 +1,107 @@
+.login {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	background: url('images/bg2.jpg') no-repeat;
+	background-position: center;
+	background-size: cover;
+
+	&__centered-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 20px;
+		background-color: rgba(40, 40, 40, 0.2);
+		padding: 2rem;
+		backdrop-filter: blur(5px);
+		-webkit-backdrop-filter: blur(10px);
+		border-radius: 10px;
+
+		&__title-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			&__title {
+				font-family: $f-font;
+				color: white;
+				font-weight: 200;
+
+				span {
+					color: $f-color;
+					font-weight: 200;
+					animation: neon-text 2s ease-in-out infinite alternate-reverse;
+					
+					@keyframes neon-text {
+						from {
+							text-shadow: 0px 0 0px $ne-color, 0 0px 0px $ne-color, 0px 0 0px $ne-color, 0 0px 0px $ne-color;
+						} to {
+							text-shadow: -1px 0 5px $ne-color, 0 1px 5px $ne-color, 1px 0 5px $ne-color, 0 -1px 5px $ne-color;
+						}
+						
+					}
+				}
+			}
+		}
+
+		&__login-form-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			&__login-form {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				gap: 16px;
+
+				&__login-input {
+					background-color: transparent;
+					border: 1px solid white;
+					padding: 10px;
+					width: 300px;
+					font-family: $f-font;
+					letter-spacing: 1px;
+					font-size: 1rem;
+					outline: none;
+					color: white;
+					border-radius: 2px;
+					font-weight: 200;
+					
+					&::placeholder {
+						color: white;
+						font-weight: 200;
+					}
+				}
+
+				&__login-btn {
+					width: 300px;
+					padding: 10px;
+					font-family: $f-font;
+					font-size: 1rem;
+					background-color: white;
+					border: none;
+					color: $fi-color;
+					outline: none;
+					cursor: pointer;
+					border-radius: 2px;
+				}
+
+				&__login-link {
+					text-decoration: none;
+					font-family: $f-font;
+					font-weight: 200;
+					color: $f-color;
+					font-size: .9rem;
+
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+			}
+		}
+	}
+}
