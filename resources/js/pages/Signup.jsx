@@ -7,7 +7,7 @@ export default function Signup() {
 			<div className="login">
         <div className="login__centered-container">
           <div className="login__centered-container__title-container">
-            <h1 className="login__centered-container__title-container__title">Legend's<span>Path</span></h1>
+            <h1 className="login__centered-container__title-container__title">Carpe<span>Diem</span></h1>
           </div>
           <div className="login__centered-container__login-form-container ">
             <form action="" method="post" className="login__centered-container__login-form-container__login-form">
