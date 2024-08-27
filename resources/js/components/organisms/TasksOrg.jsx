@@ -1,10 +1,10 @@
 import React from 'react'
-import { Navbar } from '../atoms'
+import { Header } from '../molecules'
 
 export default function TasksOrg() {
 	return (
 		<>
-			<Navbar />
+			<Header />
 		</>
 	)
 }

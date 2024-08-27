@@ -1,13 +1,3 @@
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-body {
-	background-color: #333;
-}
-
 @import './mixin/neon-two';
 @import './mixin/neon';
 @import './mixin/bg-blur';
@@ -15,3 +5,14 @@ body {
 @import './utils/fonts';
 @import './components/login';
 @import './components/navbar';
+@import './components/header';
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background-color: $bg-color-two;
+}
