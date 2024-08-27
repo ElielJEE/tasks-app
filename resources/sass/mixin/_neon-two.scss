@@ -1,0 +1,13 @@
+@mixin neon-two {
+	animation: neon 2s ease-in-out infinite alternate-reverse;
+
+	@keyframes neon {
+		from {
+			box-shadow: 0px 0 0px $ne-color, 0 0px 0px $ne-color, 0px 0 0px $ne-color, 0 0px 0px $ne-color;
+		}
+
+		to {
+			box-shadow: -1px 0 5px $ne-color, 0 1px 5px $ne-color, 1px 0 5px $ne-color, 0 -1px 5px $ne-color;
+		}
+	}
+}

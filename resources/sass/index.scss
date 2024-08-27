@@ -1,9 +1,18 @@
+@import './mixin/neon-two';
+@import './mixin/neon';
+@import './mixin/bg-blur';
+@import './utils/colors';
+@import './utils/fonts';
+@import './components/login';
+@import './components/navbar';
+@import './components/header';
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 }
 
-@import './utils/colors';
-@import './utils/fonts';
-@import './components/login';
+body {
+	background-color: $bg-color-two;
+}

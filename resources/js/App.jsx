@@ -1,5 +1,5 @@
 import React from "react";
-import { Login, Signup } from "./pages";
+import { Login, Signup, Tasks } from "./pages";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 export default function App() {
@@ -7,6 +7,7 @@ export default function App() {
 		<>
 			<BrowserRouter>
 				<Routes>
+					<Route path='/' element={<Tasks />} />
 					<Route path='/login' element={<Login />} />
 					<Route path='/register' element={<Signup />} />
 				</Routes>
