@@ -1,0 +1,3 @@
+@mixin bg-gradient ($colorOne, $colorTwo) {
+	background: linear-gradient($colorOne, $colorTwo);
+}
