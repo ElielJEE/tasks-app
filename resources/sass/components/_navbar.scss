@@ -2,33 +2,22 @@
 	position: fixed;
 	display: flex;
 	align-items: center;
-	@include bg-blur;
-	width: 100%;
-	top: 0;
+	background: linear-gradient($bg-color, $fi-color);
+	width: 98%;
+	top: 10px;
+	left: 0;
+	right: 0;
 	height: 45px;
-	padding: 0 15px;
+	padding: 0 25px;
+	z-index: 90;
+	border-radius: 10px;
+	margin: 0 auto;
 
 	&__container {
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
 		align-items: center;
 		width: 100%;
-
-		&__logo-container {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-
-			&__logo {
-				font-family: $f-font;
-				font-weight: 200;
-				color: white;
-
-				& span {
-					@include neon;
-				}
-			}
-		}
 
 		&__list-container {
 			display: flex;
@@ -46,6 +35,11 @@
 					display: flex;
 					align-items: center;
 					justify-content: center;
+					background: linear-gradient($bg-color, $fi-color);
+					border-bottom: 2px solid $f-color;
+					border-top: 1px solid $fi-color;
+					border-radius: 10px;
+					padding: 3px 15px;
 
 					&__item {
 						text-decoration: none;
@@ -55,10 +49,7 @@
 						position: relative;
 						font-family: $f-font;
 						font-size: 1.1rem;
-						background: linear-gradient($f-color, white);
-						-webkit-background-clip: text;
-						background-clip: text;
-						-webkit-text-fill-color: transparent;
+						color: white;
 						
 						&::before {
 							content: "";

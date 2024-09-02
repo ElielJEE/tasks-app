@@ -1,26 +1,53 @@
 .header {
+	position: relative;
 	display: flex;
-	background: url('images/bg2.webp') no-repeat;
-	background-position: center;
-	background-size: cover;
-	width: 100%;
+	width: 98%;
 	max-height: 250px;
-	padding: 60px 15px 15px 15px;
+	padding: 15px 15px 15px 15px;
+	border-radius: 10px;
+	border: 2px solid $fi-color;
+	@include bg-blur;
+	box-shadow:	0 0 10px $fi-color;
+	margin-top: 65px;
 	overflow: hidden;
+	z-index: 90;
+
+	&__bg-image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		z-index: 10;
+	}
 
 	&__user-container {
-		display: flex;
+		display: grid;
+		grid-template-columns: auto auto;
+		grid-template-rows: auto auto;
 		width: max-content;
 		height: 175px;
 		overflow: hidden;
+		column-gap: 10px;
+		justify-content: center;
+
+		&:nth-last-child(1) {
+			align-items: start;
+		}
+
+		&:nth-child(1) {
+			align-items: end;
+		}
 
 		&__user-image-container {
 			display: flex;
+			grid-column: 1;
+			grid-row: 1 / span 2;
 			align-items: center;
 			justify-content: center;
 			height: 175px;
 			width: 175px;
-			border-radius: 50%;
 			overflow: hidden;
 			border: 3px solid $s-color;
 			z-index: 50;
@@ -34,8 +61,11 @@
 		}
 
 		&__bars {
+			grid-column: 2;
+			grid-row: 2;
 			display: flex;
 			flex-direction: column;
+			gap: 16px;
 
 
 			&__hp-bar-container {
@@ -44,38 +74,64 @@
 				height: 25px;
 				width: 280px;
 				border: 2px solid $s-color;
-				left: -23px;
-				top: 30px;
-				z-index: 10;
+				z-index: 20;
 
 				&__hp-bar {
 					position: absolute;
-					background: linear-gradient(red, rgba(0, 0, 0, 0.5));
+					background: linear-gradient($fi-color, rgba(0, 0, 0, 0.8));
 					width: 100%;
 					height: 100%;
 					top: 0;
-					right: 0;
+					left: 0;
 				}
 			}
 
 			&__exp-bar-container {
 				position: relative;
 				background-color: $bg-color;
-				height: 15px;
-				width: 250px;
+				height: 25px;
+				width: 280px;
 				border: 2px solid $s-color;
 				overflow: hidden;
-				left: -10px;
-				top: 30px;
+				z-index: 20;
 
 				&__exp-bar {
 					position: absolute;
-					background: linear-gradient(yellow, rgba(0, 0, 0, 0.5));
+					background: linear-gradient($fi-color, rgba(0, 0, 0, 0.8));
 					width: 100%;
 					height: 100%;
 					top: 0;
 					left: 0;
 				}
+			}
+		}
+
+		&__user-info {
+			z-index: 20;
+			grid-column: 2;
+			grid-row: 1;
+
+			&__display-name,
+			&__username,
+			&__separator,
+			&__user-level {
+				color: white;
+				font-family: $f-font;
+			}
+
+			&__username,
+			&__user-level {
+				font-size: .9rem;
+			}
+
+			&__display-name {
+				font-size: 1.6rem;
+				letter-spacing: 1px;
+				line-height: 20px;
+			}
+
+			&__separator {
+				margin: 0 5px;
 			}
 		}
 	}
