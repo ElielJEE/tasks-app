@@ -14,6 +14,9 @@ export default function Navbar() {
 							<li className="navbar__container__list-container__nav-list__list-item">
 								<Link className='navbar__container__list-container__nav-list__list-item__item' to={'#'}>Quests</Link>
 							</li>
+							<li className="navbar__container__list-container__nav-list__list-item">
+								<Link className='navbar__container__list-container__nav-list__list-item__item' to={'#'}>Settings</Link>
+							</li>
 						</ul>
 					</div>
 				</div>

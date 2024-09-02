@@ -6,11 +6,24 @@
 	padding: 15px 15px 15px 15px;
 	border-radius: 10px;
 	border: 2px solid $fi-color;
-	@include bg-blur;
 	box-shadow:	0 0 10px $fi-color;
 	margin-top: 65px;
 	overflow: hidden;
 	z-index: 90;
+
+	&::after {
+		position: absolute;
+		content: "";
+		width: 100%;
+		min-height: 100%;
+		z-index: 10;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		@include bg-gradient($bg-color-th, $fi-color);
+		opacity: .5;
+	}
 
 	&__bg-image {
 		position: absolute;
@@ -19,26 +32,19 @@
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		z-index: 10;
+		z-index: 1;
 	}
 
 	&__user-container {
 		display: grid;
 		grid-template-columns: auto auto;
-		grid-template-rows: auto auto;
+		grid-template-rows: 1fr 1fr;
 		width: max-content;
 		height: 175px;
 		overflow: hidden;
 		column-gap: 10px;
 		justify-content: center;
-
-		&:nth-last-child(1) {
-			align-items: start;
-		}
-
-		&:nth-child(1) {
-			align-items: end;
-		}
+		align-items: center;
 
 		&__user-image-container {
 			display: flex;
@@ -63,12 +69,37 @@
 		&__bars {
 			grid-column: 2;
 			grid-row: 2;
-			display: flex;
-			flex-direction: column;
-			gap: 16px;
+			display: grid;
+			grid-template-columns: auto auto;
+			grid-template-rows: auto auto;
+			align-items: center;
+			row-gap: 10px;
+			column-gap: 3px;
+			margin-bottom: auto;
 
+			&__hp-title {
+				grid-column: 1;
+				grid-row: 1;
+			}
+
+			&__exp-title {
+				grid-column: 1;
+				grid-row: 2;
+			}
+
+			&__hp-title,
+			&__exp-title {
+				font-family: $f-font;
+				font-weight: bolder;
+				font-size: 1.3rem;
+				color: white;
+				z-index: 90;
+				@include neon;
+			}
 
 			&__hp-bar-container {
+				grid-column: 2;
+				grid-row: 1;
 				position: relative;
 				background-color: $bg-color;
 				height: 25px;
@@ -78,15 +109,16 @@
 
 				&__hp-bar {
 					position: absolute;
-					background: linear-gradient($fi-color, rgba(0, 0, 0, 0.8));
-					width: 100%;
+					@include bg-gradient($fi-color, $bg-color-th);
 					height: 100%;
 					top: 0;
 					left: 0;
 				}
 			}
-
+			
 			&__exp-bar-container {
+				grid-column: 2;
+				grid-row: 2;
 				position: relative;
 				background-color: $bg-color;
 				height: 25px;
@@ -97,8 +129,7 @@
 
 				&__exp-bar {
 					position: absolute;
-					background: linear-gradient($fi-color, rgba(0, 0, 0, 0.8));
-					width: 100%;
+					@include bg-gradient($fi-color, $bg-color-th);
 					height: 100%;
 					top: 0;
 					left: 0;

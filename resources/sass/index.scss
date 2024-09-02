@@ -1,3 +1,4 @@
+@import './mixin/bg-gradient';
 @import './mixin/neon-two';
 @import './mixin/neon';
 @import './mixin/bg-blur';
@@ -35,6 +36,6 @@ body {
     0 0 50px $fi-color;
 		border: 2px double $fi-color;
 		box-sizing: border-box;
-		z-index: 100;
+		z-index: 10;
 	}
 }
