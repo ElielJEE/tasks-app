@@ -6,15 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
-    public function showLoginForm()
-    {
-        //Temporal, aun no se como hacer las rutas ni como enviar las vistas de react
-        return view('auth.login');
-    }
-
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -25,13 +20,17 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             // Autenticación exitosa
             $request->session()->regenerate();
-            //Temporal, aun no se como hacer las rutas
-            return redirect()->intended('dashboard');
+            
+            return response()->json([
+                'message' => 'Login successful',
+                'user' => Auth::user(),
+            ], 200);
         }
 
-        throw ValidationException::withMessages([
-            'email' => __('auth.failed'),
-        ]);
+        return response()->json([
+            'message' => 'Login failed',
+            'errors' => ['email' => __('auth.failed')],
+        ], 422);
     }
 
     public function logout(Request $request)
@@ -41,6 +40,8 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return response()->json([
+            'message' => 'Logout successful'
+        ], 200);
     }
 }
