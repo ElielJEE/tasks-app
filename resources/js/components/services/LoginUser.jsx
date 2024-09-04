@@ -1,6 +1,6 @@
 import config from "./Config";
 
-const loginUser = async (userData) => {
+const loginUser = async (userData, navigate) => {
 	try {
 		const response = await fetch(`${config.apiBaseUrl}/login`, {
 			method: 'POST',
@@ -8,12 +8,14 @@ const loginUser = async (userData) => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(userData),
+			credentials: 'include',
 		});
 
 		if (response.ok) {
 			const data = await response.json();
 			console.log('Login successful:', data);
-			return data;			
+			navigate('/');
+			return data;
 		} else {
 			const errorData = await response.json();
 			console.log('Login failed:', errorData.errors);

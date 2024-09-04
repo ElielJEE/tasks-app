@@ -1,6 +1,6 @@
 import config from './Config'
 
-const registerUser = async (userData) => {
+const registerUser = async (userData, navigate) => {
 	try {
 		const response = await fetch(`${config.apiBaseUrl}/register`, {
 			method: 'POST',
@@ -13,6 +13,7 @@ const registerUser = async (userData) => {
 		if (response.ok) {
 			const data = await response.json();
 			console.log('Registration successful:', data);
+			navigate('/')
 		} else {
 			const errorData = await response.json();
 			console.log('Resgistration failed:', errorData.errors);
