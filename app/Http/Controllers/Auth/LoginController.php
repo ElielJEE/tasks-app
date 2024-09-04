@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -19,13 +20,15 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Autenticación exitosa
-            $request->session()->regenerate();
+            session()->regenerate();
             
             return response()->json([
                 'message' => 'Login successful',
                 'user' => Auth::user(),
             ], 200);
         }
+
+        Log::info('Login failed for user: ' . $request->input('email'));
 
         return response()->json([
             'message' => 'Login failed',
