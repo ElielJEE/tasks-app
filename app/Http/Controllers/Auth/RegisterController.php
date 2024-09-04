@@ -11,20 +11,29 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-    public function showRegistrationForm()
-    {
-        return view('auth.register');
-    }
-
     public function register(Request $request)
     {
-        $this->validator($request->all())->validate();
+        // validar los datos del request
+        $validator = $this->validator($request->all());
 
+        // si hay un fallo en los datos, devolver un error
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422); // error de datos no procesables
+        }
+
+        // Crear el nuevo usuario
         $user = $this->create($request->all());
 
+        // Autenticar al usuario recien registrado
         Auth::login($user);
-        //Temporal, aun no se como hacer las rutas
-        return redirect()->route('dashboard');
+
+        // Devolver respuesta de creacion exitosa
+        return response()->json([
+            'message' => 'Registration successful',
+            'user' => $user
+        ], 201); // Usuario creado
     }
 
     protected function validator(array $data)
@@ -32,7 +41,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
     }
 
