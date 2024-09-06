@@ -9,26 +9,40 @@ export default function Header() {
 
 	useEffect(() => {
 		const userData = async () => {
+			try {
+				// Get the token from localStorage
+				const token = localStorage.getItem('token');
+				if (!token) {
+					console.error('No token found');
+					return;
+				}
 
-			const response = await fetch(`${config.apiBaseUrl}/user`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include',
-			});
+				// Send a request with the Authorization header
+				const response = await fetch(`${config.apiBaseUrl}/user`, {
+					method: 'GET',
+					headers: {
+						'Authorization': `Bearer ${token}`,
+						'Content-Type': 'application/json',
+					},
+				});
 
-			if (response.ok) {
-				const data = await response.json();
-				setUser(data.user);
-			} else {
-				console.log('object', data);
-				console.error('Failed to fetch user data');
+				if (response.ok) {
+					const data = await response.json();
+					setUser(data.user);
+				} else if (response.status === 401) {
+					console.error('Unauthorized: Please log in');
+				} else {
+					console.error('Failed to fetch user data');
+				}
+			} catch (error) {
+				console.error('Error fetching user data:', error);
 			}
 		};
-		
+
 		userData();
 	}, []);
+
+	console.log(user);
 
 	return (
 		<>

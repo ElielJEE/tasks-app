@@ -7,12 +7,12 @@ const loginUser = async (userData, navigate) => {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(userData),
-			credentials: 'include',
+			body: JSON.stringify(userData)
 		});
 
 		if (response.ok) {
 			const data = await response.json();
+			localStorage.setItem('token', data.token);
 			console.log('Login successful:', data);
 			navigate('/');
 			return data;

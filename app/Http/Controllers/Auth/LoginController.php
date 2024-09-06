@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LoginController extends Controller
 {
@@ -18,33 +19,52 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($credentials)) {
             // Autenticación exitosa
-            session()->regenerate();
+            /* session()->regenerate(); */
+            Log::info('Login failed for user: ' . $request->input('email'));
             
             return response()->json([
-                'message' => 'Login successful',
-                'user' => Auth::user(),
-            ], 200);
+                'message' => 'Login failed',
+                'errors' => ['email' => __('auth.failed')],
+            ], 422);
         }
-
-        Log::info('Login failed for user: ' . $request->input('email'));
-
+        
         return response()->json([
-            'message' => 'Login failed',
-            'errors' => ['email' => __('auth.failed')],
-        ], 422);
+            'message' => 'Login successful',
+            'token' => $token,
+            'user' => Auth::user(),
+        ], 200);
+
     }
 
     public function logout(Request $request)
-    {
-        Auth::logout();
+{
+    try {
+        $token = JWTAuth::getToken();
+        if (!$token) {
+            return response()->json([
+                'message' => 'Token not provided'
+            ], 400);
+        }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // Invalidate the token to log out the user
+        JWTAuth::invalidate($token);
+
+        // Optionally, log out from the Laravel session as well
+        Auth::logout();
 
         return response()->json([
             'message' => 'Logout successful'
         ], 200);
+    } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+        return response()->json([
+            'message' => 'Token is invalid'
+        ], 401);
+    } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+        return response()->json([
+            'message' => 'Could not log out, token invalid'
+        ], 500);
     }
+}
 }

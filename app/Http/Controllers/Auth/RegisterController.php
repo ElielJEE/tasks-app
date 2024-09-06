@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RegisterController extends Controller
 {
@@ -27,11 +28,12 @@ class RegisterController extends Controller
         $user = $this->create($request->all());
 
         // Autenticar al usuario recien registrado
-        Auth::login($user);
+        $token = JWTAuth::fromUser($user);
 
         // Devolver respuesta de creacion exitosa
         return response()->json([
             'message' => 'Registration successful',
+            'token' => $token,
             'user' => $user
         ], 201); // Usuario creado
     }
