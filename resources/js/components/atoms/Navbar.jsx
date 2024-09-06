@@ -1,7 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { logOutUser } from '../services';
 
 export default function Navbar() {
+	const navigate = useNavigate();
+
+	const handleLogout = () => {
+		logOutUser(navigate);
+	}
+
 	return (
 		<>
 			<nav className="navbar">
@@ -14,7 +21,7 @@ export default function Navbar() {
 							<li className="navbar__container__list-container__nav-list__list-item">
 								<Link className='navbar__container__list-container__nav-list__list-item__item' to={'#'}>Quests</Link>
 							</li>
-							<li className="navbar__container__list-container__nav-list__list-item">
+							<li className="navbar__container__list-container__nav-list__list-item" onClick={handleLogout}>
 								<Link className='navbar__container__list-container__nav-list__list-item__item' to={'#'}>Settings</Link>
 							</li>
 						</ul>
