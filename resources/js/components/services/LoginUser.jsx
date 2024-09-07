@@ -2,7 +2,7 @@ import config from "./Config";
 
 const loginUser = async (userData, navigate) => {
 	try {
-		const response = await fetch(`${config.apiBaseUrl}/login`, {
+		const response = await fetch(`${config.apiBaseUrl}/auth/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -12,7 +12,7 @@ const loginUser = async (userData, navigate) => {
 
 		if (response.ok) {
 			const data = await response.json();
-			localStorage.setItem('token', data.token);
+			localStorage.setItem('token', data.access_token);
 			console.log('Login successful:', data);
 			navigate('/');
 			return data;
