@@ -2,7 +2,7 @@ import config from './Config'
 
 const registerUser = async (userData, navigate) => {
 	try {
-		const response = await fetch(`${config.apiBaseUrl}/register`, {
+		const response = await fetch(`${config.apiBaseUrl}/auth/register`, {
 			method: 'POST',
 			headers: {
 				'content-type': 'application/json',
@@ -12,7 +12,7 @@ const registerUser = async (userData, navigate) => {
 
 		if (response.ok) {
 			const data = await response.json();
-			localStorage.setItem('token', data.token);
+			localStorage.setItem('token', data.access_token);
 			console.log('Registration successful:', data);
 			navigate('/')
 		} else {

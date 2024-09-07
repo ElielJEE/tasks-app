@@ -1,18 +1,16 @@
 <?php
 // routes/api.php
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/register', [RegisterController::class, 'register']);
-
-Route::group(['middleware' => ['auth:api']], function() {
-   Route::post('/logout', [LoginController::class, 'logout']);
-   Route::get('/user', [UserController::class, 'getUser']);
+Route::middleware(['auth:api'])->group(function(){
+   Route::post('logout', [AuthController::class, 'Logout']);
+   Route::post('refresh', [AuthController::class, 'refresh']);
+   Route::post('me', [AuthController::class, 'me']);
 });
 
-
-   // Más rutas...
+Route::group(['prefix' => 'auth'], function ($router) {
+   Route::post('login', [AuthController::class, 'login']);
+   Route::post('register', [AuthController::class, 'register']);
+});

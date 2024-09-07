@@ -8,7 +8,7 @@ export default function Header() {
 	const [user, setUser] = useState(null);
 
 	useEffect(() => {
-		const userData = async () => {
+		const userDataHeader = async () => {
 			try {
 				// Get the token from localStorage
 				const token = localStorage.getItem('token');
@@ -19,7 +19,7 @@ export default function Header() {
 
 				// Send a request with the Authorization header
 				const response = await fetch(`${config.apiBaseUrl}/user`, {
-					method: 'GET',
+					method: 'POST',
 					headers: {
 						'Authorization': `Bearer ${token}`,
 						'Content-Type': 'application/json',
@@ -28,21 +28,24 @@ export default function Header() {
 
 				if (response.ok) {
 					const data = await response.json();
-					setUser(data.user);
+					setUser(data);
+
 				} else if (response.status === 401) {
 					console.error('Unauthorized: Please log in');
+
 				} else {
 					console.error('Failed to fetch user data');
+
 				}
 			} catch (error) {
 				console.error('Error fetching user data:', error);
+				
 			}
 		};
-
-		userData();
+		
+		userDataHeader();
 	}, []);
 
-	console.log(user);
 
 	return (
 		<>
