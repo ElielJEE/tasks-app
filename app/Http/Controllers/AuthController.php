@@ -35,7 +35,7 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    public function me()
+    public function user()
     {
         return response()->json(auth('api')->user());
     }

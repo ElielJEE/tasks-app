@@ -46,7 +46,7 @@ export default function Header() {
 		userDataHeader();
 	}, []);
 
-
+	console.log(user);
 	return (
 		<>
 			<Navbar />

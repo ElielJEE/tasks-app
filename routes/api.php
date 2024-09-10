@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:api'])->group(function(){
    Route::post('logout', [AuthController::class, 'Logout']);
    Route::post('refresh', [AuthController::class, 'refresh']);
-   Route::post('me', [AuthController::class, 'me']);
+   Route::post('user', [AuthController::class, 'user']);
 });
 
 Route::group(['prefix' => 'auth'], function ($router) {
