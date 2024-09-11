@@ -3,6 +3,7 @@ import { Navbar } from '../atoms'
 import userDefaultImg from '../../../../public/images/user-default-img.jpg'
 import bgImage from '../../../../public/images/bg.jpg'
 import config from '../services/Config';
+import { getAuthUser } from '../services';
 
 export default function Header() {
 	const [user, setUser] = useState(null);
@@ -18,35 +19,23 @@ export default function Header() {
 				}
 
 				// Send a request with the Authorization header
-				const response = await fetch(`${config.apiBaseUrl}/user`, {
-					method: 'POST',
-					headers: {
-						'Authorization': `Bearer ${token}`,
-						'Content-Type': 'application/json',
-					},
-				});
+				const data = await getAuthUser(token);
 
-				if (response.ok) {
-					const data = await response.json();
-					setUser(data);
-
-				} else if (response.status === 401) {
-					console.error('Unauthorized: Please log in');
+				if (!data) {
+					console.log("no data");
 
 				} else {
-					console.error('Failed to fetch user data');
-
+					setUser(data);
 				}
+
 			} catch (error) {
 				console.error('Error fetching user data:', error);
-				
 			}
 		};
 		
 		userDataHeader();
 	}, []);
-
-
+	
 	return (
 		<>
 			<Navbar />

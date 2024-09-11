@@ -1,0 +1,21 @@
+.sidebar {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 255px;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	
+	&__arrow-back {
+		display: flex;
+		align-items: center;
+		padding: 10px;
+
+		svg {
+			fill: $fi-color;
+			width: 30px;
+			height: 30px;
+		}
+	}
+}
