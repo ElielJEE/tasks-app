@@ -7,11 +7,14 @@
 @import './components/login';
 @import './components/navbar';
 @import './components/header';
+@import './components/sidebar';
 
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: $f-font;
+	color: white;
 }
 
 body {
@@ -37,5 +40,20 @@ body {
 		border: 2px double $fi-color;
 		box-sizing: border-box;
 		z-index: 10;
+		animation: brightAnim 2s alternate-reverse ease-in-out infinite;
+	}
+}
+
+@keyframes brightAnim {
+	0% {
+		box-shadow: 
+    inset 0 0 30px $fi-color,
+    0 0 20px $fi-color,
+    0 0 50px $fi-color;
+	} 100% {
+		box-shadow: 
+    inset 0 0 20px $fi-color,
+    0 0 10px $fi-color,
+    0 0 40px $fi-color;
 	}
 }
