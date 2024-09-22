@@ -3,33 +3,39 @@ import { Navbar } from '../atoms'
 import userDefaultImg from '../../../../public/images/user-default-img.jpg'
 import bgImage from '../../../../public/images/bg.jpg'
 import config from '../services/Config';
+import { getAuthUser } from '../services';
 
 export default function Header() {
 	const [user, setUser] = useState(null);
 
 	useEffect(() => {
-		const userData = async () => {
+		const userDataHeader = async () => {
+			try {
+				// Get the token from localStorage
+				const token = localStorage.getItem('token');
+				if (!token) {
+					console.error('No token found');
+					return;
+				}
 
-			const response = await fetch(`${config.apiBaseUrl}/user`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				credentials: 'include',
-			});
+				// Send a request with the Authorization header
+				const data = await getAuthUser(token);
 
-			if (response.ok) {
-				const data = await response.json();
-				setUser(data.user);
-			} else {
-				console.log('object', data);
-				console.error('Failed to fetch user data');
+				if (!data) {
+					console.log("no data");
+
+				} else {
+					setUser(data);
+				}
+
+			} catch (error) {
+				console.error('Error fetching user data:', error);
 			}
 		};
 		
-		userData();
+		userDataHeader();
 	}, []);
-
+	
 	return (
 		<>
 			<Navbar />
