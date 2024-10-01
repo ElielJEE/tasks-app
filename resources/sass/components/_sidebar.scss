@@ -49,6 +49,7 @@
 				&__item {
 					color: $f-color;
 					transition: all .5s ease-in-out;
+					text-decoration: none;
 				}
 
 				&:hover>&__item {
@@ -66,7 +67,7 @@
 				height: 50px;
 				padding: 10px 1.1rem;
 
-				span {
+				a {
 					transition: all .5s ease-in-out;
 					font-weight: bolder;
 					color: white;

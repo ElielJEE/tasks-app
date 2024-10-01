@@ -1,14 +1,28 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useActive } from '../hooks';
 
 export default function Sidebar() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { active, activeHandle } = useActive();
 
 	const goBack = () => {
 		navigate(-1);
 	}
+
+	const path = location.pathname;
+
+	const index = {
+		'/settings/account': 0,
+		'/settings/site': 1
+	}
+
+	useEffect(() => {
+		if (index[path] !== undefined) {
+			activeHandle(index[path]);
+		}
+	}, [path]);
 
 	return (
 		<aside className='sidebar'>
@@ -23,19 +37,19 @@ export default function Sidebar() {
 						active === 0
 							? "sidebar__list-container__list__list-item active"
 							: "sidebar__list-container__list__list-item"}
-						onClick={e => activeHandle(0)}>
-						<span className="sidebar__list-container__list__list-item__item">
+					>
+						<Link to={'account'} className="sidebar__list-container__list__list-item__item">
 							Account
-						</span>
+						</Link>
 					</li>
 					<li className={
 						active === 1
 							? "sidebar__list-container__list__list-item active"
 							: "sidebar__list-container__list__list-item"}
-						onClick={e => activeHandle(1)}>
-						<span className="sidebar__list-container__list__list-item__item">
+					>
+						<Link to={'site'} className="sidebar__list-container__list__list-item__item">
 							Site
-						</span>
+						</Link>
 					</li>
 				</ul>
 			</div>

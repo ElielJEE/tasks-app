@@ -8,6 +8,7 @@
 @import './components/navbar';
 @import './components/header';
 @import './components/sidebar';
+@import './components/loading';
 
 * {
 	margin: 0;
@@ -40,7 +41,7 @@ body {
 		border: 2px double $fi-color;
 		box-sizing: border-box;
 		z-index: 10;
-		animation: brightAnim 2s alternate-reverse ease-in-out infinite;
+		animation: brightAnim 1s alternate-reverse ease-in-out infinite;
 	}
 }
 

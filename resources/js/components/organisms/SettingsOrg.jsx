@@ -1,10 +1,12 @@
 import React from 'react'
-import { Siedebar } from '../atoms'
+import { Sidebar } from '../atoms'
+import { Outlet } from 'react-router-dom'
 
 export default function SettingsOrg() {
 	return (
 		<>
-			<Siedebar />
+			<Sidebar />
+			<Outlet />
 		</>
 	)
 }
