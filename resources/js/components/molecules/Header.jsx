@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Navbar } from '../atoms'
 import userDefaultImg from '../../../../public/images/user-default-img.jpg'
 import bgImage from '../../../../public/images/bg.jpg'
-import config from '../services/Config';
 import { getAuthUser } from '../services';
 
 export default function Header() {

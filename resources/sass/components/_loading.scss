@@ -1,0 +1,15 @@
+.loading-container {
+	display: flex;
+	justify-content: end;
+	align-items: end;
+	width: 100vw;
+	height: 100vh;
+	padding: 20px 30px;
+	background: url(images/logo.svg) no-repeat;
+	background-position: center;
+	background-size: contain;
+
+	&__loading {
+		font-size: 2rem;
+	}
+}

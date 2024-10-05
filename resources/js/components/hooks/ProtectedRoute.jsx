@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { refreshAuth } from '../services';
+import { Loading } from '../atoms';
 
 const ProtectedRoute = () => {
 	const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -17,7 +18,6 @@ const ProtectedRoute = () => {
 
 			try {
 				const data = await refreshAuth(token);
-				console.log(data);
 
 				if (!data) {
 					setIsAuthenticated(false);
@@ -35,7 +35,7 @@ const ProtectedRoute = () => {
 		refreshToken();
 	}, []);
 	if (loading) {
-		return <div>Loading...</div>;
+		return <Loading />;
 	}
 
 	return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;

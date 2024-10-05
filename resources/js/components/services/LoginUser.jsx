@@ -1,11 +1,12 @@
 import config from "./Config";
 
-const loginUser = async (userData, navigate) => {
+const loginUser = async (userData) => {
 	try {
 		const response = await fetch(`${config.apiBaseUrl}/auth/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
+				'Accept': 'application/json'
 			},
 			body: JSON.stringify(userData)
 		});
@@ -13,13 +14,10 @@ const loginUser = async (userData, navigate) => {
 		if (response.ok) {
 			const data = await response.json();
 			localStorage.setItem('token', data.access_token);
-			console.log('Login successful:', data);
-			navigate('/');
-			return data;
+			return { success: true, data };
 		} else {
 			const errorData = await response.json();
-			console.log('Login failed:', errorData.errors);
-			return errorData;
+			return { success: false, errors: errorData.errors || ['Login failed'] };
 		}
 
 	} catch (error) {
