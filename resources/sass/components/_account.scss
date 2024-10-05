@@ -1,0 +1,66 @@
+.account-settings {
+	padding: 15px;
+	z-index: 90;
+
+	&__account-form {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 10px;
+		width: 100%;
+
+		&__table-form {
+			width: 100%;
+
+			&__tb {
+				line-height: 35px;
+				width: 100%;
+
+				&__tr {
+					display: block;
+					width: 100%;
+					border-bottom: solid 1px $f-color;
+
+					&__td-label {
+						width: 170px;
+
+						&__account-label {
+							font-weight: bold;
+							font-size: 1.1rem;
+						}
+					}
+
+					&__td-input {
+						width: 255px;
+
+						&__account-input {
+							background-color: transparent;
+							border: none;
+							font-size: 1rem;
+							outline: none;
+						}
+					}
+
+					&__td-btn {
+						width: max-content;
+
+						&__edit-btn {
+							background-color: transparent;
+							border: none;
+							cursor: pointer;
+							font-size: 1rem;
+
+							&__edit-span {
+								color: $fi-color;
+							}
+
+							&:hover {
+								text-decoration: underline;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

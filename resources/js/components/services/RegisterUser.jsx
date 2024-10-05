@@ -1,11 +1,12 @@
 import config from './Config'
 
-const registerUser = async (userData, navigate) => {
+const registerUser = async (userData) => {
 	try {
 		const response = await fetch(`${config.apiBaseUrl}/auth/register`, {
 			method: 'POST',
 			headers: {
 				'content-type': 'application/json',
+				'Accept': 'application/json'
 			},
 			body: JSON.stringify(userData),
 		});
@@ -13,15 +14,17 @@ const registerUser = async (userData, navigate) => {
 		if (response.ok) {
 			const data = await response.json();
 			localStorage.setItem('token', data.access_token);
-			console.log('Registration successful:', data);
-			navigate('/')
+			return { success: true, data };
 		} else {
 			const errorData = await response.json();
-			console.log('Resgistration failed:', errorData.errors);
+			return { success: false, errors: errorData.errors || ['Sign up failed'] };
 		}
 
 	} catch (error) {
-		console.error('Error:', error);
+		return {
+			success: false,
+			errors: { general: ['Network error. Please try again later.'] },
+		};
 	}
 }
 

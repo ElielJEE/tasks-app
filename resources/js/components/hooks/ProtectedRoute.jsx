@@ -18,7 +18,6 @@ const ProtectedRoute = () => {
 
 			try {
 				const data = await refreshAuth(token);
-				console.log(data);
 
 				if (!data) {
 					setIsAuthenticated(false);
