@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('displayname');//Para el display
+            $table->string('displayname')->nullable();//Para el display
             $table->string('email')->unique();
             $table->string('avatar')->nullable();//Esto aun falta trabajo en el controlador
             $table->integer('level')->default(1);//Por defecto lo deje en 1

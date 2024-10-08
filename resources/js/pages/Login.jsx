@@ -4,7 +4,7 @@ import { loginUser, ValidateInputs } from "../components/services";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { validateInputs, emailError, passwordError, setEmailError, setPasswordError } = ValidateInputs();
+  const { validateInputs } = ValidateInputs();
 
   const [userData, setUserData] = useState({
     email: '',
