@@ -1,0 +1,9 @@
+{
+  "login": "Iniciar sesión",
+  "signup": "Regístrate",
+	"Don't have an account? Sign up.": "¿No tienes cuenta? Registrate.",
+	"e-mail": "Correo electronico",
+	"password": "Contraseña",
+	"username": "nombre de usuario",
+	"Already have an account? Log in.": "¿Ya tienes cuenta? Iniciar sesión."
+}

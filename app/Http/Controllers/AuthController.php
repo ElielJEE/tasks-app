@@ -47,7 +47,7 @@ class AuthController extends Controller
     // Método para actualizar el perfil del usuario
     public function update(Request $request)
     {
-        $user = Auth::user();
+        /* $user = Auth::user();
 
         // Validar los datos de entrada
         $request->validate([
@@ -82,7 +82,7 @@ class AuthController extends Controller
 
         $user->save();
 
-        return response()->json($user, 200);
+        return response()->json($user, 200); */
     }
 
     public function logout()
