@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tasks extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'title', 'description', 'difficulty', 'estimated_time', 'status', 'enemy_id'];
+    protected $fillable = ['user_id', 'title', 'description', 'difficulty', 'estimated_time', 'status'];
 
     //Esto es para la foreignKey
     public function user()
@@ -18,6 +18,6 @@ class Tasks extends Model
     
     public function objectives()
     {
-        return $this->morphMany(Objective::class, 'objectiveable');
+        return $this->morphMany(Objectives::class, 'objectiveable');
     }
 }
