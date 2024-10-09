@@ -66,7 +66,6 @@ class TasksController extends Controller
     // Eliminar una tarea
     public function destroy(Task $task)
     {
-        // Verificar que la tarea pertenece al usuario autenticado
         if ($task->user_id !== Auth::id()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }

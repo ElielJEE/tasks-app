@@ -24,7 +24,8 @@ class UserRegisterRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users|max:255',
-            'password' => 'required|string|min:6'
+            'password' => 'required|string|min:6',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'  // Validar la imagen
         ];
     }
 }
