@@ -12,8 +12,21 @@ class TasksController extends Controller
     // Mostrar todas las tareas del usuario creadas
     public function index()
     {
-        $tasks = Tasks::where('user_id', Auth::id())->get();
-        return response()->json($tasks);
+        // Verificar si el usuario está autenticado
+        $userId = Auth::id();
+        if (!$userId) {
+            return response()->json(['error' => 'No authenticated user'], 401);
+        }
+
+        // Obtener todas las tareas del usuario autenticado
+        $tasks = Tasks::where('user_id', $userId)->get();
+
+        // Verificar si hay tareas
+        if ($tasks->isEmpty()) {
+            return response()->json(['message' => 'No tasks found'], 404);
+        }
+        // Devolver las tareas en formato JSON
+        return response()->json($tasks, 200, ['Content-Type' => 'application/json']);
     }
 
     // Crear una nueva tarea
@@ -24,7 +37,7 @@ class TasksController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'difficulty' => 'required|in:easy,medium,hard',
-            'estimated_time' => 'required|integer',
+            'estimated_time' => 'nullable|integer',
             'status' => 'nullable|in:pending,completed'
         ]);
 
@@ -34,7 +47,7 @@ class TasksController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'difficulty' => $request->difficulty,
-            'estimated_time' => $request->estimated_time,
+            'estimated_time' => $request->estimated_time ?? '24',
             'status' => $request->status ?? 'pending'
         ]);
 
