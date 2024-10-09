@@ -1,38 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { useActive } from '../hooks'
 import { Loading } from '../atoms';
-import { getAuthUser } from '../services';
+import { getUser } from '../services';
 
 export default function Account() {
 	const { active, activeHandle } = useActive();
-	const [user, setUser] = useState(null);
+	const { user } = getUser();
+	const [selectedFile, setSelectedFile] = useState(null);
 
-	useEffect(() => {
-		const userDataHeader = async () => {
-			try {
-				// Get the token from localStorage
-				const token = localStorage.getItem('token');
-				if (!token) {
-					console.error('No token found');
-					return;
-				}
-
-				// Send a request with the Authorization header
-				const data = await getAuthUser(token);
-
-				if (!data || typeof data !== 'object') {
-					console.log('No valid data received');
-					return;
-				}
-				setUser(data);
-
-			} catch (error) {
-				console.error('Error fetching user data:', error);
-			}
-		};
-
-		userDataHeader();
-	}, []);
+	const handleSelectionFile = (e) => {
+		e.preventDefault();
+		setSelectedFile(e.target.files[0]);
+	}
 
 	return (
 		<>
@@ -219,6 +198,25 @@ export default function Account() {
 													</span>
 												</button>
 											</td>
+										</tr>
+										<tr className="account-settings__account-form__table-form__tb__tr">
+											<td className="account-settings__account-form__table-form__tb__tr__td-label">
+												<label htmlFor="password" className="account-settings__account-form__table-form__tb__tr__td-label__account-label" >
+													Avatar
+												</label>
+											</td>
+											<td className="account-settings__account-form__table-form__tb__tr__td-input">
+												<input type="file" className="account-settings__account-form__table-form__tb__tr__td-input__account-input-file" name='image' accept='image/*' onChange={handleSelectionFile} />
+											</td>
+											{selectedFile && (
+												<td className="account-settings__account-form__table-form__tb__tr__td-btn">
+													<button className="account-settings__account-form__table-form__tb__tr__td-btn__save-btn active-act-btn">
+														<span className="account-settings__account-form__table-form__tb__tr__td-btn__save-btn__save-span">
+															Guardar
+														</span>
+													</button>
+												</td>
+											)}
 										</tr>
 									</tbody>
 								</table>

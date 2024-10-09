@@ -2,37 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Loading, Navbar } from '../atoms'
 import userDefaultImg from '../../../../public/images/user-default-img.jpg'
 import bgImage from '../../../../public/images/bg.jpg'
-import { getAuthUser } from '../services';
+import { getUser } from '../services';
 
 export default function Header() {
-	const [user, setUser] = useState(null);
-
-	useEffect(() => {
-		const userDataHeader = async () => {
-			try {
-				// Get the token from localStorage
-				const token = localStorage.getItem('token');
-				if (!token) {
-					console.error('No token found');
-					return;
-				}
-
-				// Send a request with the Authorization header
-				const data = await getAuthUser(token);
-
-				if (!data || typeof data !== 'object') {
-					console.log('No valid data received');
-					return;
-				}
-				setUser(data);
-
-			} catch (error) {
-				console.error('Error fetching user data:', error);
-			}
-		};
-
-		userDataHeader();
-	}, []);
+	const { user } = getUser();
 
 	return (
 		<>
@@ -56,11 +29,11 @@ export default function Header() {
 								<div className="header__user-container__bars">
 									<span className="header__user-container__bars__hp-title">HP</span>
 									<div className="header__user-container__bars__hp-bar-container">
-										<div className="header__user-container__bars__hp-bar-container__hp-bar" style={{ width: '100%' }}></div>
+										<div className="header__user-container__bars__hp-bar-container__hp-bar" style={{ width: `${user.hp}%` }}></div>
 									</div>
 									<span className="header__user-container__bars__exp-title">XP</span>
 									<div className="header__user-container__bars__exp-bar-container">
-										<div className="header__user-container__bars__exp-bar-container__exp-bar" style={{ width: '100%' }}></div>
+										<div className="header__user-container__bars__exp-bar-container__exp-bar" style={{ width: `${user.xp}%` }}></div>
 									</div>
 								</div>
 							</div>
