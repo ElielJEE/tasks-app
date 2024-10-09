@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tasks;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class TasksController extends Controller
@@ -11,7 +12,7 @@ class TasksController extends Controller
     // Mostrar todas las tareas del usuario creadas
     public function index()
     {
-        $tasks = Task::where('user_id', Auth::id())->get();
+        $tasks = Tasks::where('user_id', Auth::id())->get();
         return response()->json($tasks);
     }
 
@@ -28,7 +29,7 @@ class TasksController extends Controller
         ]);
 
         // Crear la tarea asociada al usuario autenticado
-        $task = Task::create([
+        $task = Tasks::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
             'description' => $request->description,
@@ -41,7 +42,7 @@ class TasksController extends Controller
     }
 
     // Actualizar una tarea existente
-    public function update(Request $request, Task $task)
+    public function update(Request $request, Tasks $task)
     {
         // Verificar que la tarea pertenece al usuario autenticado
         if ($task->user_id !== Auth::id()) {
@@ -64,7 +65,7 @@ class TasksController extends Controller
     }
 
     // Eliminar una tarea
-    public function destroy(Task $task)
+    public function destroy(Tasks $task)
     {
         if ($task->user_id !== Auth::id()) {
             return response()->json(['error' => 'Unauthorized'], 403);

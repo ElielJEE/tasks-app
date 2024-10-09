@@ -1,23 +1,36 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { registerUser } from '../components/services';
+import { registerUser, ValidateInputs } from '../components/services';
 
 export default function Signup() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  const [userData, setUserData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  })
+  const [errors, setErrors] = useState({})
+
+  const handleChange = (e) => {
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value
+    })
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({})
 
-    const userData = {
-      name,
-      email,
-      password,
-    };
+    const result = await registerUser(userData);
 
-    await registerUser(userData, navigate);
+    if (result.success) {
+      navigate('/')
+    } else {
+      console.log(result.errors);
+      setErrors(result.errors)
+    }
   }
 
   return (
@@ -29,33 +42,54 @@ export default function Signup() {
           </div>
           <div className="login__centered-container__login-form-container ">
             <form onSubmit={handleSubmit} className="login__centered-container__login-form-container__login-form">
-              <input
-                type="text"
-                name="name"
-                id="login-username" className="login__centered-container__login-form-container__login-form__login-input" placeholder="username"
-                autoComplete="off"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <input
-                type="email"
-                name="email"
-                id="login-email"
-                className="login__centered-container__login-form-container__login-form__login-input"
-                placeholder="e-mail"
-                autoComplete="off"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <input
-                type="password"
-                name="password"
-                id="login-password"
-                className="login__centered-container__login-form-container__login-form__login-input" placeholder="password"
-                autoComplete="off"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="field-container">
+                <input
+                  type="text"
+                  name="name"
+                  id="login-username" className="login__centered-container__login-form-container__login-form__login-input" placeholder="username"
+                  autoComplete="off"
+                  value={userData.name}
+                  onChange={handleChange}
+                />
+                {errors.name && (
+                  <span className="field-container__field-error">
+                    {errors.name[0]}
+                  </span>
+                )}
+              </div>
+              <div className="field-container">
+                <input
+                  type="email"
+                  name="email"
+                  id="login-email"
+                  className="login__centered-container__login-form-container__login-form__login-input"
+                  placeholder="e-mail"
+                  autoComplete="off"
+                  value={userData.email}
+                  onChange={handleChange}
+                />
+                {errors.email && (
+                  <span className="field-container__field-error">
+                    {errors.email[0]}
+                  </span>
+                )}
+              </div>
+              <div className="field-container">
+                <input
+                  type="password"
+                  name="password"
+                  id="login-password"
+                  className="login__centered-container__login-form-container__login-form__login-input" placeholder="password"
+                  autoComplete="off"
+                  value={userData.password}
+                  onChange={handleChange}
+                />
+                {errors.password && (
+                  <span className="field-container__field-error">
+                    {errors.password[0]}
+                  </span>
+                )}
+              </div>
               <button className="login__centered-container__login-form-container__login-form__login-btn">
                 <span className="login__centered-container__login-form-container__login-form__login-btn__span">
                   Sign Up

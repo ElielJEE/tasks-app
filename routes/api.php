@@ -2,13 +2,16 @@
 // routes/api.php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ObjectivesController;
+use App\Http\Controllers\QuestsController;
+use App\Http\Controllers\TasksController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->group(function(){
    Route::post('logout', [AuthController::class, 'Logout']);
    Route::post('refresh', [AuthController::class, 'refresh']);
    Route::post('user', [AuthController::class, 'user']);
-   Route::put('update', [UserController::class, 'update']);
+   /* Route::put('update', [UserController::class, 'update']); */
 });
 
 Route::group(['prefix' => 'auth'], function ($router) {
@@ -16,30 +19,30 @@ Route::group(['prefix' => 'auth'], function ($router) {
    Route::post('register', [AuthController::class, 'register']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:api')->group(function () {
    // Rutas para tareas (tasks)
-   Route::get('tasks', [TaskController::class, 'index']);
-   Route::post('createtask', [TaskController::class, 'store']);
-   Route::put('updatetask', [TaskController::class, 'update']);
-   Route::delete('deletetask', [TaskController::class, 'destroy']);
+   Route::get('tasks', [TasksController::class, 'index']);
+   Route::post('createtask', [TasksController::class, 'store']);
+   Route::put('updatetask', [TasksController::class, 'update']);
+   Route::delete('deletetask', [TasksController::class, 'destroy']);
 
    // Rutas para quests
-   Route::get('quests', [QuestController::class, 'index']);
-   Route::post('createquest', [QuestController::class, 'store']);
-   Route::put('updatequest', [QuestController::class, 'update']);
-   Route::delete('deletequest', [QuestController::class, 'destroy']);
+   Route::get('quests', [QuestsController::class, 'index']);
+   Route::post('createquest', [QuestsController::class, 'store']);
+   Route::put('updatequest', [QuestsController::class, 'update']);
+   Route::delete('deletequest', [QuestsController::class, 'destroy']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:api')->group(function () {
    // Rutas para los objetivos de las tareas
-   Route::get('taskobjectives', [ObjectiveController::class, 'indexForTask']);
-   Route::post('createtaskobjectives', [ObjectiveController::class, 'storeForTask']);
+   Route::get('taskobjectives', [ObjectivesController::class, 'indexForTask']);
+   Route::post('createtaskobjectives', [ObjectivesController::class, 'storeForTask']);
 
    // Rutas para los objetivos de las quests
-   Route::get('questobjectives', [ObjectiveController::class, 'indexForQuest']);
-   Route::post('createquestobjectives', [ObjectiveController::class, 'storeForQuest']);
+   Route::get('questobjectives', [ObjectivesController::class, 'indexForQuest']);
+   Route::post('createquestobjectives', [ObjectivesController::class, 'storeForQuest']);
 
    // Actualizar y eliminar objetivos
-   Route::put('editobjectives', [ObjectiveController::class, 'update']);
-   Route::delete('deleteobjectives', [ObjectiveController::class, 'destroy']);
+   Route::put('editobjectives', [ObjectivesController::class, 'update']);
+   Route::delete('deleteobjectives', [ObjectivesController::class, 'destroy']);
 });

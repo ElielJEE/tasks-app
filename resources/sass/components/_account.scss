@@ -1,0 +1,115 @@
+.account-settings {
+	padding: 15px;
+	z-index: 90;
+
+	&__account-form {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 10px;
+		width: 100%;
+
+		&__table-form {
+			width: 100%;
+
+			&__tb {
+				line-height: 35px;
+				width: 100%;
+
+				&__tr {
+					display: block;
+					width: 100%;
+					border-bottom: solid 1px $f-color;
+
+					&__td-label {
+						width: 170px;
+
+						&__account-label {
+							font-weight: bold;
+							font-size: 1.1rem;
+						}
+					}
+
+					&__td-input {
+						width: 255px;
+
+						&__account-input {
+							background-color: $t-alt-color;
+							border: none;
+							font-size: 1rem;
+							outline: none;
+							border-radius: 5px;
+							padding: 2px 10px;
+							width: 100%;
+							
+							&:disabled {
+								background-color: transparent;
+							}
+						}
+					}
+
+					&__td-btn {
+						width: max-content;
+
+						&__edit-btn {
+							display: none;
+							background-color: transparent;
+							border: none;
+							cursor: pointer;
+							font-size: 1rem;
+							color: $f-color;
+
+							&__edit-span {
+								color: $f-color;
+							}
+
+							&:hover {
+								text-decoration: underline;
+							}
+						}
+
+						.active-edit-btn {
+							display: inline;
+						}
+
+						.active-act-btn {
+							display: inline;
+						}
+
+						&__save-btn,
+						&__cancel-btn {
+							display: none;
+							padding: 5px 10px;
+							border-radius: 10px;
+							cursor: pointer;
+						}
+
+						&__save-btn {
+							@include bg-gradient($bg-color-th, $fi-color);
+							border-top: solid 1px $fi-color;
+							border-left: solid 1px $fi-color;
+							border-right: solid 1px $fi-color;
+							border-bottom: solid 1px $f-color;
+							margin-right: 10px;
+							margin-left: 10px;
+						}
+
+						&__cancel-btn {
+							@include bg-gradient($bg-color-th, red);
+							border: solid 1px red;
+						}
+					}
+				}
+			}
+		}
+
+		&__delete-btn {
+			padding: 8px 13px;
+			border-radius: 10px;
+			cursor: pointer;
+			@include bg-gradient($bg-color-th, red);
+			border: solid 1px red;
+			margin-right: auto;
+		}
+	}
+}
