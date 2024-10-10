@@ -12,19 +12,23 @@ class QuestsController extends Controller
     // Mostrar todas las quests del usuario autenticado
     public function show($id)
     {
-        // Verificamos si el usuario autenticado está accediendo a sus propias quests
-        if ($id != Auth::id()) {
-            return response()->json(['error' => 'No autorizado para ver estas quests'], 403);
+        // Verificamos si el usuario autenticado está accediendo a sus propias tareas
+        $user = auth('api')->user();
+        if ($id != $user->id) {
+            return response()->json(['Error' => 'No autorizado para ver estas Quest'], 403);
         }
 
-        // Obtener todas las quests asociadas a este usuario
-        $quests = Quest::where('user_id', $id)->get();
-
-        if ($quests->isEmpty()) {
+        // Obtener todas las tareas asociadas a este usuario
+        $quests = Quests::where('user_id', $id)->all();
+        
+        if ($tasks->isEmpty()) {
             return response()->json(['message' => 'No quests found'], 200);
         }
-
-        return response()->json($quests, 200);
+        
+        return response()->json([
+            'message' => 'Quests',
+            'quest' => $quests
+        ]);
     }
 
     // Crear una nueva quest
@@ -44,6 +48,29 @@ class QuestsController extends Controller
             'description' => $request->description,
             'status' => $request->status ?? 'active',
         ]);
+
+        // // Validación de la quest
+        // $validatedData = $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'description' => 'nullable|string',
+        //     'objectives' => 'array|required', // Validar que los objetivos están presentes
+        //     'objectives.*.name' => 'required|string|max:255', // Cada objetivo debe tener un nombre
+        // ]);
+
+        // // Crear la Quest
+        // $quest = Quest::create([
+        //     'user_id' => Auth::id(),
+        //     'title' => $validatedData['title'],
+        //     'description' => $validatedData['description'],
+        // ]);
+
+        // // Crear los Objetivos asociados a la Quest
+        // foreach ($validatedData['objectives'] as $objectiveData) {
+        //     Objective::create([
+        //         'quest_id' => $quest->id,
+        //         'name' => $objectiveData['name'],
+        //     ]);
+        // }
 
         return response()->json($quest, 201);
     }
