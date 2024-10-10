@@ -21,28 +21,28 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
 Route::middleware(['auth:api'])->group(function () {
    // Rutas para tareas (tasks)
-   Route::get('/tasks/{user_id}', [TasksController::class, 'show'])->name('tasks.show');
+   Route::post('/tasks/{user_id}', [TasksController::class, 'show'])->name('tasks.show');
    Route::post('/tasks', [TasksController::class, 'store'])->name('tasks.store');
    Route::put('/tasks/{task}', [TasksController::class, 'update'])->name('tasks.update');
    Route::delete('/tasks/{task}', [TasksController::class, 'destroy'])->name('tasks.delete');
 
    // Rutas para quests
-   Route::get('/quests/{user_id}', [QuestsController::class, 'show'])->name('quests.show');
+   Route::post('/quests/{user_id}', [QuestsController::class, 'show'])->name('quests.show');
    Route::post('/quests', [QuestsController::class, 'store'])->name('quests.store');
    Route::put('/quests/{quest}', [QuestsController::class, 'update'])->name('quests.update');
    Route::delete('/quests/{quest}', [QuestsController::class, 'destroy'])->name('quests.delete');
 });
 
-Route::middleware('auth:api')->group(function () {
-    // CRUD para los objetivos de quests
-    Route::get('/quests/{quest_id}/objectives', [ObjectivesController::class, 'showObjectivesByQuest'])->name('questsobj.show');
-    Route::post('/quests/{quest_id}/objectives', [ObjectivesController::class, 'storeObjectiveForQuest'])->name('questsobj.store');
-    Route::put('/quests/{quest_id}/objectives/{objective_id}', [ObjectivesController::class, 'updateObjectiveForQuest'])->name('questsobj.update');
-    Route::delete('/quests/{quest_id}/objectives/{objective_id}', [ObjectivesController::class, 'deleteObjectiveForQuest'])->name('questsobj.delete');
-    
-    // CRUD para los objetivos de tasks
-    Route::get('/tasks/{task_id}/objectives', [ObjectivesController::class, 'showObjectivesByTask'])->name('tasksobj.show');
-    Route::post('/tasks/{task_id}/objectives', [ObjectivesController::class, 'storeObjectiveForTask'])->name('tasksobj.store');
-    Route::put('/tasks/{task_id}/objectives/{objective_id}', [ObjectivesController::class, 'updateObjectiveForTask'])->name('tasksobj.update');
-    Route::delete('/tasks/{task_id}/objectives/{objective_id}', [ObjectivesController::class, 'deleteObjectiveForTask'])->name('tasksobj.delete');
-});
+// Rutas para tareas
+// Route::prefix('tasks/{task}')->group(function () {
+//    Route::get('objectives', [ObjectiveController::class, 'index']); // Obtener los objetivos de una task
+// });
+
+// // Rutas para quests
+// Route::prefix('quests/{quest}')->group(function () {
+//    Route::get('objectives', [ObjectiveController::class, 'index']); // Obtener los objetivos de una quest
+// });
+
+// // Rutas generales para actualizar y eliminar objetivos
+// Route::put('objectives/{id}', [ObjectiveController::class, 'update']);
+// Route::delete('objectives/{id}', [ObjectiveController::class, 'destroy']);
