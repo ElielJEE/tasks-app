@@ -12,21 +12,19 @@ class TasksController extends Controller
     // Mostrar todas las tareas del usuario creadas
     public function index()
     {
-        // Verificar si el usuario está autenticado
-        $userId = Auth::id();
-        if (!$userId) {
-            return response()->json(['error' => 'No authenticated user'], 401);
+        // Obtener el usuario autenticado directamente desde el token JWT
+        $user = auth('api')->user();
+
+        // Verificar si se obtuvo correctamente el usuario
+        if (!$user) {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
         }
 
-        // Obtener todas las tareas del usuario autenticado
-        $tasks = Tasks::where('user_id', $userId)->get();
+        // Consultar las tareas asociadas al usuario autenticado
+        $tasks = Tasks::where('user_id', $user->id)->get();
 
-        // Verificar si hay tareas
-        if ($tasks->isEmpty()) {
-            return response()->json(['message' => 'No tasks found'], 404);
-        }
         // Devolver las tareas en formato JSON
-        return response()->json($tasks, 200, ['Content-Type' => 'application/json']);
+        return response()->json($tasks, 200);
     }
 
     // Crear una nueva tarea
@@ -41,9 +39,11 @@ class TasksController extends Controller
             'status' => 'nullable|in:pending,completed'
         ]);
 
+        $user = auth('api')->user();
+
         // Crear la tarea asociada al usuario autenticado
         $task = Tasks::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'title' => $request->title,
             'description' => $request->description,
             'difficulty' => $request->difficulty,

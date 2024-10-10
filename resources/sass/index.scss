@@ -15,6 +15,8 @@
 @import './components/task';
 @import './components/card';
 @import './components/cardsDisplayer';
+@import './components/createTasks';
+@import './components/taskCards';
 
 * {
 	margin: 0;
@@ -86,4 +88,8 @@ body {
 		width: max-content;
 	}
 
+}
+
+.active-modal-creation {
+	display: flex;
 }

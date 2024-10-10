@@ -21,7 +21,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
 Route::middleware(['auth:api'])->group(function () {
    // Rutas para tareas (tasks)
-   Route::get('/tasks', [TasksController::class, 'index']);
+   Route::get('tasks', [TasksController::class, 'index']);
    Route::post('createtask', [TasksController::class, 'store']);
    Route::put('updatetask', [TasksController::class, 'update']);
    Route::delete('deletetask', [TasksController::class, 'destroy']);
