@@ -68,4 +68,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return []; // Si no tienes claims personalizados, puedes devolver un array vacío
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Tasks::class);
+    }
+    
+    public function quests()
+    {
+        return $this->hasMany(Quests::class);
+    }
 }

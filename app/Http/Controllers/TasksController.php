@@ -9,11 +9,22 @@ use Illuminate\Http\Request;
 
 class TasksController extends Controller
 {
-    // Mostrar todas las tareas del usuario creadas
-    public function index()
+    // Mostrar tareas del usuario autenticado o de un usuario específico
+    public function show($id)
     {
-        $tasks = Tasks::where('user_id', Auth::id())->get();
-        return response()->json($tasks);
+        // Verificamos si el usuario autenticado está accediendo a sus propias tareas
+        if ($id != Auth::id()) {
+            return response()->json(['error' => 'No autorizado para ver estas tareas'], 403);
+        }
+
+        // Obtener todas las tareas asociadas a este usuario
+        $tasks = Task::where('user_id', $id)->get();
+
+        if ($tasks->isEmpty()) {
+            return response()->json(['message' => 'No tasks found'], 200);
+        }
+
+        return response()->json($tasks, 200);
     }
 
     // Crear una nueva tarea
