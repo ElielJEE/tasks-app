@@ -19,14 +19,14 @@ class TasksController extends Controller
         }
 
         // Obtener todas las tareas del usuario autenticado
-        $tasks = Tasks::where('user_id', $userId)->get();
+        $tasks = Tasks::where('user_id', $userId)->all();
 
         // Verificar si hay tareas
         if ($tasks->isEmpty()) {
             return response()->json(['message' => 'No tasks found'], 404);
         }
         // Devolver las tareas en formato JSON
-        return response()->json($tasks, 200, ['Content-Type' => 'application/json']);
+        return response()->json($tasks, 200);
     }
 
     // Crear una nueva tarea

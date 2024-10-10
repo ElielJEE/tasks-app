@@ -19,9 +19,9 @@ Route::group(['prefix' => 'auth'], function ($router) {
    Route::post('register', [AuthController::class, 'register']);
 });
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
    // Rutas para tareas (tasks)
-   Route::get('/tasks', [TasksController::class, 'index']);
+   Route::get('indextasks', [TasksController::class, 'index']);
    Route::post('createtask', [TasksController::class, 'store']);
    Route::put('updatetask', [TasksController::class, 'update']);
    Route::delete('deletetask', [TasksController::class, 'destroy']);

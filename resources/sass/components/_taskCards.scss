@@ -1,0 +1,38 @@
+.task-cards-container {
+	&__create-task-btn {
+		position: absolute;
+		top: 15px;
+		right: 30px;
+		border-radius: 10px;
+		border: solid 1px $fi-color;
+		padding: 5px 10px;
+		@include bg-gradient($bg-color-th, $fi-color);
+		cursor: pointer;
+	}
+}
+
+.create-task-modal-container {
+	position: absolute;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	z-index: 100;
+	@include bg-blur();
+	width: 100%;
+	height: 100vh;
+	bottom: -445px;
+
+	&__close-modal {
+		position: absolute;
+		top: 10px;
+		right: 20px;
+		background-color: transparent;
+		border: none;
+		font-size: 1.2rem;
+		cursor: pointer;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
