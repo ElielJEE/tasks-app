@@ -10,66 +10,96 @@ use Illuminate\Http\Request;
 
 class ObjectivesController extends Controller
 {
-    // Mostrar todos los objetivos de una tarea
-    public function indexForTask(Tasks $task)
+    // Mostrar todos los objetivos relacionados con una quest
+    public function showObjectivesByQuest($quest_id)
     {
-        return response()->json($task->objectives);
+        $objectives = Objective::where('quest_id', $quest_id)->get();
+
+        if ($objectives->isEmpty()) {
+            return response()->json(['message' => 'No objectives found for this quest'], 200);
+        }
+
+        return response()->json($objectives, 200);
     }
 
-    // Mostrar todos los objetivos de una quest
-    public function indexForQuest(Quests $quest)
+    // Mostrar todos los objetivos relacionados con una task
+    public function showObjectivesByTask($task_id)
     {
-        return response()->json($quest->objectives);
+        $objectives = Objective::where('task_id', $task_id)->get();
+
+        if ($objectives->isEmpty()) {
+            return response()->json(['message' => 'No objectives found for this task'], 200);
+        }
+
+        return response()->json($objectives, 200);
     }
 
-    // Crear un objetivo para una tarea
-    public function storeForTask(Request $request, Tasks $task)
+    public function storeObjectiveForTask(Request $request, $task_id)
     {
-        $request->validate([
-            'description' => 'required|string|max:255',
-        ]);
+        // Lógica para crear un objetivo para una task
+        $objective = new Objective();
+        $objective->task_id = $task_id;
+        $objective->name = $request->name;
+        // Completa la lógica de guardado
 
-        $objective = $task->objectives()->create([
-            'description' => $request->description,
-            'completed' => false,
-        ]);
+        $objective->save();
 
-        return response()->json($objective, 201);
+        return response()->json(['message' => 'Objective created for task'], 201);
     }
 
-    // Crear un objetivo para una quest
-    public function storeForQuest(Request $request, Quests $quest)
+    public function updateObjectiveForTask(Request $request, $task_id, $objective_id)
     {
-        $request->validate([
-            'description' => 'required|string|max:255',
-        ]);
+        // Lógica para actualizar un objetivo de task
+        $objective = Objective::where('task_id', $task_id)->findOrFail($objective_id);
+        $objective->name = $request->name;
+        // Completa la lógica de actualización
 
-        $objective = $quest->objectives()->create([
-            'description' => $request->description,
-            'completed' => false,
-        ]);
+        $objective->save();
 
-        return response()->json($objective, 201);
+        return response()->json(['message' => 'Objective updated for task'], 200);
     }
 
-    // Actualizar un objetivo
-    public function update(Request $request, Objectives $objective)
+    public function deleteObjectiveForTask($task_id, $objective_id)
     {
-        $request->validate([
-            'description' => 'required|string|max:255',
-            'completed' => 'boolean',
-        ]);
-
-        $objective->update($request->all());
-
-        return response()->json($objective);
-    }
-
-    // Eliminar un objetivo
-    public function destroy(Objectives $objective)
-    {
+        // Lógica para eliminar un objetivo de task
+        $objective = Objective::where('task_id', $task_id)->findOrFail($objective_id);
         $objective->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Objective deleted for task'], 200);
     }
+
+    public function storeObjectiveForQuest(Request $request, $quest_id)
+    {
+        // Lógica para crear un objetivo para una quest
+        $objective = new Objective();
+        $objective->quest_id = $quest_id;
+        $objective->name = $request->name;
+        // Completa la lógica de guardado
+
+        $objective->save();
+
+        return response()->json(['message' => 'Objective created for quest'], 201);
+    }
+
+    public function updateObjectiveForQuest(Request $request, $quest_id, $objective_id)
+    {
+        // Lógica para actualizar un objetivo de quest
+        $objective = Objective::where('quest_id', $quest_id)->findOrFail($objective_id);
+        $objective->name = $request->name;
+        // Completa la lógica de actualización
+
+        $objective->save();
+
+        return response()->json(['message' => 'Objective updated for quest'], 200);
+    }
+
+    public function deleteObjectiveForQuest($quest_id, $objective_id)
+    {
+        // Lógica para eliminar un objetivo de quest
+        $objective = Objective::where('quest_id', $quest_id)->findOrFail($objective_id);
+        $objective->delete();
+
+        return response()->json(['message' => 'Objective deleted for quest'], 200);
+    }
+
 }

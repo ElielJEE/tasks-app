@@ -10,10 +10,21 @@ use Illuminate\Support\Facades\Auth;
 class QuestsController extends Controller
 {
     // Mostrar todas las quests del usuario autenticado
-    public function index()
+    public function show($id)
     {
-        $quests = Quests::where('user_id', Auth::id())->get();
-        return response()->json($quests);
+        // Verificamos si el usuario autenticado está accediendo a sus propias quests
+        if ($id != Auth::id()) {
+            return response()->json(['error' => 'No autorizado para ver estas quests'], 403);
+        }
+
+        // Obtener todas las quests asociadas a este usuario
+        $quests = Quest::where('user_id', $id)->get();
+
+        if ($quests->isEmpty()) {
+            return response()->json(['message' => 'No quests found'], 200);
+        }
+
+        return response()->json($quests, 200);
     }
 
     // Crear una nueva quest

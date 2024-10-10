@@ -9,24 +9,21 @@ use Illuminate\Http\Request;
 
 class TasksController extends Controller
 {
-    // Mostrar todas las tareas del usuario creadas
-    public function index()
+    // Mostrar tareas del usuario autenticado o de un usuario específico
+    public function show($id)
     {
-        // Obtener el usuario autenticado directamente desde el token JWT
-        $user = auth('api')->user();
-
-        // Verificar si se obtuvo correctamente el usuario
-        if (!$user) {
-            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        // Verificamos si el usuario autenticado está accediendo a sus propias tareas
+        if ($id != Auth::id()) {
+            return response()->json(['error' => 'No autorizado para ver estas tareas'], 403);
         }
 
-        // Consultar las tareas asociadas al usuario autenticado
-        $tasks = Tasks::where('user_id', $user->id)->get();
+        // Obtener todas las tareas asociadas a este usuario
+        $tasks = Task::where('user_id', $id)->get();
 
-        // Devolver las tareas en formato JSON
-        return response()->json($tasks, 200);
+        if ($tasks->isEmpty()) {
+            return response()->json(['message' => 'No tasks found'], 200);
+        }
     }
-
     // Crear una nueva tarea
     public function store(Request $request)
     {
