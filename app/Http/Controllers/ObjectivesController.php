@@ -4,24 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Objectives;
 use App\Http\Controllers\Controller;
+use App\Models\Quests;
+use App\Models\Tasks;
 use Illuminate\Http\Request;
 
 class ObjectivesController extends Controller
 {
     // Mostrar todos los objetivos de una tarea
-    public function indexForTask(Task $task)
+    public function indexForTask(Tasks $task)
     {
         return response()->json($task->objectives);
     }
 
     // Mostrar todos los objetivos de una quest
-    public function indexForQuest(Quest $quest)
+    public function indexForQuest(Quests $quest)
     {
         return response()->json($quest->objectives);
     }
 
     // Crear un objetivo para una tarea
-    public function storeForTask(Request $request, Task $task)
+    public function storeForTask(Request $request, Tasks $task)
     {
         $request->validate([
             'description' => 'required|string|max:255',
@@ -36,7 +38,7 @@ class ObjectivesController extends Controller
     }
 
     // Crear un objetivo para una quest
-    public function storeForQuest(Request $request, Quest $quest)
+    public function storeForQuest(Request $request, Quests $quest)
     {
         $request->validate([
             'description' => 'required|string|max:255',
@@ -51,7 +53,7 @@ class ObjectivesController extends Controller
     }
 
     // Actualizar un objetivo
-    public function update(Request $request, Objective $objective)
+    public function update(Request $request, Objectives $objective)
     {
         $request->validate([
             'description' => 'required|string|max:255',
@@ -64,7 +66,7 @@ class ObjectivesController extends Controller
     }
 
     // Eliminar un objetivo
-    public function destroy(Objective $objective)
+    public function destroy(Objectives $objective)
     {
         $objective->delete();
 

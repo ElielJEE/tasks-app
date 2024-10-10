@@ -7,6 +7,7 @@ const CreateTask = async (token, data) => {
 			headers: {
 				'Authorization': `Bearer ${token}`,
 				'Content-Type': 'application/json',
+				'Accept': 'application/json'
 			},
 			body: JSON.stringify(data),
 		});
