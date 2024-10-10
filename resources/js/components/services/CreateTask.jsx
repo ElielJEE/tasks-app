@@ -2,7 +2,7 @@ import config from './Config'
 
 const CreateTask = async (token, data) => {
 	try {
-		const response = await fetch(`${config.apiBaseUrl}/createtask`, {
+		const response = await fetch(`${config.apiBaseUrl}/tasks`, {
 			method: 'POST',
 			headers: {
 				'Authorization': `Bearer ${token}`,
