@@ -19,7 +19,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
    Route::post('register', [AuthController::class, 'register']);
 });
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api'])->group(function () {
    // Rutas para tareas (tasks)
    Route::get('/tasks/{user_id}', [TaskController::class, 'show'])->name('tasks.show');
    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');

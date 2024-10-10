@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Objectives;
 use App\Http\Controllers\Controller;
+use App\Models\Quests;
+use App\Models\Tasks;
 use Illuminate\Http\Request;
 
 class ObjectivesController extends Controller

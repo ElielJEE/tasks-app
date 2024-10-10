@@ -1,0 +1,29 @@
+.tabs-container {
+	position: relative;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	&__tabs-list {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 16px;
+		list-style: none;
+
+		&__tab-item {
+			padding: 15px 10px;
+
+			&__tab-link {
+				text-decoration: none;
+				color: $f-color;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+}

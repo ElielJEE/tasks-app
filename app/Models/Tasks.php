@@ -18,6 +18,6 @@ class Tasks extends Model
     
     public function objectives()
     {
-        return $this->morphMany(Objective::class, 'objectiveable');
+        return $this->morphMany(Objectives::class, 'objectiveable');
     }
 }

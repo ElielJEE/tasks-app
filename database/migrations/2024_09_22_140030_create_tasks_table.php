@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->enum('difficulty', ['easy', 'medium', 'hard']);
-            $table->integer('estimated_time'); // esto es en minutos
+            $table->integer('estimated_time')->default(24); // esto es en minutos
             $table->enum('status', ['pending', 'completed'])->default('pending'); //Aqui por defecto iran los estatus de pendiente o completado, pero de base sera pendiente
             $table->timestamps();
         });

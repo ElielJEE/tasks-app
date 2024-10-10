@@ -23,10 +23,7 @@ class TasksController extends Controller
         if ($tasks->isEmpty()) {
             return response()->json(['message' => 'No tasks found'], 200);
         }
-
-        return response()->json($tasks, 200);
     }
-
     // Crear una nueva tarea
     public function store(Request $request)
     {
@@ -35,17 +32,19 @@ class TasksController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'difficulty' => 'required|in:easy,medium,hard',
-            'estimated_time' => 'required|integer',
+            'estimated_time' => 'nullable|integer',
             'status' => 'nullable|in:pending,completed'
         ]);
 
+        $user = auth('api')->user();
+
         // Crear la tarea asociada al usuario autenticado
         $task = Tasks::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'title' => $request->title,
             'description' => $request->description,
             'difficulty' => $request->difficulty,
-            'estimated_time' => $request->estimated_time,
+            'estimated_time' => $request->estimated_time ?? '24',
             'status' => $request->status ?? 'pending'
         ]);
 

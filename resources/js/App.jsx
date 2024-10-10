@@ -2,7 +2,7 @@ import React from "react";
 import { Login, Settings, Signup, Tasks } from "./pages";
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./components/hooks";
-import { Account, Site } from "./components/molecules";
+import { Account, HabitCards, QuestCards, Site, TaskCards } from "./components/molecules";
 
 export default function App() {
 	return (
@@ -10,7 +10,13 @@ export default function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route element={<ProtectedRoute />}>
-						<Route path='/' element={<Tasks />} />
+						<Route path='/' element={<Tasks />}>
+							<Route index element={<Navigate to="tasks" replace />} />
+							<Route path="tasks" element={<TaskCards />} />
+							<Route path="quests" element={<QuestCards />} />
+							<Route path="habits" element={<HabitCards />} />
+						</Route>
+
 						<Route path="settings/*" element={<Settings />}>
 							<Route index element={<Navigate to="account" replace />}
 							/>
