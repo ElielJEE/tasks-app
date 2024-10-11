@@ -1,9 +1,15 @@
 import config from './Config';
 
-const GetTasks = async (token) => {
+const GetTasks = async (token, userId) => {
 	try {
-		const response = await fetch(`${config.apiBaseUrl}/tasks`, {
-			method: 'GET',
+		console.log('getTask se esta ejecutando');
+		if (!userId) {
+      console.error('No user ID found');
+      return;
+    }
+		console.log(userId);
+		const response = await fetch(`${config.apiBaseUrl}/tasks/${userId}`, {
+			method: 'POST',
 			headers: {
 				'Authorization': `Bearer ${token}`,
 				'Content-Type': 'application/json',
