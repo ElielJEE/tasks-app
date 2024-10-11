@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react';
+import { getTasks, getUser } from '../services';
 import { Cards } from '../atoms'
-import { getTasks } from '../services';
-import CreateTask from './CreateTaskView';
-import CreateTaskView from './CreateTaskView';
-import { useActive } from '../hooks';
+import { TaskContext } from '../services/TaskContext';
 
 export default function TaskCards() {
-	const { active, activeHandle } = useActive();
+	const { userId } = getUser();
 	const [task, setTask] = useState([]);
 
 	useEffect(() => {
@@ -20,45 +18,52 @@ export default function TaskCards() {
 				}
 
 				// Send a request with the Authorization header
-				const data = await getTasks(token);
-
+				let data;
+				if (token && userId) {
+					data = await getTasks(token, userId);
+					console.log(userId);
+					console.log(data);
+				}
+				
 				if (!data || typeof data !== 'object') {
 					console.log('No valid data received');
 					return;
 				}
 				setTask(data);
-
+				
 			} catch (error) {
 				console.error('Error fetching user data:', error);
 			}
 		};
-
+		
 		tasksDataHeader();
-	}, []);
+	}, [userId]);
+	console.log(task.tasks);
+	/* const { tasks, loading } = useContext(TaskContext);
+	if (loading) return <p>Cargando tareas...</p>; */
+
 
 	return (
 		<>
 			<div className="task-cards-container">
 				{
-					task.length > 0 ? (
-						task.map((item, key) => (
-							<Cards key={key} {...item} />
-						))
-					) : (
-						<p>no se encontraron tareas.</p>
+					task.tasks && (
+						task.tasks.length > 0 ? (
+							task.tasks.map((item, key) => (
+								<Cards key={key} {...item} />
+							))
+						) : (
+							<p>no se encontraron tareas.</p>
+						)
 					)
 				}
-				<button className="task-cards-container__create-task-btn" onClick={e => activeHandle(1)}>
-					<span className="task-cards-container__create-task-btn__span-task">
-						Agregar tarea
-					</span>
-				</button>
-			</div>
-			<div className={active === 1 ? ("create-task-modal-container active-modal-creation") : ("create-task-modal-container")}>
-				<button className="create-task-modal-container__close-modal" onClick={e => activeHandle(0)}>
-					Cerrar
-				</button>
-				<CreateTaskView />
+				{/* {tasks.length > 0 ? (
+					tasks.map((item, key) => (
+						<Cards key={key} {...item} />  // Renderizar las tarjetas de tareas
+					))
+				) : (
+					<p>No se encontraron tareas.</p>  // Mensaje cuando no hay tareas
+				)} */}
 			</div>
 		</>
 	)

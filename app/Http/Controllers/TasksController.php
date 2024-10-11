@@ -12,17 +12,23 @@ class TasksController extends Controller
     // Mostrar tareas del usuario autenticado o de un usuario específico
     public function show($id)
     {
+        $user = auth('api')->user();
         // Verificamos si el usuario autenticado está accediendo a sus propias tareas
-        if ($id != Auth::id()) {
+        if ($id != $user->id) {
             return response()->json(['error' => 'No autorizado para ver estas tareas'], 403);
         }
 
         // Obtener todas las tareas asociadas a este usuario
-        $tasks = Task::where('user_id', $id)->get();
+        $tasks = Tasks::where('user_id', $id)->get();
+        return response()->json([
+            'message' => 'Task',
+            'tasks' => $tasks,
+        ]);
 
         if ($tasks->isEmpty()) {
             return response()->json(['message' => 'No tasks found'], 200);
         }
+
     }
     // Crear una nueva tarea
     public function store(Request $request)

@@ -21,7 +21,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
 Route::middleware(['auth:api'])->group(function () {
    // Rutas para tareas (tasks)
-   Route::get('/tasks/{user_id}', [TasksController::class, 'show'])->name('tasks.show');
+   Route::post('/tasks/{user_id}', [TasksController::class, 'show'])->name('tasks.show');
    Route::post('/tasks', [TasksController::class, 'store'])->name('tasks.store');
    Route::put('/tasks/{task}', [TasksController::class, 'update'])->name('tasks.update');
    Route::delete('/tasks/{task}', [TasksController::class, 'destroy'])->name('tasks.delete');

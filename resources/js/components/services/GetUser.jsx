@@ -3,6 +3,7 @@ import { getAuthUser } from '.';
 
 export default function GetUser() {
 	const [user, setUser] = useState(null);
+	const [userId, setUserId] = useState(null);
 
 	useEffect(() => {
 		const userDataHeader = async () => {
@@ -22,6 +23,7 @@ export default function GetUser() {
 					return;
 				}
 				setUser(data);
+				setUserId(data.id)
 
 			} catch (error) {
 				console.error('Error fetching user data:', error);
@@ -31,5 +33,5 @@ export default function GetUser() {
 		userDataHeader();
 	}, []);
 
-	return { user }
+	return { user, userId }
 }

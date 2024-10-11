@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import config from '../services/Config';
-import { createTask, registerUser } from '../services';
+import React, { useState, useContext } from 'react';
+import { createTask } from '../services';
+import { TaskContext } from '../services/TaskContext';
 
 export default function CreateTaskView() {
   const [errors, setErrors] = useState([]);
@@ -12,6 +12,8 @@ export default function CreateTaskView() {
     estimatedTime: '',
     status: 'pending',
   })
+
+  /* const { addTask } = useContext(TaskContext); */
 
   const handleChange = (e) => {
     setTaskData({
@@ -41,6 +43,8 @@ export default function CreateTaskView() {
         estimatedTime: '',
         status: 'pending',
       })
+
+      /* addTask(result.newTask); */
     } else {
       setErrors(result.errors)
     }
