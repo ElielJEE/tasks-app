@@ -12,23 +12,23 @@ class TasksController extends Controller
     // Mostrar tareas del usuario autenticado o de un usuario específico
     public function show($id)
     {
-        $user = auth('api')->user();
         // Verificamos si el usuario autenticado está accediendo a sus propias tareas
+        $user = auth('api')->user();
         if ($id != $user->id) {
-            return response()->json(['error' => 'No autorizado para ver estas tareas'], 403);
+            return response()->json(['Error' => 'No autorizado para ver estas tareas'], 403);
         }
 
         // Obtener todas las tareas asociadas a este usuario
-        $tasks = Tasks::where('user_id', $id)->get();
-        return response()->json([
-            'message' => 'Task',
-            'tasks' => $tasks,
-        ]);
-
+        $tasks = Tasks::where('user_id', $id)->all();
+        
         if ($tasks->isEmpty()) {
             return response()->json(['message' => 'No tasks found'], 200);
         }
-
+        
+        return response()->json([
+            'message' => 'Task',
+            'task' => $tasks
+        ]);
     }
     // Crear una nueva tarea
     public function store(Request $request)
@@ -53,6 +53,29 @@ class TasksController extends Controller
             'estimated_time' => $request->estimated_time ?? '24',
             'status' => $request->status ?? 'pending'
         ]);
+
+        // // Validación de la task
+        // $validatedData = $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'description' => 'nullable|string',
+        //     'objectives' => 'array|required', // Validar que los objetivos están presentes
+        //     'objectives.*.name' => 'required|string|max:255', // Cada objetivo debe tener un nombre
+        // ]);
+
+        // // Crear la Task
+        // $task = Task::create([
+        //     'user_id' => Auth::id(),
+        //     'title' => $validatedData['title'],
+        //     'description' => $validatedData['description'],
+        // ]);
+
+        // // Crear los Objetivos asociados a la Task
+        // foreach ($validatedData['objectives'] as $objectiveData) {
+        //     Objective::create([
+        //         'task_id' => $task->id,
+        //         'name' => $objectiveData['name'],
+        //     ]);
+        // }
 
         return response()->json($task, 201);
     }
