@@ -6,7 +6,7 @@ import { getUser } from '../services';
 
 export default function Header() {
 	const { user } = getUser();
-
+	
 	return (
 		<>
 			{!user
