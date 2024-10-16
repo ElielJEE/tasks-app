@@ -16,9 +16,15 @@ class Objectives extends Model
         'objectiveable_type',
     ];
 
-    // Definir la relación polimórfica
-    public function objectiveable()
+    // Relación con Task
+    public function task()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Task::class);
+    }
+
+    // Relación con Quest
+    public function quest()
+    {
+        return $this->belongsTo(Quest::class);
     }
 }

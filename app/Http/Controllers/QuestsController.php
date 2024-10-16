@@ -19,7 +19,9 @@ class QuestsController extends Controller
         }
 
         // Obtener todas las tareas asociadas a este usuario
-        $quests = Quests::where('user_id', $id)->all();
+        $quests = Quest::with('objectives') // Carga los objetivos relacionados
+                    ->where($id, Auth::id())
+                    ->get();
         
         if ($tasks->isEmpty()) {
             return response()->json(['message' => 'No quests found'], 200);
@@ -38,7 +40,11 @@ class QuestsController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'nullable|in:active,completed'
+            'status' => 'nullable|in:active,completed',
+            'objectives' => 'array|required', // Validar que los objetivos están presentes
+            'objectives.*.description' => 'required|string|max:255', // Cada objetivo debe tener una descripción
+            'objectives.*.completed' => 'boolean', // Cada objetivo puede tener estado completado (por defecto falso)
+        
         ]);
 
         // Crear la quest asociada al usuario autenticado
@@ -75,38 +81,77 @@ class QuestsController extends Controller
         return response()->json($quest, 201);
     }
 
-    // Actualizar una quest existente
-    public function update(Request $request, Quests $quest)
+    public function update(Request $request, $id)
     {
-        // Verificar que la quest pertenece al usuario autenticado
-        if ($quest->user_id !== Auth::id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        // Buscar la Quest
+        $quest = Quest::findOrFail($id);
+
+        // Verificar que la quest pertenezca al usuario autenticado
+        if ($quest->user_id != Auth::id()) {
+            return response()->json(['error' => 'No autorizado para actualizar esta quest'], 403);
         }
 
-        // Validar los datos de entrada
-        $request->validate([
-            'name' => 'required|string|max:255',
+        // Validación de la quest y los objetivos
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'nullable|in:active,completed'
+            'status' => 'nullable|in:active,completed',
+            'objectives' => 'array|required', // Validar que los objetivos están presentes
+            'objectives.*.id' => 'nullable|exists:objectives,id', // Validar si el objetivo ya existe
+            'objectives.*.description' => 'required|string|max:255', // Descripción del objetivo
+            'objectives.*.completed' => 'boolean', // Estado del objetivo (completado o no)
         ]);
 
-        // Actualizar la quest
-        $quest->update($request->all());
+        // Actualizar la Quest
+        $quest->update([
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'],
+            'status' => $request->status ?? 'pending'
+        ]);
 
-        return response()->json($quest);
+        // Actualizar, crear o eliminar objetivos
+        $existingObjectiveIds = [];
+        foreach ($validatedData['objectives'] as $objectiveData) {
+            if (isset($objectiveData['id'])) {
+                // Actualizar objetivo existente
+                $objective = Objective::find($objectiveData['id']);
+                $objective->update([
+                    'description' => $objectiveData['description'],
+                    'completed' => $objectiveData['completed'] ?? false,
+                ]);
+                $existingObjectiveIds[] = $objective->id;
+            } else {
+                // Crear nuevo objetivo
+                $newObjective = Objective::create([
+                    'quest_id' => $quest->id,
+                    'description' => $objectiveData['description'],
+                    'completed' => $objectiveData['completed'] ?? false,
+                ]);
+                $existingObjectiveIds[] = $newObjective->id;
+            }
+        }
+
+        // Eliminar objetivos que no fueron enviados
+        Objective::where('quest_id', $quest->id)->whereNotIn('id', $existingObjectiveIds)->delete();
+
+        return response()->json(['message' => 'Quest and objectives updated successfully', 'quest' => $quest], 200);
     }
 
     // Eliminar una quest
-    public function destroy(Quests $quest)
+    public function destroy($id)
     {
-        // Verificar que la quest pertenece al usuario autenticado
-        if ($quest->user_id !== Auth::id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        // Obtener la quest
+        $quest = Quest::findOrFail($id);
+
+        // Verificar que la quest pertenezca al usuario autenticado
+        if ($quest->user_id != Auth::id()) {
+            return response()->json(['error' => 'No autorizado para eliminar esta quest'], 403);
         }
 
-        // Eliminar la quest
-        $quest->delete();
+        // Eliminar la quest y sus objetivos
+        $quest->objectives()->delete(); // Elimina los objetivos asociados
+        $quest->delete(); // Elimina la quest
 
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Quest and its objectives deleted successfully'], 200);
     }
 }
