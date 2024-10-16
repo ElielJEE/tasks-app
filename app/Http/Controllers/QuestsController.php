@@ -55,30 +55,16 @@ class QuestsController extends Controller
             'status' => $request->status ?? 'active',
         ]);
 
-        // // Validación de la quest
-        // $validatedData = $request->validate([
-        //     'title' => 'required|string|max:255',
-        //     'description' => 'nullable|string',
-        //     'objectives' => 'array|required', // Validar que los objetivos están presentes
-        //     'objectives.*.name' => 'required|string|max:255', // Cada objetivo debe tener un nombre
-        // ]);
+        // Crear los Objetivos asociados a la Quest
+        foreach ($validatedData['objectives'] as $objectiveData) {
+            Objective::create([
+                'quest_id' => $quest->id,
+                'description' => $objectiveData['description'],
+                'completed' => $objectiveData['completed'] ?? false, // Si no se especifica, se pone en false
+            ]);
+        }
 
-        // // Crear la Quest
-        // $quest = Quest::create([
-        //     'user_id' => Auth::id(),
-        //     'title' => $validatedData['title'],
-        //     'description' => $validatedData['description'],
-        // ]);
-
-        // // Crear los Objetivos asociados a la Quest
-        // foreach ($validatedData['objectives'] as $objectiveData) {
-        //     Objective::create([
-        //         'quest_id' => $quest->id,
-        //         'name' => $objectiveData['name'],
-        //     ]);
-        // }
-
-        return response()->json($quest, 201);
+        return response()->json(['message' => 'Quest and its objectives deleted successfully'], 200);
     }
 
     public function update(Request $request, $id)
