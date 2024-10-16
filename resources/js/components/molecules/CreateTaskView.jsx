@@ -13,7 +13,7 @@ export default function CreateTaskView() {
     status: 'pending',
   })
 
-  /* const { addTask } = useContext(TaskContext); */
+  const { addTask } = useContext(TaskContext);
 
   const handleChange = (e) => {
     setTaskData({
@@ -43,8 +43,9 @@ export default function CreateTaskView() {
         estimatedTime: '',
         status: 'pending',
       })
+      
 
-      /* addTask(result.newTask); */
+      addTask(result.data);
     } else {
       setErrors(result.errors)
     }

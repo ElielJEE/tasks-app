@@ -1,8 +1,8 @@
 import config from './Config';
 
 const GetTasks = async (token, userId) => {
+	console.log('getTask se esta ejecutando');
 	try {
-		console.log('getTask se esta ejecutando');
 		if (!userId) {
       console.error('No user ID found');
       return;

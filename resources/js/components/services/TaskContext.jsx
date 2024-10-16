@@ -26,7 +26,7 @@ export const TaskProvider = ({ children }) => {
 		let data;
 		if (token && userId) {
 			data = await getTasks(token, userId);
-			setTasks(data);
+			setTasks(data.tasks);
 			setLoading(false);
 			console.log(userId);
 		}
@@ -35,7 +35,7 @@ export const TaskProvider = ({ children }) => {
 
 	useEffect(() => {
 		fetchTasks();
-	}, []);
+	}, [userId]);
 
 	// Función para añadir una nueva tarea
 	const addTask = (newTask) => {
