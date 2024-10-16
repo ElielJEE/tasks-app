@@ -8,9 +8,9 @@ export default function CreateTaskView() {
   const [taskData, setTaskData] = useState({
     title: '',
     description: '',
-    difficulty: 'easy',
+    difficulty: 'facil',
     estimatedTime: '',
-    status: 'pending',
+    status: 'pendiente',
   })
 
   const { addTask } = useContext(TaskContext);
@@ -39,9 +39,9 @@ export default function CreateTaskView() {
       setTaskData({
         title: '',
         description: '',
-        difficulty: 'easy',
+        difficulty: 'facil',
         estimatedTime: '',
-        status: 'pending',
+        status: 'pendiente',
       })
       
 
@@ -99,9 +99,9 @@ export default function CreateTaskView() {
             onChange={handleChange}
             required
           >
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
+            <option value="facil">Facil</option>
+            <option value="medio">Medio</option>
+            <option value="dificil">Dificil</option>
           </select>
         </div>
 

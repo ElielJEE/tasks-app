@@ -26,7 +26,7 @@ export const TaskProvider = ({ children }) => {
 		let data;
 		if (token && userId) {
 			data = await getTasks(token, userId);
-			setTasks(data.tasks);
+			setTasks(data.task);
 			setLoading(false);
 			console.log(userId);
 		}

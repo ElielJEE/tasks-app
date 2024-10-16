@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tasks;
 use App\Http\Controllers\Controller;
+use App\Models\Objectives;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -19,8 +20,8 @@ class TasksController extends Controller
         }
 
         // Obtener todas las tareas asociadas a este usuario
-        $tasks = Task::with('objectives') // Carga los objetivos relacionados
-        ->where($id, Auth::id())
+        $tasks = Tasks::where('user_id', $id) // Carga los objetivos relacionados
+        ->with('objectives')
         ->get();
         
         if ($tasks->isEmpty()) {
@@ -48,7 +49,7 @@ class TasksController extends Controller
         ]);
 
         // Crear la Task
-        $task = Task::create([
+        $task = Tasks::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
             'description' => $request->description,
@@ -59,7 +60,7 @@ class TasksController extends Controller
 
         // Crear los Objetivos asociados a la Task
         foreach ($validatedData['objectives'] as $objectiveData) {
-            Objective::create([
+            Objectives::create([
                 'task_id' => $task->id,
                 'description' => $objectiveData['description'],
                 'completed' => $objectiveData['completed'] ?? false, // Si no se especifica, se pone en false
@@ -72,7 +73,7 @@ class TasksController extends Controller
     public function update(Request $request, $id)
     {
         // Buscar la Task
-        $task = Task::findOrFail($id);
+        $task = Tasks::findOrFail($id);
 
         // Verificar que la task pertenezca al usuario autenticado
         if ($task->user_id != Auth::id()) {
@@ -107,7 +108,7 @@ class TasksController extends Controller
         foreach ($validatedData['objectives'] as $objectiveData) {
             if (isset($objectiveData['id'])) {
                 // Actualizar objetivo existente
-                $objective = Objective::find($objectiveData['id']);
+                $objective = Objectives::find($objectiveData['id']);
                 $objective->update([
                     'description' => $objectiveData['description'],
                     'completed' => $objectiveData['completed'] ?? false,
@@ -115,7 +116,7 @@ class TasksController extends Controller
                 $existingObjectiveIds[] = $objective->id;
             } else {
                 // Crear nuevo objetivo
-                $newObjective = Objective::create([
+                $newObjective = Objectives::create([
                     'task_id' => $task->id,
                     'description' => $objectiveData['description'],
                     'completed' => $objectiveData['completed'] ?? false,
@@ -125,7 +126,7 @@ class TasksController extends Controller
         }
 
         // Eliminar objetivos que no fueron enviados
-        Objective::where('task_id', $task->id)->whereNotIn('id', $existingObjectiveIds)->delete();
+        Objectives::where('task_id', $task->id)->whereNotIn('id', $existingObjectiveIds)->delete();
 
         return response()->json(['message' => 'Task and objectives updated successfully', 'task' => $task], 200);
     }
@@ -134,7 +135,7 @@ class TasksController extends Controller
     public function destroy(Tasks $task)
     {
         // Obtener la task
-        $task = Task::findOrFail($id);
+        $task = Tasks::findOrFail($id);
 
         // Verificar que la task pertenezca al usuario autenticado
         if ($task->user_id != Auth::id()) {

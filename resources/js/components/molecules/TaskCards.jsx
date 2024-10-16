@@ -57,13 +57,15 @@ export default function TaskCards() {
 						)
 					)
 				} */}
-				{tasks.length > 0 ? (
-					tasks.map((item, key) => (
-						<Cards key={key} {...item} />  // Renderizar las tarjetas de tareas
-					))
-				) : (
-					<p>No se encontraron tareas.</p>  // Mensaje cuando no hay tareas
-				)}
+				{
+					tasks ? (
+						tasks.map((item, key) => (
+							<Cards key={key} {...item} />  // Renderizar las tarjetas de tareas
+						))
+					) : (
+						<p>No se encontraron tareas.</p>  // Mensaje cuando no hay tareas
+					)
+				}
 			</div>
 		</>
 	)
