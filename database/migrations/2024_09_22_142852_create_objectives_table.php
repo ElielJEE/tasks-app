@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('objectives', function (Blueprint $table) {
             $table->id();
-            $table->string('description');
-            $table->boolean('completed')->default(false);
-
-            // Relación polimórfica para que el objetivo pertenezca a Task o Quest
-            $table->morphs('objectiveable'); // Crea objectiveable_type y objectiveable_id
-
+            $table->foreignId('task_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('quest_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('description');  // Campo para la descripción del objetivo
+            $table->boolean('completed')->default(false);  // Campo para el estado de completado
             $table->timestamps();
         });
     }

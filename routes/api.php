@@ -32,17 +32,3 @@ Route::middleware(['auth:api'])->group(function () {
    Route::put('/quests/{quest}', [QuestsController::class, 'update'])->name('quests.update');
    Route::delete('/quests/{quest}', [QuestsController::class, 'destroy'])->name('quests.delete');
 });
-
-// Rutas para tareas
-// Route::prefix('tasks/{task}')->group(function () {
-//    Route::get('objectives', [ObjectiveController::class, 'index']); // Obtener los objetivos de una task
-// });
-
-// // Rutas para quests
-// Route::prefix('quests/{quest}')->group(function () {
-//    Route::get('objectives', [ObjectiveController::class, 'index']); // Obtener los objetivos de una quest
-// });
-
-// // Rutas generales para actualizar y eliminar objetivos
-// Route::put('objectives/{id}', [ObjectiveController::class, 'update']);
-// Route::delete('objectives/{id}', [ObjectiveController::class, 'destroy']);
