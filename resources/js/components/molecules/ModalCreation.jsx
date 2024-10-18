@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useActive } from '../hooks'
 import CreateTaskView from './CreateTaskView';
 import { useLocation, useNavigate } from 'react-router-dom';
 

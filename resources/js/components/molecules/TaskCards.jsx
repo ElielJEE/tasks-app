@@ -41,6 +41,7 @@ export default function TaskCards() {
 	console.log(task.tasks); */
 	const { tasks, loading } = useContext(TaskContext);
 	if (loading) return <p>Cargando tareas...</p>;
+	console.log(tasks);
 
 
 	return (

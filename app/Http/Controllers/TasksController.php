@@ -40,22 +40,23 @@ class TasksController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'difficulty' => 'required|in:easy,medium,hard',
+            'difficulty' => 'required|in:facil,medio,dificil',
             'estimated_time' => 'nullable|integer',
-            'status' => 'nullable|in:pending,completed',
-            'objectives' => 'array|required', // Validar que los objetivos están presentes
-            'objectives.*.description' => 'required|string|max:255', // Cada objetivo debe tener una descripción
+            'status' => 'nullable|in:pendiente,completado',
+            'objectives' => 'array|nullable', // Validar que los objetivos están presentes
+            'objectives.*.description' => 'nullable|string|max:255', // Cada objetivo debe tener una descripción
             'objectives.*.completed' => 'boolean', // Cada objetivo puede tener estado completado (por defecto falso)
         ]);
 
+        $user = auth('api')->user();
         // Crear la Task
         $task = Tasks::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'title' => $request->title,
             'description' => $request->description,
             'difficulty' => $request->difficulty,
-            'estimated_time' => $request->estimated_time,
-            'status' => $request->status ?? 'pending'
+            'estimated_time' => $request->estimated_time ?? 24,
+            'status' => $request->status ?? 'pendiente'
         ]);
 
         // Crear los Objetivos asociados a la Task
@@ -67,7 +68,7 @@ class TasksController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Task created successfully with objectives', 'task' => $task], 201);
+        return response()->json($task, 201);
     }
 
     public function update(Request $request, $id)
@@ -87,9 +88,9 @@ class TasksController extends Controller
             'difficulty' => 'required|in:easy,medium,hard',
             'estimated_time' => 'required|integer',
             'status' => 'nullable|in:pending,completed',
-            'objectives' => 'array|required', // Validar que los objetivos están presentes
+            'objectives' => 'array|nullable', // Validar que los objetivos están presentes
             'objectives.*.id' => 'nullable|exists:objectives,id', // Validar si el objetivo ya existe
-            'objectives.*.description' => 'required|string|max:255', // Descripción del objetivo
+            'objectives.*.description' => 'nullable|string|max:255', // Descripción del objetivo
             'objectives.*.completed' => 'boolean', // Estado del objetivo (completado o no)
         ]);
 
@@ -100,7 +101,7 @@ class TasksController extends Controller
             'description' => $request->description,
             'difficulty' => $request->difficulty,
             'estimated_time' => $request->estimated_time,
-            'status' => $request->status ?? 'pending'
+            'status' => $request->status ?? 'pendiente'
         ]);
 
         // Actualizar, crear o eliminar objetivos
@@ -132,7 +133,7 @@ class TasksController extends Controller
     }
 
     // Eliminar una tarea
-    public function destroy(Tasks $task)
+    public function destroy(Tasks $task, $id)
     {
         // Obtener la task
         $task = Tasks::findOrFail($id);

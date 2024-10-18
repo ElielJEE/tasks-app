@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->enum('difficulty', ['Facil', 'Medio', 'Dificil']);
+            $table->enum('difficulty', ['facil', 'medio', 'dificil']);
             $table->integer('estimated_time')->default(24); // esto es en minutos
-            $table->enum('status', ['Pendiente', 'Completo'])->default('Pendiente'); //Aqui por defecto iran los estatus de pendiente o completado, pero de base sera pendiente
+            $table->enum('status', ['pendiente', 'completo'])->default('pendiente'); //Aqui por defecto iran los estatus de pendiente o completado, pero de base sera pendiente
             $table->timestamps();
         });
     }

@@ -1,12 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { useActive } from '../hooks';
-import CreateTaskView from './CreateTaskView';
-import { TaskContext } from '../services/TaskContext';
-import ModalCreation from './ModalCreation';
 
 export default function CardsDisplayer() {
-	const location = useLocation();
 	const [showModal, setShowModal] = useState(false);
 	const navigate = useNavigate()
 
