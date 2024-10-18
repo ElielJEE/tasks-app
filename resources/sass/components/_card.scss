@@ -1,18 +1,23 @@
 .task-card {
+	position: relative;
 	display: flex;
 	background-color: $s-color;
 	border-radius: 0.5rem;
 	overflow: hidden;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	border: 1px solid $t-color;
-	margin-bottom: 1rem;
 	transition: all 0.3s ease;
 	cursor: default;
+	min-width: 250px;
 
 	&:hover {
 		border-color: $fi-color;
 		box-shadow: 0 0 15px $fi-color;
 		transform: scale(1.1);
+	}
+
+	&.completed {
+		opacity: 0.6;
 	}
 
 	&__checkbox-container {
@@ -38,9 +43,39 @@
 		}
 
 		input[type="checkbox"] {
-			margin-top: 10px;
+			margin-top: 8px;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			width: 20px;
+			height: 20px;
+			background-color: rgba(255, 255, 255, 0.3);
+			border: solid 2px rgb(255, 255, 255);
 			border-radius: 50%;
-			background-color: black;
+			outline: none;
+			transition: all 0.3s ease;
+			cursor: pointer;
+			position: relative;
+
+			&:hover {
+				border-color: $fi-color;
+				box-shadow: 0 0 15px $fi-color;
+			}
+
+			&:checked {
+				background-color: $t-color;
+				border-color: $t-color;
+
+				&::after {
+					content: '\2714';
+					font-size: 14px;
+					color: white;
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+				}
+			}
 		}
 	}
 
@@ -57,12 +92,39 @@
 			color: $f-color;
 		}
 	}
+
+	&__edit-btn,
+	&__delete-btn {
+		position: absolute;
+		top: 8px;
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
+		opacity: 0;
+		transition: all .5s ease-in-out;
+		font-size: .8rem;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	&__edit-btn {
+		right: 55px;
+	}
+
+	&__delete-btn {
+		right: 10px;
+	}
+
+	&:hover .task-card__edit-btn,
+	&:hover .task-card__delete-btn {
+		opacity: 1;
+	}
 }
 
 
-.task-card.completed {
-	opacity: 0.6;
-}
+
 
 .task-card.completed .task-card__task-title,
 .task-card.completed .task-card__task-description {

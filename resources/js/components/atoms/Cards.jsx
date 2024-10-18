@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { TaskContext } from '../services/TaskContext';
 
-export default function TaskCard({ title, description, difficulty }) {
+export default function TaskCard({ title, description, difficulty, id }) {
   const [isCompleted, setIsCompleted] = useState(false);
+  const { deleteTask } = useContext(TaskContext); 
 
   const handleCheckboxChange = () => {
     setIsCompleted(!isCompleted);
   };
+
+  const handleDelete = () => {
+    deleteTask(id)
+  }
 
   return (
     <div className={`task-card ${isCompleted ? 'completed' : ''}`}>
@@ -20,6 +26,12 @@ export default function TaskCard({ title, description, difficulty }) {
         <h3 className="task-card__info-container__task-title">{title}</h3>
         <p className="task-card__info-container__task-description">{description}</p>
       </div>
+      <button className="task-card__edit-btn">
+        Editar
+      </button>
+      <button className="task-card__delete-btn" onClick={handleDelete}>
+        Borrar
+      </button>
     </div>
   );
 }
