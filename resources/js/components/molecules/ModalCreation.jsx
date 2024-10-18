@@ -22,7 +22,7 @@ export default function ModalCreation({ showModal }) {
 			<button className="create-task-modal-container__close-modal" onClick={handleCloseModal}>
 				Cerrar
 			</button>
-			<CreateTaskView />
+			<CreateTaskView setCloseModal />
 		</div>
 	)
 }

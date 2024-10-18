@@ -19,19 +19,23 @@
 		align-items: center;
 		width: 100%;
 
-		&__list-container {
+		&__list-container,
+		&__list-container-two {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			margin-left: auto;
 
-			&__nav-list {
+			&__nav-list,
+			&__nav-list-two {
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				gap: 16px;
 				list-style-type: none;
 
-				&__list-item {
+				&__list-item,
+				&__list-item-two {
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -40,8 +44,10 @@
 					border-top: 1px solid $fi-color;
 					border-radius: 10px;
 					padding: 3px 15px;
+					cursor: pointer;
 
-					&__item {
+					&__item,
+					&__span {
 						text-decoration: none;
 						display: flex;
 						align-items: center;
