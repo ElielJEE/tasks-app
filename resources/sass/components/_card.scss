@@ -1,11 +1,11 @@
 .task-card {
+	display: flex;
 	background-color: $s-color;
 	border-radius: 0.5rem;
 	overflow: hidden;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	border: 1px solid $t-color;
 	margin-bottom: 1rem;
-	padding: 1rem;
 	transition: all 0.3s ease;
 	cursor: default;
 
@@ -15,64 +15,50 @@
 		transform: scale(1.1);
 	}
 
-	&__task-title {
-		font-size: 1.25rem;
-		font-weight: 600;
-		color: white;
-		margin: 0 0 0.5rem 0;
-	}
-
-	&__task-description {
-		font-size: 0.875rem;
-		color: #d8b4fe;
-		margin-bottom: 1rem;
-	}
-
-	&__task-details {
+	&__checkbox-container {
 		display: flex;
-		justify-content: space-between;
-		align-items: center;
+		width: 3rem;
+		justify-content: center;
+		align-items: start;
 
-		&__task-difficulty {
-			font-size: 0.75rem;
-			padding: 0.25rem 0.5rem;
-			border-radius: 9999px;
-			font-weight: 600;
+		&.facil {
+			background-color: #10b981;
+			color: #064e3b;
 
-			&.Facil {
-				background-color: #10b981;
-				color: #064e3b;
-			}
 		}
 
+		&.medio {
+			background-color: #f59e0b;
+			color: #78350f;
+		}
+
+		&.dificil {
+			background-color: #ef4444;
+			color: #7f1d1d;
+		}
+
+		input[type="checkbox"] {
+			margin-top: 10px;
+			border-radius: 50%;
+			background-color: black;
+		}
+	}
+
+	&__info-container {
+		padding: 1rem;
+
+		&__task-title {
+			font-size: 1.25rem;
+			font-weight: 600;
+		}
+
+		&__task-description {
+			font-size: 0.875rem;
+			color: $f-color;
+		}
 	}
 }
 
-
-
-
-
-
-.task-card__task-details__task-difficulty.medium {
-	background-color: #f59e0b;
-	color: #78350f;
-}
-
-.task-card__task-details__task-difficulty.hard {
-	background-color: #ef4444;
-	color: #7f1d1d;
-}
-
-.task-card__task-details label {
-	display: flex;
-	align-items: center;
-	color: #d8b4fe;
-	font-size: 0.875rem;
-}
-
-.task-card__task-details input[type="checkbox"] {
-	margin-right: 0.5rem;
-}
 
 .task-card.completed {
 	opacity: 0.6;
