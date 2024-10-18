@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { createTask } from '../services';
 import { TaskContext } from '../services/TaskContext';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function CreateTaskView() {
+export default function CreateTaskView({ func }) {
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
   const [taskData, setTaskData] = useState({
@@ -12,6 +13,15 @@ export default function CreateTaskView() {
     estimatedTime: '',
     status: 'pendiente',
   })
+
+  const location = useLocation();
+  const shouldShowModal = location.state?.showModal ?? showModal;
+  const [closeModal, setCloseModal] = useState(true)
+  const navigate = useNavigate()
+
+  if (!shouldShowModal) {
+    return null;
+  }
 
   const { addTask } = useContext(TaskContext);
 
@@ -43,9 +53,10 @@ export default function CreateTaskView() {
         estimatedTime: '',
         status: 'pendiente',
       })
-      
 
-      addTask(result.data);
+      addTask(result.data.task);
+      setCloseModal(false)
+      navigate('/tasks', { state: { showModal: false } })
     } else {
       setErrors(result.errors)
     }
@@ -115,7 +126,10 @@ export default function CreateTaskView() {
           />
         </div>
 
-        <button type="submit" className="form-task-container__form-task__submit-btn">Crear tarea</button>
+        <button
+          type="submit"
+          className="form-task-container__form-task__submit-btn"
+        >Crear tarea</button>
       </form>
     </div>
   )
