@@ -22,7 +22,7 @@ class QuestsController extends Controller
         // Obtener todas las quests asociadas a este usuario
         $quests = Quests::with('objectives') // Carga los objetivos relacionados
                     ->where('user_id', Auth::id())
-                    ->all();
+                    ->get();
         
         if ($quests->isEmpty()) {
             return response()->json(['message' => 'No quests found'], 200);
