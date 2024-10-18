@@ -4,7 +4,7 @@ import { Cards } from '../atoms'
 import { TaskContext } from '../services/TaskContext';
 
 export default function TaskCards() {
-	const { userId } = getUser();
+	/* const { userId } = getUser();
 	const [task, setTask] = useState([]);
 
 	useEffect(() => {
@@ -38,15 +38,16 @@ export default function TaskCards() {
 		
 		tasksDataHeader();
 	}, [userId]);
-	console.log(task.tasks);
-	/* const { tasks, loading } = useContext(TaskContext);
-	if (loading) return <p>Cargando tareas...</p>; */
+	console.log(task.tasks); */
+	const { tasks, loading } = useContext(TaskContext);
+	if (loading) return <p>Cargando tareas...</p>;
+	console.log(tasks);
 
 
 	return (
 		<>
 			<div className="task-cards-container">
-				{
+				{/* {
 					task.tasks && (
 						task.tasks.length > 0 ? (
 							task.tasks.map((item, key) => (
@@ -56,14 +57,16 @@ export default function TaskCards() {
 							<p>no se encontraron tareas.</p>
 						)
 					)
+				} */}
+				{
+					tasks ? (
+						tasks.map((item, key) => (
+							<Cards key={key} {...item} />  // Renderizar las tarjetas de tareas
+						))
+					) : (
+						<p>No se encontraron tareas.</p>  // Mensaje cuando no hay tareas
+					)
 				}
-				{/* {tasks.length > 0 ? (
-					tasks.map((item, key) => (
-						<Cards key={key} {...item} />  // Renderizar las tarjetas de tareas
-					))
-				) : (
-					<p>No se encontraron tareas.</p>  // Mensaje cuando no hay tareas
-				)} */}
 			</div>
 		</>
 	)

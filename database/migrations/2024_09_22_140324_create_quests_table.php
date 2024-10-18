@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->enum('difficulty', ['Facil', 'Medio', 'Dificil']);
-            $table->enum('status', ['Activo', 'Completo'])->default('active');
+            $table->enum('status', ['Activo', 'Completo'])->default('Activo');
             $table->timestamps();
         });
     }

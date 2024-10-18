@@ -21,7 +21,6 @@ export default function TaskCard({ title, description, difficulty }) {
                         checked={isCompleted} 
                         onChange={handleCheckboxChange} 
                     />
-                    Completada
                 </label>
             </div>
         </div>

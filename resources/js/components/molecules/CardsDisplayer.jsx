@@ -1,10 +1,15 @@
-import React from 'react'
-import { Link, Outlet } from 'react-router-dom'
-import { useActive } from '../hooks';
-import CreateTaskView from './CreateTaskView';
+import React, { useState } from 'react'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 export default function CardsDisplayer() {
-	const { active, activeHandle } = useActive();
+	const [showModal, setShowModal] = useState(false);
+	const navigate = useNavigate()
+
+	const handleShowModal = () => {
+		setShowModal(true)
+		console.log('object');
+		navigate('/tasks', { state: { showModal: true } })
+	}
 
 	return (
 		<div className="tabs-container">
@@ -25,7 +30,7 @@ export default function CardsDisplayer() {
 					</Link>
 				</li>
 				<li className="tabs-container__tabs-list__tab-item-btn">
-					<button className="tabs-container__tabs-list__tab-item-btn__tab-btn" onClick={e => activeHandle(1)}>
+					<button className="tabs-container__tabs-list__tab-item-btn__tab-btn" onClick={handleShowModal}>
 						<span className="tabs-container__tabs-list__tab-item-btn__tab-btn__tab-btn-span">
 							Agregar tarea
 						</span>
@@ -33,12 +38,6 @@ export default function CardsDisplayer() {
 				</li>
 			</ul>
 			<Outlet />
-			<div className={active === 1 ? ("create-task-modal-container active-modal-creation") : ("create-task-modal-container")}>
-				<button className="create-task-modal-container__close-modal" onClick={e => activeHandle(0)}>
-					Cerrar
-				</button>
-				<CreateTaskView />
-			</div>
 		</div>
 	)
 }

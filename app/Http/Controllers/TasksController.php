@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tasks;
 use App\Http\Controllers\Controller;
+use App\Models\Objectives;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -19,8 +20,8 @@ class TasksController extends Controller
         }
 
         // Obtener todas las tareas asociadas a este usuario
-        $tasks = Task::with('objectives') // Carga los objetivos relacionados
-        ->where($id, Auth::id())
+        $tasks = Tasks::where('user_id', $id) // Carga los objetivos relacionados
+        ->with('objectives')
         ->get();
         
         if ($tasks->isEmpty()) {
@@ -39,40 +40,41 @@ class TasksController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'difficulty' => 'required|in:easy,medium,hard',
+            'difficulty' => 'required|in:facil,medio,dificil',
             'estimated_time' => 'nullable|integer',
-            'status' => 'nullable|in:pending,completed',
-            'objectives' => 'array|required', // Validar que los objetivos están presentes
-            'objectives.*.description' => 'required|string|max:255', // Cada objetivo debe tener una descripción
+            'status' => 'nullable|in:pendiente,completado',
+            'objectives' => 'array|nullable', // Validar que los objetivos están presentes
+            'objectives.*.description' => 'nullable|string|max:255', // Cada objetivo debe tener una descripción
             'objectives.*.completed' => 'boolean', // Cada objetivo puede tener estado completado (por defecto falso)
         ]);
 
+        $user = auth('api')->user();
         // Crear la Task
-        $task = Task::create([
-            'user_id' => Auth::id(),
+        $task = Tasks::create([
+            'user_id' => $user->id,
             'title' => $request->title,
             'description' => $request->description,
             'difficulty' => $request->difficulty,
-            'estimated_time' => $request->estimated_time,
-            'status' => $request->status ?? 'pending'
+            'estimated_time' => $request->estimated_time ?? 24,
+            'status' => $request->status ?? 'pendiente'
         ]);
 
         // Crear los Objetivos asociados a la Task
         foreach ($validatedData['objectives'] as $objectiveData) {
-            Objective::create([
+            Objectives::create([
                 'task_id' => $task->id,
                 'description' => $objectiveData['description'],
                 'completed' => $objectiveData['completed'] ?? false, // Si no se especifica, se pone en false
             ]);
         }
 
-        return response()->json(['message' => 'Task created successfully with objectives', 'task' => $task], 201);
+        return response()->json($task, 201);
     }
 
     public function update(Request $request, $id)
     {
         // Buscar la Task
-        $task = Task::findOrFail($id);
+        $task = Tasks::findOrFail($id);
 
         // Verificar que la task pertenezca al usuario autenticado
         if ($task->user_id != Auth::id()) {
@@ -86,9 +88,9 @@ class TasksController extends Controller
             'difficulty' => 'required|in:easy,medium,hard',
             'estimated_time' => 'required|integer',
             'status' => 'nullable|in:pending,completed',
-            'objectives' => 'array|required', // Validar que los objetivos están presentes
+            'objectives' => 'array|nullable', // Validar que los objetivos están presentes
             'objectives.*.id' => 'nullable|exists:objectives,id', // Validar si el objetivo ya existe
-            'objectives.*.description' => 'required|string|max:255', // Descripción del objetivo
+            'objectives.*.description' => 'nullable|string|max:255', // Descripción del objetivo
             'objectives.*.completed' => 'boolean', // Estado del objetivo (completado o no)
         ]);
 
@@ -99,7 +101,7 @@ class TasksController extends Controller
             'description' => $request->description,
             'difficulty' => $request->difficulty,
             'estimated_time' => $request->estimated_time,
-            'status' => $request->status ?? 'pending'
+            'status' => $request->status ?? 'pendiente'
         ]);
 
         // Actualizar, crear o eliminar objetivos
@@ -107,7 +109,7 @@ class TasksController extends Controller
         foreach ($validatedData['objectives'] as $objectiveData) {
             if (isset($objectiveData['id'])) {
                 // Actualizar objetivo existente
-                $objective = Objective::find($objectiveData['id']);
+                $objective = Objectives::find($objectiveData['id']);
                 $objective->update([
                     'description' => $objectiveData['description'],
                     'completed' => $objectiveData['completed'] ?? false,
@@ -115,7 +117,7 @@ class TasksController extends Controller
                 $existingObjectiveIds[] = $objective->id;
             } else {
                 // Crear nuevo objetivo
-                $newObjective = Objective::create([
+                $newObjective = Objectives::create([
                     'task_id' => $task->id,
                     'description' => $objectiveData['description'],
                     'completed' => $objectiveData['completed'] ?? false,
@@ -125,16 +127,16 @@ class TasksController extends Controller
         }
 
         // Eliminar objetivos que no fueron enviados
-        Objective::where('task_id', $task->id)->whereNotIn('id', $existingObjectiveIds)->delete();
+        Objectives::where('task_id', $task->id)->whereNotIn('id', $existingObjectiveIds)->delete();
 
         return response()->json(['message' => 'Task and objectives updated successfully', 'task' => $task], 200);
     }
 
     // Eliminar una tarea
-    public function destroy(Tasks $task)
+    public function destroy(Tasks $task, $id)
     {
         // Obtener la task
-        $task = Task::findOrFail($id);
+        $task = Tasks::findOrFail($id);
 
         // Verificar que la task pertenezca al usuario autenticado
         if ($task->user_id != Auth::id()) {

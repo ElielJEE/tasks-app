@@ -8,12 +8,12 @@ export default function CreateTaskView() {
   const [taskData, setTaskData] = useState({
     title: '',
     description: '',
-    difficulty: 'easy',
+    difficulty: 'facil',
     estimatedTime: '',
-    status: 'pending',
+    status: 'pendiente',
   })
 
-  /* const { addTask } = useContext(TaskContext); */
+  const { addTask } = useContext(TaskContext);
 
   const handleChange = (e) => {
     setTaskData({
@@ -39,12 +39,13 @@ export default function CreateTaskView() {
       setTaskData({
         title: '',
         description: '',
-        difficulty: 'easy',
+        difficulty: 'facil',
         estimatedTime: '',
-        status: 'pending',
+        status: 'pendiente',
       })
+      
 
-      /* addTask(result.newTask); */
+      addTask(result.data);
     } else {
       setErrors(result.errors)
     }
@@ -65,7 +66,6 @@ export default function CreateTaskView() {
 
       <form onSubmit={handleSubmit} className="form-task-container__form-task">
         <div className="form-task-container__form-task__form-row">
-          <label htmlFor="title" className="form-task-container__form-task__form-row__label-task">Titulo:</label>
           <input
             className="form-task-container__form-task__form-row__input-task"
             type="text"
@@ -78,7 +78,6 @@ export default function CreateTaskView() {
         </div>
 
         <div className="form-task-container__form-task__form-row">
-          <label htmlFor="description" className="form-task-container__form-task__form-row__label-task">Descripcion:</label>
           <textarea
             className="form-task-container__form-task__form-row__textarea-task"
             id="description"
@@ -98,9 +97,9 @@ export default function CreateTaskView() {
             onChange={handleChange}
             required
           >
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
+            <option value="facil">facil</option>
+            <option value="medio">medio</option>
+            <option value="dificil">dificil</option>
           </select>
         </div>
 

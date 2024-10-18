@@ -6,3 +6,4 @@ export { default as TaskCards } from './TaskCards';
 export { default as QuestCards } from './QuestCards';
 export { default as HabitCards } from './HabitCards';
 export { default as CreateTaskView } from './CreateTaskView';
+export { default as ModalCreation } from './ModalCreation';
