@@ -85,6 +85,7 @@ export default function CreateTaskView({ func }) {
             value={taskData.title}
             onChange={handleChange}
             required
+            placeholder='Titulo de la tarea'
           />
         </div>
 
@@ -95,6 +96,7 @@ export default function CreateTaskView({ func }) {
             name='description'
             value={taskData.description}
             onChange={handleChange}
+            placeholder='Descripcion'
           />
         </div>
 
@@ -112,18 +114,6 @@ export default function CreateTaskView({ func }) {
             <option value="medio">medio</option>
             <option value="dificil">dificil</option>
           </select>
-        </div>
-
-        <div className="form-task-container__form-task__form-row">
-          <label htmlFor="estimatedTime" className="form-task-container__form-task__form-row__label-task">Tiempo (hours):</label>
-          <input
-            className="form-task-container__form-task__form-row__input-task"
-            type="number"
-            id="estimatedTime"
-            name="estimatedTime"
-            value={taskData.estimatedTime}
-            onChange={handleChange}
-          />
         </div>
 
         <button

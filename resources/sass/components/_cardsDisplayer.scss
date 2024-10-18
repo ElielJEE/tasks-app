@@ -30,6 +30,7 @@
 		&__tab-item-btn {
 			display: flex;
 			padding: 15px;
+			display: none;
 
 			&__tab-btn {
 				margin-left: auto;
@@ -38,6 +39,10 @@
 				padding: 5px 10px;
 				@include bg-gradient($bg-color-th, $fi-color);
 				cursor: pointer;
+			}
+
+			&.active-tab {
+				display: flex;
 			}
 		}
 	}
