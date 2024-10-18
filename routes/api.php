@@ -32,3 +32,14 @@ Route::middleware(['auth:api'])->group(function () {
    Route::put('/quests/{quest}', [QuestsController::class, 'update'])->name('quests.update');
    Route::delete('/quests/{quest}', [QuestsController::class, 'destroy'])->name('quests.delete');
 });
+
+Route::middleware(['auth:api'])->group(function () {
+   Route::post('habits/{id}', [HabitsController::class, 'show'])->name('habits.show');
+   Route::post('habits', [HabitsController::class, 'store'])->name('habits.store');
+   Route::put('habits/{id}', [HabitsController::class, 'update'])->name('habits.update');
+   Route::delete('habits/{id}', [HabitsController::class, 'destroy'])->name('habits.destroy');
+
+   // Rutas para incrementar y decrementar el contador
+   Route::post('habits/{id}/increment', [HabitsController::class, 'incrementCount'])->name('habits.increment');
+   Route::post('habits/{id}/decrement', [HabitsController::class, 'decrementCount'])->name('habits.decrement');
+});
