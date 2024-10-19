@@ -9,15 +9,17 @@
 	transition: all 0.3s ease;
 	cursor: default;
 	min-width: 250px;
+	max-width: 650px;
 
 	&:hover {
 		border-color: $fi-color;
 		box-shadow: 0 0 15px $fi-color;
-		transform: scale(1.1);
+		transform: scale(1.02);
 	}
-
+	
 	&.completed {
 		opacity: 0.6;
+		transform: scale(1);
 	}
 
 	&__checkbox-container {
@@ -28,18 +30,14 @@
 
 		&.facil {
 			background-color: #10b981;
-			color: #064e3b;
-
 		}
 
 		&.medio {
 			background-color: #f59e0b;
-			color: #78350f;
 		}
 
 		&.dificil {
 			background-color: #ef4444;
-			color: #7f1d1d;
 		}
 
 		input[type="checkbox"] {
@@ -80,7 +78,8 @@
 	}
 
 	&__info-container {
-		padding: 1rem;
+		padding: 1.7rem 1rem 1rem 1rem;
+		width: 100%;
 
 		&__task-title {
 			font-size: 1.25rem;
@@ -103,18 +102,27 @@
 		opacity: 0;
 		transition: all .5s ease-in-out;
 		font-size: .8rem;
+		color: white;
+		width: 20px;
+		height: 20px;
+		
+		svg {
+			width: 20px;
+			height: 20px;
+			fill: white;
 
-		&:hover {
-			text-decoration: underline;
+			&:hover {
+				fill: $fi-color;
+			}
 		}
 	}
 
 	&__edit-btn {
-		right: 55px;
+		right: 45px;
 	}
 
 	&__delete-btn {
-		right: 10px;
+		right: 15px;
 	}
 
 	&:hover .task-card__edit-btn,
