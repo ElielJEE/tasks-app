@@ -14,6 +14,7 @@
 
   &__form-task {
     &__form-row {
+      position: relative;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -28,13 +29,18 @@
 
       &__input-task,
       &__select-task,
-      &__textarea-task {
+      &__textarea-task,
+      &__input-task-objective {
         flex-grow: 1;
         background-color: $t-alt-color;
         padding: 8px;
         border-radius: 8px;
         border: none;
         outline: none;
+
+        &:hover ~ .form-task-container__form-task__form-row__delete-objective {
+          opacity: 1;
+        }
       }
 
       &__textarea-task {
@@ -43,6 +49,32 @@
 
       &__input-task[type="number"] {
         max-width: 100px;
+      }
+
+      &__delete-objective {
+        position: absolute;
+        right: 10px;
+        width: 15px;
+        height: 15px;
+        background-color: transparent;
+        border: none;
+        opacity: 0;
+        transition: all .2s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        svg {
+          fill: white;
+          width: 15px;
+          height: 15px;
+
+          &:hover {
+            fill: $f-color;
+          }
+        }
       }
     }
 

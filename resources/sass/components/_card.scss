@@ -9,15 +9,17 @@
 	transition: all 0.3s ease;
 	cursor: default;
 	min-width: 250px;
+	max-width: 650px;
 
 	&:hover {
 		border-color: $fi-color;
 		box-shadow: 0 0 15px $fi-color;
-		transform: scale(1.1);
+		transform: scale(1.02);
 	}
 
 	&.completed {
 		opacity: 0.6;
+		transform: scale(1);
 	}
 
 	&__checkbox-container {
@@ -28,21 +30,17 @@
 
 		&.facil {
 			background-color: #10b981;
-			color: #064e3b;
-
 		}
 
 		&.medio {
 			background-color: #f59e0b;
-			color: #78350f;
 		}
 
 		&.dificil {
 			background-color: #ef4444;
-			color: #7f1d1d;
 		}
 
-		input[type="checkbox"] {
+		&__task-checkbox {
 			margin-top: 8px;
 			-webkit-appearance: none;
 			-moz-appearance: none;
@@ -80,7 +78,8 @@
 	}
 
 	&__info-container {
-		padding: 1rem;
+		padding: 1.7rem 1rem 1rem 1rem;
+		width: 100%;
 
 		&__task-title {
 			font-size: 1.25rem;
@@ -91,6 +90,61 @@
 			font-size: 0.875rem;
 			color: $f-color;
 		}
+
+		&__task-objectives-title {
+			margin-top: 10px;
+		}
+
+		&__task-objectives-list {
+			list-style: none;
+
+			&__task-objective-item {
+				display: flex;
+				align-items: center;
+				gap: 7px;
+				padding: 10px 10px 0 10px;
+
+				&__task-objective-checkbox[type='checkbox'] {
+					-webkit-appearance: none;
+					-moz-appearance: none;
+					appearance: none;
+					width: 15px;
+					height: 15px;
+					background-color: rgba(255, 255, 255, 0.3);
+					border: solid 2px rgb(255, 255, 255);
+					border-radius: 50%;
+					outline: none;
+					transition: all 0.3s ease;
+					cursor: pointer;
+					position: relative;
+
+					&:hover {
+						border-color: $fi-color;
+						box-shadow: 0 0 15px $fi-color;
+					}
+
+					&:checked {
+						background-color: $t-color;
+						border-color: $t-color;
+
+						&::after {
+							content: '\2714';
+							font-size: 14px;
+							color: white;
+							position: absolute;
+							top: 50%;
+							left: 50%;
+							transform: translate(-50%, -50%);
+						}
+					}
+				}
+
+				&__task-objective-title {
+					font-size: .85rem;
+				}
+			}
+		}
+
 	}
 
 	&__edit-btn,
@@ -103,32 +157,33 @@
 		opacity: 0;
 		transition: all .5s ease-in-out;
 		font-size: .8rem;
+		color: white;
+		width: 20px;
+		height: 20px;
 
-		&:hover {
-			text-decoration: underline;
+		svg {
+			width: 20px;
+			height: 20px;
+			fill: white;
+
+			&:hover {
+				fill: $fi-color;
+			}
 		}
 	}
 
 	&__edit-btn {
-		right: 55px;
+		right: 45px;
 	}
 
 	&__delete-btn {
-		right: 10px;
+		right: 15px;
 	}
 
 	&:hover .task-card__edit-btn,
 	&:hover .task-card__delete-btn {
 		opacity: 1;
 	}
-}
-
-
-
-
-.task-card.completed .task-card__task-title,
-.task-card.completed .task-card__task-description {
-	text-decoration: line-through;
 }
 
 /* Responsive design */

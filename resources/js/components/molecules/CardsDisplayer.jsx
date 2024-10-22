@@ -1,15 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useActive } from '../hooks';
 
 export default function CardsDisplayer() {
 	const [showModal, setShowModal] = useState(false);
-	const navigate = useNavigate()
+	const navigate = useNavigate();
+	const { active, activeHandle } = useActive();
+	const location = useLocation();
+	const path = location.pathname;
 
 	const handleShowModal = () => {
 		setShowModal(true)
 		console.log('object');
 		navigate('/tasks', { state: { showModal: true } })
 	}
+
+	const index = {
+		'/tasks': 0,
+		'/quests': 1,
+		'/habits': 2,
+	}
+
+	useEffect(() => {
+		if (index[path] !== undefined) {
+			activeHandle(index[path])
+		}
+	}, [path])
 
 	return (
 		<div className="tabs-container">
@@ -29,10 +45,24 @@ export default function CardsDisplayer() {
 						Habitos
 					</Link>
 				</li>
-				<li className="tabs-container__tabs-list__tab-item-btn">
+				<li className={`tabs-container__tabs-list__tab-item-btn ${active === 0 ? 'active-tab' : ''}`}>
 					<button className="tabs-container__tabs-list__tab-item-btn__tab-btn" onClick={handleShowModal}>
 						<span className="tabs-container__tabs-list__tab-item-btn__tab-btn__tab-btn-span">
 							Agregar tarea
+						</span>
+					</button>
+				</li>
+				<li className={`tabs-container__tabs-list__tab-item-btn ${active === 1 ? 'active-tab' : ''}`}>
+					<button className="tabs-container__tabs-list__tab-item-btn__tab-btn" >
+						<span className="tabs-container__tabs-list__tab-item-btn__tab-btn__tab-btn-span">
+							Agregar mision
+						</span>
+					</button>
+				</li>
+				<li className={`tabs-container__tabs-list__tab-item-btn ${active === 2 ? 'active-tab' : ''}`}>
+					<button className="tabs-container__tabs-list__tab-item-btn__tab-btn" >
+						<span className="tabs-container__tabs-list__tab-item-btn__tab-btn__tab-btn-span">
+							Agregar habito
 						</span>
 					</button>
 				</li>

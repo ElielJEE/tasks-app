@@ -18,7 +18,7 @@ export default function TaskCards() {
 							<Cards key={key} {...item} />  // Renderizar las tarjetas de tareas
 						))
 					) : (
-						<p>No se encontraron tareas.</p>  // Mensaje cuando no hay tareas
+						<p className='task-cards-container__message'>No se encontraron tareas.</p>  // Mensaje cuando no hay tareas
 					)
 				}
 			</div>

@@ -9,7 +9,7 @@
 	right: 0;
 	height: 45px;
 	padding: 0 25px;
-	z-index: 90;
+	z-index: 100;
 	border-radius: 10px;
 	margin: 0 auto;
 
@@ -34,8 +34,7 @@
 				gap: 16px;
 				list-style-type: none;
 
-				&__list-item,
-				&__list-item-two {
+				&__list-item {
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -46,8 +45,7 @@
 					padding: 3px 15px;
 					cursor: pointer;
 
-					&__item,
-					&__span {
+					&__item {
 						text-decoration: none;
 						display: flex;
 						align-items: center;
@@ -56,6 +54,19 @@
 						font-family: $f-font;
 						font-size: 1.1rem;
 						color: white;
+					}
+				}
+
+				&__list-item-two {
+					display: flex;
+					width: 25px;
+					height: 25px;
+					cursor: pointer;
+
+					svg {
+						height: 25px;
+						width: 25px;
+						fill: white;
 					}
 				}
 			}
