@@ -16,7 +16,7 @@ class TasksController extends Controller
     {
         // Verificamos si el usuario autenticado está accediendo a sus propias tareas
         $user = auth('api')->user();
-        if ($id != $user->id) {
+        if (!$user) {
             return response()->json(['Error' => 'No autorizado para ver estas tareas'], 403);
         }
 
@@ -30,7 +30,7 @@ class TasksController extends Controller
         }
 
         return response()->json([
-            'message' => 'Task',
+            'message' => 'Succesful',
             'task' => $tasks
         ]);
     }
@@ -47,7 +47,7 @@ class TasksController extends Controller
             'status' => 'nullable|in:pendiente,completo',
             'objectives' => 'array|nullable', // Ahora los objetivos son opcionales
             'objectives.*.description' => 'required_with:objectives|string|max:255', // Solo requerido si se envían objetivos
-            'objectives.*.completed' => 'required_with:objectives|boolean', // Puede tener estado completado (por defecto falso)
+            'objectives.*.completed' => 'boolean', // Puede tener estado completado (por defecto falso)
         ]);
 
         // Crear la Task
@@ -56,7 +56,7 @@ class TasksController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'difficulty' => $request->difficulty,
-            'estimated_time' => $request->estimated_time??24,
+            'estimated_time' => $request->estimated_time ?? 24,
             'status' => $request->status ?? 'pendiente'
         ]);
 
@@ -64,14 +64,16 @@ class TasksController extends Controller
         if (!empty($validatedData['objectives'])) {
             foreach ($validatedData['objectives'] as $objectiveData) {
                 Objectives::create([
-                    'task_id' => $task->id,
+                    'related_type'=> Tasks::class,
+                    'related_id' => $task->id,
                     'description' => $objectiveData['description'],
                     'completed' => $objectiveData['completed'] ?? false, // Si no se especifica, se pone en false
                 ]);
             }
         }
 
-        return response()->json(['message' => 'OK', 'task' => $task], 201);
+        $taskWithObjectives = Tasks::with('objectives')->find($task->id);
+        return response()->json(['message' => 'OK', 'task' => $taskWithObjectives], 201);
     }
 
     // Actualizar una tarea

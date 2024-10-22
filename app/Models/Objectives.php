@@ -12,19 +12,13 @@ class Objectives extends Model
     protected $fillable = [
         'description',
         'completed',
-        'objectiveable_id',
-        'objectiveable_type',
+        'related_type',
+        'related_id'
     ];
 
     // Relación con Task
-    public function task()
+    public function related()
     {
-        return $this->belongsTo(Task::class);
-    }
-
-    // Relación con Quest
-    public function quest()
-    {
-        return $this->belongsTo(Quest::class);
+        return $this->morphTo();
     }
 }

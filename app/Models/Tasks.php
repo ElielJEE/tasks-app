@@ -18,6 +18,6 @@ class Tasks extends Model
     
     public function objectives()
     {
-        return $this->hasMany(Objectives::class, 'task_id');
+        return $this->morphMany(Objectives::class, 'related');
     }
 }
