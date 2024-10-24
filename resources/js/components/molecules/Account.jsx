@@ -1,16 +1,57 @@
 import React, { useState, useEffect } from 'react'
 import { useActive } from '../hooks'
 import { Loading } from '../atoms';
-import { getUser } from '../services';
+import { getUser, updateUser } from '../services';
+import { useNavigate } from 'react-router-dom';
 
 export default function Account() {
 	const { active, activeHandle } = useActive();
 	const { user } = getUser();
 	const [selectedFile, setSelectedFile] = useState(null);
+	const navigate = useNavigate();
 
 	const handleSelectionFile = (e) => {
 		e.preventDefault();
 		setSelectedFile(e.target.files[0]);
+	}
+
+	console.log(selectedFile);
+
+	const [userData, setUserData] = useState({
+		name: '',
+		email: '',
+		password: '',
+		avatar: '',
+		displayname: ''
+	})
+	const [errors, setErrors] = useState({})
+
+	const handleChange = (e) => {
+		setUserData({
+			...userData,
+			[e.target.name]: e.target.value
+		})
+	}
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setErrors({})
+
+		const token = localStorage.getItem('token')
+		if (!token) {
+			console.error('No token found.')
+			return
+		}
+
+		const result = await updateUser(userData, token);
+
+		if (result.success) {
+			navigate(0)
+			console.log('bien');
+		} else {
+			console.log(result.errors);
+			setErrors(result.errors)
+		}
 	}
 
 	return (
@@ -32,7 +73,15 @@ export default function Account() {
 												</label>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-input">
-												<input type="text" className="account-settings__account-form__table-form__tb__tr__td-input__account-input" name='username' defaultValue={user.name} disabled={active === 1 ? false : true} />
+												<input
+													type="text"
+													className="account-settings__account-form__table-form__tb__tr__td-input__account-input"
+													name='name'
+													disabled={active === 1 ? false : true}
+													value={userData.name}
+													onChange={handleChange}
+													placeholder={user.name}
+												/>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-btn">
 												<button className={active === 1 ? ("account-settings__account-form__table-form__tb__tr__td-btn__edit-btn") : ("account-settings__account-form__table-form__tb__tr__td-btn__edit-btn active-edit-btn")}
@@ -48,10 +97,7 @@ export default function Account() {
 												</button>
 												<button className={active === 1 ? ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn active-act-btn") : ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn")}
 													type='button'
-													onClick={e => {
-														activeHandle(1)
-														e.preventDefault();
-													}}
+													onClick={handleSubmit}
 												>
 													<span className="account-settings__account-form__table-form__tb__tr__td-btn__save-btn__save-span">
 														Guardar
@@ -77,7 +123,15 @@ export default function Account() {
 												</label>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-input">
-												<input type="email" className="account-settings__account-form__table-form__tb__tr__td-input__account-input" name='email' defaultValue={user.email} disabled={active === 2 ? false : true} />
+												<input
+													type="email"
+													className="account-settings__account-form__table-form__tb__tr__td-input__account-input"
+													name='email'
+													placeholder={user.email}
+													disabled={active === 2 ? false : true}
+													value={userData.email}
+													onChange={handleChange}
+												/>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-btn">
 												<button className={active === 2 ? ("account-settings__account-form__table-form__tb__tr__td-btn__edit-btn") : ("account-settings__account-form__table-form__tb__tr__td-btn__edit-btn active-edit-btn")}
@@ -91,7 +145,10 @@ export default function Account() {
 														Editar
 													</span>
 												</button>
-												<button className={active === 2 ? ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn active-act-btn") : ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn")}>
+												<button
+													className={active === 2 ? ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn active-act-btn") : ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn")}
+													onClick={handleSubmit}
+												>
 													<span className="account-settings__account-form__table-form__tb__tr__td-btn__save-btn__save-span">
 														Guardar
 													</span>
@@ -116,7 +173,15 @@ export default function Account() {
 												</label>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-input">
-												<input type="text" className="account-settings__account-form__table-form__tb__tr__td-input__account-input" name='displayname' defaultValue={!user.displayname ? (user.name) : (user.displayname)} disabled={active === 3 ? false : true} />
+												<input
+													type="text"
+													className="account-settings__account-form__table-form__tb__tr__td-input__account-input"
+													name='displayname'
+													placeholder={!user.displayname ? (user.name) : (user.displayname)}
+													disabled={active === 3 ? false : true}
+													value={userData.displayname}
+													onChange={handleChange}
+												/>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-btn">
 												<button className={active === 3 ? ("account-settings__account-form__table-form__tb__tr__td-btn__edit-btn") : ("account-settings__account-form__table-form__tb__tr__td-btn__edit-btn active-edit-btn")}
@@ -130,12 +195,10 @@ export default function Account() {
 														Editar
 													</span>
 												</button>
-												<button className={active === 3 ? ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn active-act-btn") : ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn")}
+												<button
+													className={active === 3 ? ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn active-act-btn") : ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn")}
 													type='button'
-													onClick={e => {
-														activeHandle(1)
-														e.preventDefault();
-													}}
+													onClick={handleSubmit}
 												>
 													<span className="account-settings__account-form__table-form__tb__tr__td-btn__save-btn__save-span">
 														Guardar
@@ -161,7 +224,15 @@ export default function Account() {
 												</label>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-input">
-												<input type="password" className="account-settings__account-form__table-form__tb__tr__td-input__account-input" name='password' disabled={active === 4 ? false : true} />
+												<input
+													type="password"
+													className="account-settings__account-form__table-form__tb__tr__td-input__account-input"
+													name='password'
+													disabled={active === 4 ? false : true}
+													value={userData.password}
+													onChange={handleChange}
+													placeholder='***********'
+												/>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-btn">
 												<button className={active === 4 ? ("account-settings__account-form__table-form__tb__tr__td-btn__edit-btn") : ("account-settings__account-form__table-form__tb__tr__td-btn__edit-btn active-edit-btn")}
@@ -175,12 +246,10 @@ export default function Account() {
 														Editar
 													</span>
 												</button>
-												<button className={active === 4 ? ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn active-act-btn") : ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn")}
+												<button
+													className={active === 4 ? ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn active-act-btn") : ("account-settings__account-form__table-form__tb__tr__td-btn__save-btn")}
 													type='button'
-													onClick={e => {
-														activeHandle(1)
-														e.preventDefault();
-													}}
+													onClick={handleSubmit}
 												>
 													<span className="account-settings__account-form__table-form__tb__tr__td-btn__save-btn__save-span">
 														Guardar
@@ -206,11 +275,20 @@ export default function Account() {
 												</label>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-input">
-												<input type="file" className="account-settings__account-form__table-form__tb__tr__td-input__account-input-file" name='image' accept='image/*' onChange={handleSelectionFile} />
+												<input
+													type="file"
+													className="account-settings__account-form__table-form__tb__tr__td-input__account-input-file"
+													name='image'
+													accept='image/*'
+													onChange={handleSelectionFile}
+												/>
 											</td>
 											{selectedFile && (
 												<td className="account-settings__account-form__table-form__tb__tr__td-btn">
-													<button className="account-settings__account-form__table-form__tb__tr__td-btn__save-btn active-act-btn">
+													<button
+														className="account-settings__account-form__table-form__tb__tr__td-btn__save-btn active-act-btn"
+														onClick={handleSubmit}
+													>
 														<span className="account-settings__account-form__table-form__tb__tr__td-btn__save-btn__save-span">
 															Guardar
 														</span>

@@ -8,7 +8,7 @@ export default function Sidebar() {
 	const { active, activeHandle } = useActive();
 
 	const goBack = () => {
-		navigate(-10);
+		navigate('/');
 	}
 
 	const path = location.pathname;

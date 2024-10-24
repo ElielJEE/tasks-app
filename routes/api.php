@@ -2,16 +2,18 @@
 // routes/api.php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HabitsController;
 use App\Http\Controllers\ObjectivesController;
 use App\Http\Controllers\QuestsController;
 use App\Http\Controllers\TasksController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->group(function(){
    Route::post('logout', [AuthController::class, 'Logout']);
    Route::post('refresh', [AuthController::class, 'refresh']);
    Route::post('user', [AuthController::class, 'user']);
-   /* Route::put('update', [UserController::class, 'update']); */
+   Route::put('update', [UsersController::class, 'update']);
 });
 
 Route::group(['prefix' => 'auth'], function ($router) {

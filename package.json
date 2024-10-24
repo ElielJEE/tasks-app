@@ -25,6 +25,7 @@
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-i18next": "^15.0.2",
+        "react-masonry-css": "^1.0.16",
         "react-router-dom": "^6.26.1",
         "router-dom": "^2.2.11",
         "sass": "^1.77.8"
