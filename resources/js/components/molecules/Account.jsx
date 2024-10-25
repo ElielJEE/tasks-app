@@ -15,8 +15,6 @@ export default function Account() {
 		setSelectedFile(e.target.files[0]);
 	}
 
-	console.log(selectedFile);
-
 	const [userData, setUserData] = useState({
 		name: '',
 		email: '',
@@ -33,6 +31,18 @@ export default function Account() {
 		})
 	}
 
+	/* useEffect(() => {
+		if (user) {
+			setUserData({
+				name: user.name,
+				email: user.email,
+				displayname: user.displayname,
+				avatar: user.avatar,
+				password: ''
+			})
+		}
+	}, [user]) */
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setErrors({})
@@ -43,7 +53,19 @@ export default function Account() {
 			return
 		}
 
-		const result = await updateUser(userData, token);
+		const formData = new FormData();
+		formData.append('name', userData.name);
+		formData.append('email', userData.email);
+		formData.append('password', userData.password);
+		formData.append('displayname', userData.displayname);
+
+		if (selectedFile) {
+			formData.append('avatar', selectedFile);
+		}
+
+		formData.append('_method', 'PUT');
+
+		const result = await updateUser(formData, token);
 
 		if (result.success) {
 			navigate(0)
@@ -63,6 +85,9 @@ export default function Account() {
 					)
 					: (
 						<div className="account-settings s-container">
+							<div style={{position: 'absolute', top: '30px', right: '100px', backgroundColor: 'red'}}>
+								<img src={user.avatar} alt="" style={{ width: '150px' }} />
+							</div>
 							<form className="account-settings__account-form">
 								<table className="account-settings__account-form__table-form">
 									<tbody className="account-settings__account-form__table-form__tb">
@@ -81,6 +106,7 @@ export default function Account() {
 													value={userData.name}
 													onChange={handleChange}
 													placeholder={user.name}
+													autoComplete='username'
 												/>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-btn">
@@ -181,6 +207,7 @@ export default function Account() {
 													disabled={active === 3 ? false : true}
 													value={userData.displayname}
 													onChange={handleChange}
+													autoComplete='displayname'
 												/>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-btn">
@@ -232,6 +259,7 @@ export default function Account() {
 													value={userData.password}
 													onChange={handleChange}
 													placeholder='***********'
+													autoComplete='current-password'
 												/>
 											</td>
 											<td className="account-settings__account-form__table-form__tb__tr__td-btn">

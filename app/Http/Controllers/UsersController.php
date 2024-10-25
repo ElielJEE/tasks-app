@@ -18,14 +18,13 @@ class UsersController extends Controller
             $user = auth('api')->user();
             $validateUser = $request->validated();
             // Si se sube un avatar, guardarlo en el almacenamiento y actualizar el campo avatar
-            dd($request->all());
             if ($request->hasFile('avatar')) {
                 $request->validate([
                     'avatar' => 'image|mimes:jpeg,png,jpg,gif|max:100048', // Validación mejorada del avatar
                 ]);
                 // Borrar el avatar anterior si existe
-                if ($user->avatar && Storage::exists('public/avatars/' . $user->avatar)) {
-                    Storage::delete('public/avatars' . $user->avatar);
+                if ($user->avatar && Storage::exists('public/storage/avatars' . $user->avatar)) {
+                    Storage::delete('public/storage/avatars' . $user->avatar);
                 }
 
                 // Guardar el nuevo avatar
@@ -33,8 +32,8 @@ class UsersController extends Controller
                 $request->file('avatar')->storeAs('avatars', $avatarName, 'public');
 
                 // Actualizar el campo avatar
-                $user->avatar_url = Storage::url('avatars/' . $avatarName);
-                $user->avatar = 'avatars/' . $avatarName;
+                $user->avatar = Storage::url('avatars/' . $avatarName);
+                /* $user->avatar = 'avatars/' . $avatarName; */
             }
 
             // Actualizar los campos del usuario

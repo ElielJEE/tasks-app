@@ -2,14 +2,18 @@ import config from './Config'
 
 const UpdateUser = async (userDataUpdate, token) => {
 	try {
+		const formData = new FormData();
+
+		// Supongamos que userDataUpdate es un objeto con propiedades
+		for (const key in userDataUpdate) {
+			formData.append(key, userDataUpdate[key]);
+		}
 		const response = await fetch(`${config.apiBaseUrl}/update`, {
-			method: 'PUT',
+			method: 'POST',
+			body: userDataUpdate,
 			headers: {
 				'Authorization': `Bearer ${token}`,
-				'Content-Type': 'application/json',
-				'Accept': 'application/json'
 			},
-			body: JSON.stringify(userDataUpdate),
 		});
 
 		if (response.ok) {
