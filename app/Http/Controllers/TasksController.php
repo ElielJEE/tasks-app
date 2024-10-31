@@ -64,7 +64,7 @@ class TasksController extends Controller
         if (!empty($validatedData['objectives'])) {
             foreach ($validatedData['objectives'] as $objectiveData) {
                 Objectives::create([
-                    'related_type'=> Tasks::class,
+                    'related_type' => Tasks::class,
                     'related_id' => $task->id,
                     'description' => $objectiveData['description'],
                     'completed' => $objectiveData['completed'] ?? false, // Si no se especifica, se pone en false
@@ -89,15 +89,15 @@ class TasksController extends Controller
 
         // Validación de la task y los objetivos (los objetivos son opcionales)
         $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'difficulty' => 'required|in:easy,medium,hard',
-            'estimated_time' => 'required|integer',
-            'status' => 'nullable|in:pending,completed',
+            'difficulty' => 'nullable|in:facil,medio,dificil',
+            'estimated_time' => 'nullable|integer',
+            'status' => 'nullable|in:pendiente,completado',
             'objectives' => 'array|nullable', // Objetivos opcionales
             'objectives.*.id' => 'nullable|exists:objectives,id', // Validar si el objetivo ya existe
             'objectives.*.description' => 'required_with:objectives|string|max:255', // Requerido si se envían objetivos
-            'objectives.*.completed' => 'required_with:objectives|boolean', // Estado del objetivo
+            'objectives.*.completed' => 'boolean', // Estado del objetivo
         ]);
 
         // Actualizar la Task
@@ -105,8 +105,8 @@ class TasksController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'difficulty' => $request->difficulty,
-            'estimated_time' => $request->estimated_time,
-            'status' => $request->status ?? 'pending'
+            'estimated_time' => $request->estimated_time ?? 24,
+            'status' => $request->status ?? 'pendiente'
         ]);
 
         // Actualizar, crear o eliminar objetivos (si existen)
@@ -124,7 +124,8 @@ class TasksController extends Controller
                 } else {
                     // Crear nuevo objetivo
                     $newObjective = Objectives::create([
-                        'task_id' => $task->id,
+                        'related_type' => Tasks::class,
+                        'related_id' => $task->id,
                         'description' => $objectiveData['description'],
                         'completed' => $objectiveData['completed'] ?? false,
                     ]);
@@ -133,10 +134,11 @@ class TasksController extends Controller
             }
 
             // Eliminar objetivos que no fueron enviados
-            Objectives::where('task_id', $task->id)->whereNotIn('id', $existingObjectiveIds)->delete();
+            Objectives::where('related_id', $task->id)->whereNotIn('id', $existingObjectiveIds)->delete();
         }
 
-        return response()->json(['message' => 'Task and objectives updated successfully', 'task' => $task], 200);
+        $taskWithObjectives = Tasks::with('objectives')->find($task->id);
+        return response()->json(['message' => 'OK', 'task' => $taskWithObjectives], 201);
     }
 
     // Eliminar una tarea

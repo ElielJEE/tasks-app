@@ -85,9 +85,18 @@ export default function Account() {
 					)
 					: (
 						<div className="account-settings s-container">
-							<div style={{position: 'absolute', top: '30px', right: '100px', backgroundColor: 'red'}}>
-								<img src={user.avatar} alt="" style={{ width: '150px' }} />
-							</div>
+							{
+								user.avatar && (
+									<>
+										<div className='account-settings__image-preview'>
+											<img src={user.avatar} alt="" className='account-settings__image-preview__img-prev' />
+										</div>
+										<span className="account-settings__image-preview__span-img">
+											¿Te gusta tu nueva imagen?
+										</span>
+									</>
+								)
+							}
 							<form className="account-settings__account-form">
 								<table className="account-settings__account-form__table-form">
 									<tbody className="account-settings__account-form__table-form__tb">

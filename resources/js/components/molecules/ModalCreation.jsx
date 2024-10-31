@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import CreateTaskView from './CreateTaskView';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function ModalCreation({ showModal }) {
+export default function ModalCreation({ showModal, comp }) {
 	const location = useLocation();
 	const shouldShowModal = location.state?.showModal ?? showModal;
 	const [closeModal, setCloseModal] = useState(true)
@@ -13,16 +13,25 @@ export default function ModalCreation({ showModal }) {
 		navigate('/tasks', { state: { showModal: false } })
 	}
 
-	if (!shouldShowModal) {
+	/* if (!shouldShowModal) {
 		return null;
-	}
+	} */
 
 	return (
-		<div className="create-task-modal-container active-modal-creation">
-			<button className="create-task-modal-container__close-modal" onClick={handleCloseModal}>
-				Cerrar
-			</button>
-			<CreateTaskView setCloseModal />
-		</div>
+		<>
+			{
+				shouldShowModal || comp ? (
+					<div className="create-task-modal-container active-modal-creation">
+						<button className="create-task-modal-container__close-modal" onClick={handleCloseModal}>
+							Cerrar
+						</button>
+						{
+							comp ? (comp) : (<CreateTaskView setCloseModal />)
+						}
+
+					</div>
+				) : ('')
+			}
+		</>
 	)
 }

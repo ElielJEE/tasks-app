@@ -64,6 +64,7 @@ export default function CreateTaskView({ func }) {
     e.preventDefault();
     setErrors({});
 
+    // para filtrar solo los inputs que tienen valores
     const filterObjectives = taskData.objectives.filter(
       (objective) => objective.description.trim() !== ''
     )
