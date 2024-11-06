@@ -52,16 +52,19 @@ export const TaskProvider = ({ children }) => {
 	const updateTask = async (updatedTaskData, token) => {
 		try {
 			const updatedTask = await updateTaskService(updatedTaskData, token, updatedTaskData.id); // Llama al servicio que actualiza en el backend
-			const upTask = updatedTask.data.task;
 			console.log("desde la api:", updatedTask);
-			console.log("desde la api:", updatedTaskData.id);
-			// Actualizar la lista de tareas en el estado
-			setTasks((prevTasks) =>
-				prevTasks.map((task) =>
-					task.id === upTask.id ? { ...task, ...upTask } : task
-				)
-			);
-			console.log("desde el contexto:", tasks[1].id);
+			if (updatedTask.success) {
+				const upTask = updatedTask.data.task;
+				console.log("desde la api:", updatedTaskData.id);
+				// Actualizar la lista de tareas en el estado
+				setTasks((prevTasks) =>
+					prevTasks.map((task) =>
+						task.id === upTask.id ? { ...task, ...upTask } : task
+					)
+				);
+			} else {
+				console.log("error:", updatedTask.errors)
+			}
 		} catch (error) {
 			console.error('Error al actualizar la tarea:', error);
 		}

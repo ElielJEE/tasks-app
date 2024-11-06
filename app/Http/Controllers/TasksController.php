@@ -44,10 +44,10 @@ class TasksController extends Controller
             'description' => 'nullable|string',
             'difficulty' => 'required|in:facil,medio,dificil',
             'estimated_time' => 'nullable|integer',
-            'status' => 'nullable|in:pendiente,completo',
+            'status' => 'nullable|in:pendiente,completado',
             'objectives' => 'array|nullable', // Ahora los objetivos son opcionales
             'objectives.*.description' => 'required_with:objectives|string|max:255', // Solo requerido si se envían objetivos
-            'objectives.*.completed' => 'boolean', // Puede tener estado completado (por defecto falso)
+            'objectives.*.completed' => 'nullable|in:pendiente,completado', // Puede tener estado completado (por defecto falso)
         ]);
 
         // Crear la Task
@@ -67,7 +67,7 @@ class TasksController extends Controller
                     'related_type' => Tasks::class,
                     'related_id' => $task->id,
                     'description' => $objectiveData['description'],
-                    'completed' => $objectiveData['completed'] ?? false, // Si no se especifica, se pone en false
+                    'completed' => $objectiveData['completed'] ?? 'pendiente', // Si no se especifica, se pone en false
                 ]);
             }
         }
@@ -97,7 +97,7 @@ class TasksController extends Controller
             'objectives' => 'array|nullable', // Objetivos opcionales
             'objectives.*.id' => 'nullable|exists:objectives,id', // Validar si el objetivo ya existe
             'objectives.*.description' => 'required_with:objectives|string|max:255', // Requerido si se envían objetivos
-            'objectives.*.completed' => 'boolean', // Estado del objetivo
+            'objectives.*.completed' => 'nullable|in:pendiente,completado', // Estado del objetivo
         ]);
 
         // Actualizar la Task
@@ -118,7 +118,7 @@ class TasksController extends Controller
                     $objective = Objectives::find($objectiveData['id']);
                     $objective->update([
                         'description' => $objectiveData['description'],
-                        'completed' => $objectiveData['completed'] ?? false,
+                        'completed' => $objectiveData['completed'] ?? 'pendiente',
                     ]);
                     $existingObjectiveIds[] = $objective->id;
                 } else {
@@ -127,7 +127,7 @@ class TasksController extends Controller
                         'related_type' => Tasks::class,
                         'related_id' => $task->id,
                         'description' => $objectiveData['description'],
-                        'completed' => $objectiveData['completed'] ?? false,
+                        'completed' => $objectiveData['completed'] ?? 'pendiente',
                     ]);
                     $existingObjectiveIds[] = $newObjective->id;
                 }

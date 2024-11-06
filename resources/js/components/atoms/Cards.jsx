@@ -3,7 +3,7 @@ import { TaskContext } from '../services/TaskContext';
 import { useActive } from '../hooks';
 
 
-export default function TaskCard({ title, description, difficulty, id, objectives }) {
+export default function TaskCard({ title, description, difficulty, status, id, objectives }) {
   const [isCompleted, setIsCompleted] = useState(false);
   const [isCompletedObj, setIsCompletedObj] = useState(objectives.map(() => false));
   const { deleteTask, updateTask } = useContext(TaskContext);
@@ -13,34 +13,47 @@ export default function TaskCard({ title, description, difficulty, id, objective
     description: description || '',
     difficulty: difficulty || 'facil',
     estimatedTime: '',
-    status: 'pendiente',
+    status: status || 'pendiente',
     objectives: (objectives && objectives.length > 0)
-      ? objectives.map(obj => ({ description: obj.description || '' }))
-      : [{ description: '' }]
+      ? objectives.map(obj => ({ description: obj.description || '', completed: obj.completed || 'pendiente' }))
+      : [{ description: '', completed: 'pendiente' }]
   })
+  console.log(taskDataUpdate.objectives);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e = null, updateStatus = isCompleted, updateStatusObj = isCompletedObj) => {
+    if (e) e.preventDefault();
 
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
     if (!token) {
-      console.log('no token found');
-      return
+      console.log('No se encontró el token');
+      return;
     }
 
+    let dataToUpdate = { id };
+    // Actualización completa de la tarea
     const filterObjectives = taskDataUpdate.objectives.filter(
       (objective) => objective.description.trim() !== ''
-    )
+    );
 
-    const dataToUpdate = {
+    dataToUpdate = {
       ...taskDataUpdate,
-      objectives: filterObjectives,
+      status: updateStatus ? 'completado' : 'pendiente',
+      objectives: filterObjectives.map((objective) => ({
+        ...objective,
+        completed: updateStatusObj ? 'completado' : 'pendiente',
+      })),
       id,
-    }
+    };
+    console.log(filterObjectives);
 
-    await updateTask(dataToUpdate, token);
-    activeHandle(0);
-  }
+    try {
+      console.log(dataToUpdate);
+      await updateTask(dataToUpdate, token);
+      activeHandle(0);
+    } catch (error) {
+      console.error('Error al actualizar la tarea:', error);
+    }
+  };
 
   const handleChangeObjectivesUpdate = (e, index) => {
     e.preventDefault();
@@ -57,13 +70,23 @@ export default function TaskCard({ title, description, difficulty, id, objective
   }
 
   const handleCheckboxChange = () => {
-    setIsCompleted(!isCompleted);
+    const updatedStatus = taskDataUpdate.status !== 'completado';
+    setTaskDataUpdate(prev => ({ ...prev, status: updatedStatus ? 'completado' : 'pendiente' }));
+    handleSubmit(null, updatedStatus);
   };
 
   const handleCheckboxObjectivesChange = (index) => {
-    const updatedObjective = [...isCompletedObj]
-    updatedObjective[index] = !updatedObjective[index]
-    setIsCompletedObj(updatedObjective);
+    console.log(index);
+    setIsCompletedObj(prevState => {
+      // Copia el estado anterior y cambia solo el objetivo específico en el índice proporcionado
+      const updatedObjectives = [...prevState];
+      updatedObjectives[index] = !updatedObjectives[index];
+
+      // Llama a handleSubmit con los objetivos actualizados
+      handleSubmit(null, null, updatedObjectives);
+
+      return updatedObjectives; // Actualiza el estado con los objetivos modificados
+    });
   };
 
   const handleDelete = () => {
@@ -80,7 +103,10 @@ export default function TaskCard({ title, description, difficulty, id, objective
       objectives: [...taskDataUpdate.objectives, { description: '' }]
     });
   };
-  console.log(taskDataUpdate);
+  const removeObjective = (index) => {
+    const newObjectives = taskDataUpdate.objectives.filter((_, i) => i !== index);
+    setTaskDataUpdate({ ...taskDataUpdate, objectives: newObjectives });
+  };
 
   const handleObjectiveKeyPress = (e, index) => {
     if (e.key === 'Enter') {
@@ -93,7 +119,7 @@ export default function TaskCard({ title, description, difficulty, id, objective
 
   return (
     <>
-      <div className={`task-card ${isCompleted ? 'completed' : ''}`}>
+      <div className={`task-card ${taskDataUpdate.status === 'completado' ? 'completed' : ''}`}>
         <div className={`task-card__checkbox-container  ${difficulty}`}>
           {
             active === 1 ? (
@@ -101,7 +127,8 @@ export default function TaskCard({ title, description, difficulty, id, objective
             ) : (
               <input className='task-card__checkbox-container__task-checkbox'
                 type="checkbox"
-                checked={isCompleted}
+                name='status'
+                checked={taskDataUpdate.status === 'completado'}
                 onChange={handleCheckboxChange}
               />
             )
@@ -152,6 +179,19 @@ export default function TaskCard({ title, description, difficulty, id, objective
                               onChange={(e) => handleChangeObjectivesUpdate(e, index)}
                               onKeyDown={(e) => handleObjectiveKeyPress(e, index)}
                             />
+                            {
+                              item.description !== '' && (
+                                <button
+                                  type='button'
+                                  className="task-card__info-container__task-objectives-list__task-objective-item__task-objective-btn"
+                                  onClick={() => removeObjective(index)}
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M170.5 51.6L151.5 80l145 0-19-28.4c-1.5-2.2-4-3.6-6.7-3.6l-93.7 0c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80 368 80l48 0 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-8 0 0 304c0 44.2-35.8 80-80 80l-224 0c-44.2 0-80-35.8-80-80l0-304-8 0c-13.3 0-24-10.7-24-24S10.7 80 24 80l8 0 48 0 13.8 0 36.7-55.1C140.9 9.4 158.4 0 177.1 0l93.7 0c18.7 0 36.2 9.4 46.6 24.9zM80 128l0 304c0 17.7 14.3 32 32 32l224 0c17.7 0 32-14.3 32-32l0-304L80 128zm80 64l0 208c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-208c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0l0 208c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-208c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0l0 208c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-208c0-8.8 7.2-16 16-16s16 7.2 16 16z" />
+                                  </svg>
+                                </button>
+                              )
+                            }
                           </li>
                         ))
                       }
@@ -171,7 +211,7 @@ export default function TaskCard({ title, description, difficulty, id, objective
                             <li className="task-card__info-container__task-objectives-list__task-objective-item" key={index}>
                               <input
                                 type="checkbox"
-                                checked={isCompletedObj[index]} className='task-card__info-container__task-objectives-list__task-objective-item__task-objective-checkbox'
+                                checked={item.completed === 'completado'} className='task-card__info-container__task-objectives-list__task-objective-item__task-objective-checkbox'
                                 onChange={() => handleCheckboxObjectivesChange(index)}
                               />
                               <span className="task-card__info-container__task-objectives-list__task-objective-item__task-objective-title">
