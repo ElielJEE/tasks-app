@@ -81,12 +81,29 @@ body {
 .field-container {
 	display: flex;
 	flex-direction: column;
+	position: relative;
 
 	&__field-error {
 		font-size: .8rem;
 		padding: 0 6px;
 		background-color: rgba(255, 0, 0, 0.5);
 		width: max-content;
+	}
+
+	&__show-password {
+		width: 25px;
+		height: 25px;
+		fill: white;
+		position: absolute;
+		right: 10px;
+		top: 9px;
+		bottom: 10px;
+		cursor: pointer;
+
+		svg {
+			width: 25px;
+			height: 25px;
+		}
 	}
 
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->morphs('related');
             $table->string('description')->nullable();  // Campo para la descripción del objetivo
-            $table->boolean('completed')->default(false); // Campo para el estado de completado
+            $table->enum('completed', ['pendiente', 'completado'])->default('pendiente'); // Campo para el estado de completado
             $table->timestamps();
         });
     }

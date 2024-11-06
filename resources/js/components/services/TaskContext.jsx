@@ -1,20 +1,19 @@
 // src/context/TaskContext.js
 import React, { createContext, useState, useEffect } from 'react';
-import { getTasks, getUser, deleteTask as deleteTaskService } from '.';
+import { getTasks, getUser, deleteTask as deleteTaskService, updateTask as updateTaskService } from '.';
 
 export const TaskContext = createContext({
-  tasks: [],
-  addTask: () => {},
-  fetchTasks: () => {},
-  deleteTask: () => {},
-  loading: true,
+	tasks: [],
+	addTask: () => { },
+	fetchTasks: () => { },
+	deleteTask: () => { },
+	loading: true,
 });
 
 export const TaskProvider = ({ children }) => {
 	const [tasks, setTasks] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const { userId } = getUser();
-
 	// Función para cargar las tareas
 	const fetchTasks = async () => {
 		console.log('se ejecuta fetch task');
@@ -29,9 +28,7 @@ export const TaskProvider = ({ children }) => {
 			data = await getTasks(token, userId);
 			setTasks(data.task);
 			setLoading(false);
-			console.log(userId);
 		}
-		console.log(data);
 	};
 
 	useEffect(() => {
@@ -44,16 +41,37 @@ export const TaskProvider = ({ children }) => {
 	};
 
 	const deleteTask = async (taskId) => {
-    try {
-      await deleteTaskService(taskId);  // Elimina la tarea desde el backend
-      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));  // Actualiza el estado local
-    } catch (err) {
-      console.error('Error al eliminar la tarea:', err);
-    }
-  };
+		try {
+			await deleteTaskService(taskId);  // Elimina la tarea desde el backend
+			setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));  // Actualiza el estado local
+		} catch (err) {
+			console.error('Error al eliminar la tarea:', err);
+		}
+	};
+
+	const updateTask = async (updatedTaskData, token) => {
+		try {
+			const updatedTask = await updateTaskService(updatedTaskData, token, updatedTaskData.id); // Llama al servicio que actualiza en el backend
+			console.log("desde la api:", updatedTask);
+			if (updatedTask.success) {
+				const upTask = updatedTask.data.task;
+				console.log("desde la api:", updatedTaskData.id);
+				// Actualizar la lista de tareas en el estado
+				setTasks((prevTasks) =>
+					prevTasks.map((task) =>
+						task.id === upTask.id ? { ...task, ...upTask } : task
+					)
+				);
+			} else {
+				console.log("error:", updatedTask.errors)
+			}
+		} catch (error) {
+			console.error('Error al actualizar la tarea:', error);
+		}
+	};
 
 	return (
-		<TaskContext.Provider value={{ tasks, addTask, fetchTasks, loading, deleteTask }}>
+		<TaskContext.Provider value={{ tasks, addTask, fetchTasks, loading, deleteTask, updateTask }}>
 			{children}
 		</TaskContext.Provider>
 	);

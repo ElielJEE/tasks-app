@@ -21,12 +21,24 @@ class UserRegisterRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|string|unique:users|max:255',
-            'displayname' => 'nullable|string|max:255',
-            'email' => 'required|string|email|unique:users|max:255',
-            'password' => 'required|string|min:6',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'  // Validar la imagen
-        ];
+        if ($this->isMethod('post')) {
+            // Reglas para crear un nuevo usuario
+            return [
+                'name' => 'required|string|unique:users|max:255',
+                'displayname' => 'nullable|string|max:255',
+                'email' => 'required|string|email|unique:users|max:255',
+                'password' => 'required|string|min:6',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:100048',
+            ];
+        } else {
+            // Reglas para actualizar un usuario
+            return [
+                'name' => 'nullable|string|max:255',
+                'displayname' => 'nullable|string|max:255',
+                'email' => 'nullable|string|email|unique:users,email,' . $this->user()->id . '|max:255',
+                'password' => 'nullable|string|min:6',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:100048',
+            ];
+        }
     }
 }
