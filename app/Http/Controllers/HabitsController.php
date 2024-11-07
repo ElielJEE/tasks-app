@@ -5,20 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Habits;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HabitsController extends Controller
 {
     // Mostrar todos los hábitos del usuario autenticado
     public function show($id)
     {
-        $habit = Habits::findOrFail($id);
-
-        // Verificar que el hábito pertenece al usuario autenticado
-        if ($habit->user_id != Auth::id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        $user = auth('api')->user();
+        if (!$user) {
+            return response()->json(['Error' => 'No autorizado para ver estas tareas'], 403);
         }
 
+        $habit = Habits::where('user_id', Auth::id())->get();
+
         return response()->json([
+            'message' => 'succesful',
             'habit' => $habit
         ], 200);
     }
@@ -37,7 +39,7 @@ class HabitsController extends Controller
             'description' => $validatedData['description'] ?? null,
         ]);
 
-        return response()->json($habit, 201);
+        return response()->json([$habit], 201);
     }
 
     // Actualizar un hábito existente (incluir suma/resta en el contador)
@@ -83,7 +85,7 @@ class HabitsController extends Controller
     // Incrementar el contador de un hábito
     public function incrementCount($id)
     {
-        $habit = Habit::findOrFail($id);
+        $habit = Habits::findOrFail($id);
 
         if ($habit->user_id != Auth::id()) {
             return response()->json(['error' => 'Unauthorized'], 403);
@@ -97,7 +99,7 @@ class HabitsController extends Controller
     // Decrementar el contador de un hábito
     public function decrementCount($id)
     {
-        $habit = Habit::findOrFail($id);
+        $habit = Habits::findOrFail($id);
 
         if ($habit->user_id != Auth::id()) {
             return response()->json(['error' => 'Unauthorized'], 403);

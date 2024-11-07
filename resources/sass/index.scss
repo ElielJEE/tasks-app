@@ -17,6 +17,7 @@
 @import './components/cardsDisplayer';
 @import './components/createTasks';
 @import './components/taskCards';
+@import './components/habitsCards';
 
 * {
 	margin: 0;
@@ -136,4 +137,17 @@ body {
 
 .active-modal-creation {
 	display: flex;
+}
+
+.my-masonry-grid {
+	display: flex;
+  width: 100%;
+	gap: 10px;
+}
+
+.my-masonry-grid_column {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+  background-clip: padding-box;
 }
