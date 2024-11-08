@@ -18,7 +18,7 @@ export default function HabitCards() {
 		500: 1
 	}
 
-	console.log(hasHabit);
+	console.log(habits.count);
 
 	return (
 		<>
@@ -31,7 +31,7 @@ export default function HabitCards() {
 							columnClassName='my-masonry-grid_column'
 						>
 							{
-								habits.map((item, key) => (
+								habits.map((item) => (
 									<HabitsCards key={item.id} {...item} />
 								))
 							}

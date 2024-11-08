@@ -5,6 +5,7 @@ import { ProtectedRoute } from "./components/hooks";
 import { Account, CreateTaskView, HabitCards, ModalCreation, QuestCards, Site, TaskCards } from "./components/molecules";
 import { TaskProvider } from "./components/services/TaskContext";
 import { HabitProvider } from "./components/services/HabitContext";
+import ModalHabitCreation from "./components/molecules/ModalHabitCreation";
 
 export default function App() {
 	return (
@@ -24,6 +25,7 @@ export default function App() {
 							<Route path="habits" element={
 								<HabitProvider>
 									<HabitCards />
+									<ModalHabitCreation />
 								</HabitProvider>
 							} />
 						</Route>

@@ -18,6 +18,7 @@
 @import './components/createTasks';
 @import './components/taskCards';
 @import './components/habitsCards';
+@import './components/createHabit';
 
 * {
 	margin: 0;
@@ -109,7 +110,7 @@ body {
 
 }
 
-.create-task-modal-container {
+.create-modal-container {
 	position: fixed;
 	display: none;
 	justify-content: center;
