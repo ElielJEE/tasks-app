@@ -12,7 +12,7 @@ export default function CardsDisplayer() {
 	const handleShowModal = () => {
 		setShowModal(true)
 		console.log('object');
-		navigate('/tasks', { state: { showModal: true } })
+		navigate(path, { state: { showModal: true } })
 	}
 
 	const index = {
@@ -53,14 +53,14 @@ export default function CardsDisplayer() {
 					</button>
 				</li>
 				<li className={`tabs-container__tabs-list__tab-item-btn ${active === 1 ? 'active-tab' : ''}`}>
-					<button className="tabs-container__tabs-list__tab-item-btn__tab-btn" >
+					<button className="tabs-container__tabs-list__tab-item-btn__tab-btn">
 						<span className="tabs-container__tabs-list__tab-item-btn__tab-btn__tab-btn-span">
 							Agregar mision
 						</span>
 					</button>
 				</li>
 				<li className={`tabs-container__tabs-list__tab-item-btn ${active === 2 ? 'active-tab' : ''}`}>
-					<button className="tabs-container__tabs-list__tab-item-btn__tab-btn" >
+					<button className="tabs-container__tabs-list__tab-item-btn__tab-btn" onClick={handleShowModal}>
 						<span className="tabs-container__tabs-list__tab-item-btn__tab-btn__tab-btn-span">
 							Agregar habito
 						</span>

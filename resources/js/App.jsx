@@ -4,6 +4,8 @@ import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./components/hooks";
 import { Account, CreateTaskView, HabitCards, ModalCreation, QuestCards, Site, TaskCards } from "./components/molecules";
 import { TaskProvider } from "./components/services/TaskContext";
+import { HabitProvider } from "./components/services/HabitContext";
+import ModalHabitCreation from "./components/molecules/ModalHabitCreation";
 
 export default function App() {
 	return (
@@ -20,7 +22,12 @@ export default function App() {
 								</TaskProvider>
 							} />
 							<Route path="quests" element={<QuestCards />} />
-							<Route path="habits" element={<HabitCards />} />
+							<Route path="habits" element={
+								<HabitProvider>
+									<HabitCards />
+									<ModalHabitCreation />
+								</HabitProvider>
+							} />
 						</Route>
 
 						<Route path="settings/*" element={<Settings />}>
