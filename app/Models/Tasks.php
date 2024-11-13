@@ -20,13 +20,4 @@ class Tasks extends Model
     {
         return $this->morphMany(Objectives::class, 'related');
     }
-
-    public function needsReactivation()
-    {
-        if ($this->completed && $this->last_completed_at) {
-            $nextActivationTime = Carbon::parse($this->last_completed_at)->addHours(24);
-            return now()->greaterThanOrEqualTo($nextActivationTime);
-        }
-        return false;
-    }
 }
