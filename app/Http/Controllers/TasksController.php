@@ -100,6 +100,22 @@ class TasksController extends Controller
             'objectives.*.completed' => 'nullable|in:pendiente,completado', // Estado del objetivo
         ]);
 
+        // Comprobación de 24 horas desde la última vez que se completó la tarea
+        $now = Carbon::now('America/Managua');
+        $is24HoursElapsed = false;
+
+        if ($task->status === 'completado') {
+            if ($task->last_completed_at) {
+                $timeSinceLastCompletion = Carbon::parse($task->last_completed_at)->diffInHours($now);
+                if ($timeSinceLastCompletion >= 24) {
+                    $is24HoursElapsed = true;
+                    $task->status = 'pendiente'; // Reactivar la tarea si han pasado 24 horas
+                }
+            } else {
+                $is24HoursElapsed = true; // No hay registro de completado; activar la tarea
+            }
+        }
+
         // Actualizar la Task
         $task->update([
             'title' => $request->title,
@@ -108,6 +124,12 @@ class TasksController extends Controller
             'estimated_time' => $request->estimated_time ?? 24,
             'status' => $request->status ?? 'pendiente'
         ]);
+
+          // Si la tarea se completa, actualizar el `last_completed_at`
+        if ($task->status === 'completado') {
+            $task->last_completed_at = $now;
+            $task->save();
+        }
 
         // Actualizar, crear o eliminar objetivos (si existen)
         if (!empty($validatedData['objectives'])) {

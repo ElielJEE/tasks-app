@@ -13,7 +13,9 @@ class Quests extends Model
         'user_id',
         'name',
         'description',
-        'status'
+        'status',
+        'start_date',
+        'end_date'
     ];
 
     public function user()

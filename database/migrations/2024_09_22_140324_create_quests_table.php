@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->enum('difficulty', ['Facil', 'Medio', 'Dificil']);
             $table->enum('status', ['Activo', 'Completo'])->default('Activo');
+            $table->date('start_date'); // Fecha de inicio definida por el usuario
+            $table->date('end_date');   // Fecha de finalización definida por el usuario
             $table->timestamps();
         });
     }
