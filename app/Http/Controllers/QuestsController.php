@@ -43,6 +43,8 @@ class QuestsController extends Controller
             'description' => 'nullable|string',
             'difficulty' => 'required|in:Facil,Medio,Dificil',
             'status' => 'nullable|in:activo,completo',
+            'start_date' => 'required|date|after_or_equal:today', // La fecha de inicio no puede ser en el pasado
+            'end_date' => 'required|date|after:start_date', // La fecha de fin debe ser posterior a la fecha de inicio
             'objectives' => 'array|nullable', // Objetivos son opcionales
             'objectives.*.description' => 'required_with:objectives|string|max:255', // Solo si se envían objetivos
             'objectives.*.completed' => 'required_with:objectives|boolean', // Estado de completado por defecto en false
@@ -54,6 +56,8 @@ class QuestsController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'status' => $request->status ?? 'active',
+            'start_date' => $validatedData['start_date'],
+            'end_date' => $validatedData['end_date'],
         ]);
 
         // Crear los objetivos asociados a la Quest (si existen)
@@ -86,6 +90,8 @@ class QuestsController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'nullable|in:active,completed',
+            'start_date' => 'nullable|date|after_or_equal:today', // Permitir modificar si la fecha aún no ha pasado
+            'end_date' => 'nullable|date|after:start_date', // end_date debe ser posterior a start_date
             'objectives' => 'array|nullable', // Objetivos son opcionales
             'objectives.*.id' => 'nullable|exists:objectives,id', // Validar si el objetivo ya existe
             'objectives.*.description' => 'required_with:objectives|string|max:255', // Solo si se envían objetivos
@@ -96,7 +102,9 @@ class QuestsController extends Controller
         $quest->update([
             'name' => $validatedData['name'],
             'description' => $validatedData['description'],
-            'status' => $request->status ?? 'active'
+            'status' => $request->status ?? 'active',
+            'start_date' => $quest->start_date > now() ? $validatedData['start_date'] : $quest->start_date, // Solo actualizar si no ha pasado la fecha de inicio
+            'end_date' => $validatedData['end_date'] ?? $quest->end_date,
         ]);
 
         // Actualizar, crear o eliminar objetivos (si existen)
