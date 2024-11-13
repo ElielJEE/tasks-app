@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Quests;
 use App\Models\Objetives;
 use App\Http\Controllers\Controller;
+use App\Models\Objectives;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,21 +16,19 @@ class QuestsController extends Controller
     {
         // Verificamos si el usuario autenticado está accediendo a sus propias misiones
         $user = auth('api')->user();
-        if ($id != $user->id) {
+        if (!$user) {
             return response()->json(['Error' => 'No autorizado para ver estas Quests'], 403);
         }
 
         // Obtener todas las quests asociadas a este usuario
-        $quests = Quests::with('objectives') // Carga los objetivos relacionados
-                    ->where('user_id', Auth::id())
-                    ->get();
+        $quests = Quests::where('user_id', Auth::id())->with('objectives')->get();
         
         if ($quests->isEmpty()) {
             return response()->json(['message' => 'No quests found'], 200);
         }
         
         return response()->json([
-            'message' => 'Quests',
+            'message' => 'Succesful',
             'quests' => $quests
         ]);
     }
@@ -64,7 +63,8 @@ class QuestsController extends Controller
         if (!empty($validatedData['objectives'])) {
             foreach ($validatedData['objectives'] as $objectiveData) {
                 Objectives::create([
-                    'quest_id' => $quest->id,
+                    'related_type' => Quests::class,
+                    'related_id' => $quest->id,
                     'description' => $objectiveData['description'],
                     'completed' => $objectiveData['completed'] ?? false,
                 ]);

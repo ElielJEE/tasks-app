@@ -25,6 +25,6 @@ class Quests extends Model
 
     public function objectives()
     {
-        return $this->morphMany(Objectives::class, 'related_id');
+        return $this->morphMany(Objectives::class, 'related');
     }
 }
