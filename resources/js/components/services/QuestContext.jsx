@@ -4,7 +4,7 @@ import { getQuests, getUser } from '.';
 export const QuestContext = createContext({
 	quest: [],
 	addQuest: () => { },
-	fetchTask: () => { },
+	fetchQuests: () => { },
 	deleteQuest: () => { },
 	loading: true,
 });
@@ -34,8 +34,12 @@ export const QuestProvider = ({ children }) => {
 		fetchQuests();
 	}, [userId]);
 
+	const addQuest = (newQuest) => {
+		setQuests((prevQuests) => Array.isArray(prevQuests) ? [...prevQuests, newQuest] : [newQuest]);
+	}
+
 	return (
-		<QuestContext.Provider value={{ quests, fetchQuests, loading }}>
+		<QuestContext.Provider value={{ quests, fetchQuests, loading, addQuest }}>
 			{children}
 		</QuestContext.Provider>
 	)

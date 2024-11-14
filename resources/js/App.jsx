@@ -2,7 +2,7 @@ import React from "react";
 import { Login, Settings, Signup, Tasks } from "./pages";
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./components/hooks";
-import { Account, CreateTaskView, HabitCards, ModalCreation, QuestCards, Site, TaskCards } from "./components/molecules";
+import { Account, CreateTaskView, HabitCards, ModalCreation, ModalQuestCreation, QuestCards, Site, TaskCards } from "./components/molecules";
 import { TaskProvider } from "./components/services/TaskContext";
 import { HabitProvider } from "./components/services/HabitContext";
 import ModalHabitCreation from "./components/molecules/ModalHabitCreation";
@@ -25,6 +25,7 @@ export default function App() {
 							<Route path="quests" element={
 								<QuestProvider>
 									<QuestCards />
+									<ModalQuestCreation />
 								</QuestProvider>
 							} />
 							<Route path="habits" element={

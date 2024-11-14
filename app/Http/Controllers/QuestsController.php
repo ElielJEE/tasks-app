@@ -40,13 +40,13 @@ class QuestsController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'difficulty' => 'required|in:Facil,Medio,Dificil',
+            'difficulty' => 'required|in:facil,medio,dificil',
             'status' => 'nullable|in:activo,completo',
             'start_date' => 'required|date|after_or_equal:today', // La fecha de inicio no puede ser en el pasado
             'end_date' => 'required|date|after:start_date', // La fecha de fin debe ser posterior a la fecha de inicio
             'objectives' => 'array|nullable', // Objetivos son opcionales
             'objectives.*.description' => 'required_with:objectives|string|max:255', // Solo si se envían objetivos
-            'objectives.*.completed' => 'required_with:objectives|boolean', // Estado de completado por defecto en false
+            'objectives.*.completed' => 'nullable|in:pendiente,completado', // Estado de completado por defecto en false
         ]);
 
         // Crear la quest asociada al usuario autenticado
@@ -54,6 +54,7 @@ class QuestsController extends Controller
             'user_id' => Auth::id(),
             'name' => $request->name,
             'description' => $request->description,
+            'difficulty' => $request->difficulty,
             'status' => $request->status ?? 'active',
             'start_date' => $validatedData['start_date'],
             'end_date' => $validatedData['end_date'],
@@ -66,12 +67,13 @@ class QuestsController extends Controller
                     'related_type' => Quests::class,
                     'related_id' => $quest->id,
                     'description' => $objectiveData['description'],
-                    'completed' => $objectiveData['completed'] ?? false,
+                    'completed' => $objectiveData['completed'] ?? 'pendiente',
                 ]);
             }
         }
 
-        return response()->json(['message' => 'Quest created successfully', 'quest' => $quest], 201);
+        $questWithObjectives = Quests::with('objectives')->find($quest->id);
+        return response()->json(['message' => 'OK', 'quests' => $questWithObjectives], 201);
     }
 
     // Actualizar una quest
