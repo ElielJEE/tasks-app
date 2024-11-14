@@ -1,0 +1,75 @@
+.form-quest-container {
+	&__form-row {
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 10px 0;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
+		&__label-quest {
+			font-weight: bold;
+			font-size: 14px;
+			flex-basis: 35%;
+		}
+
+		&__input-quest,
+		&__select-quest,
+		&__textarea-quest,
+		&__input-date,
+		&__input-quest-objective {
+			flex-grow: 1;
+			background-color: $t-alt-color;
+			padding: 8px;
+			border-radius: 8px;
+			border: none;
+			outline: none;
+
+			&:hover~.form-quest-container__form-row__delete-objective {
+				opacity: 1;
+			}
+		}
+
+		&__delete-objective {
+			position: absolute;
+			right: 10px;
+			width: 15px;
+			height: 15px;
+			background-color: transparent;
+			border: none;
+			opacity: 0;
+			transition: all .2s ease-in-out;
+			cursor: pointer;
+
+			&:hover {
+				opacity: 1;
+			}
+
+			svg {
+				fill: white;
+				width: 15px;
+				height: 15px;
+
+				&:hover {
+					fill: $f-color;
+				}
+			}
+		}
+
+		&__textarea-quest {
+			resize: vertical;
+		}
+
+	}
+
+	&__submit-btn {
+		@include bg-gradient($s-color, $t-color);
+		border: solid 1px $f-color;
+		font-size: 1rem;
+		border-radius: 10px;
+		padding: 10px;
+		cursor: pointer;
+		width: 100%;
+		margin-top: 20px;
+	}
+}

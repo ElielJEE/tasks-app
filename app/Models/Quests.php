@@ -13,6 +13,7 @@ class Quests extends Model
         'user_id',
         'name',
         'description',
+        'difficulty',
         'status',
         'start_date',
         'end_date'

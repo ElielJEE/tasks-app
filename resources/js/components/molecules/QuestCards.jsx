@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { QuestContext } from '../services/QuestContext'
 import { array } from 'i/lib/util';
 import Masonry from 'react-masonry-css';
-import { Cards } from '../atoms';
+import { QuestsCards } from '../atoms';
 
 export default function QuestCards() {
 	const { quests, loading } = useContext(QuestContext);
@@ -31,7 +31,7 @@ export default function QuestCards() {
 						>
 							{
 								quests.map((item) => (
-									<Cards key={item.id} {...item} />
+									<QuestsCards key={item.id} {...item} />
 								))
 							}
 						</Masonry>

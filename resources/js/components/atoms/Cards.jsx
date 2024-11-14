@@ -256,7 +256,7 @@ export default function TaskCard({ title, description, difficulty, status, id, o
             </>
           )
         }
-      </div >
+      </div>
     </>
   );
 }
