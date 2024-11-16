@@ -101,22 +101,6 @@ class TasksController extends Controller
             'objectives.*.completed' => 'nullable|in:pendiente,completado', // Estado del objetivo
         ]);
 
-        // Comprobación de 24 horas desde la última vez que se completó la tarea
-        $now = Carbon::now('America/Managua');
-        $is24HoursElapsed = false;
-
-        if ($task->status === 'completado') {
-            if ($task->last_completed_at) {
-                $timeSinceLastCompletion = Carbon::parse($task->last_completed_at)->diffInHours($now);
-                if ($timeSinceLastCompletion >= 24) {
-                    $is24HoursElapsed = true;
-                    $task->status = 'pendiente'; // Reactivar la tarea si han pasado 24 horas
-                }
-            } else {
-                $is24HoursElapsed = true; // No hay registro de completado; activar la tarea
-            }
-        }
-
         // Actualizar la Task
         $task->update([
             'title' => $request->title,
@@ -128,8 +112,7 @@ class TasksController extends Controller
 
           // Si la tarea se completa, actualizar el `last_completed_at`
         if ($task->status === 'completado') {
-            $task->last_completed_at = $now;
-            $task->save();
+            $this->completeTask($task->id);
         }
 
         // Actualizar, crear o eliminar objetivos (si existen)
@@ -155,13 +138,26 @@ class TasksController extends Controller
                     $existingObjectiveIds[] = $newObjective->id;
                 }
             }
-
             // Eliminar objetivos que no fueron enviados
             Objectives::where('related_id', $task->id)->whereNotIn('id', $existingObjectiveIds)->delete();
         }
 
         $taskWithObjectives = Tasks::with('objectives')->find($task->id);
         return response()->json(['message' => 'OK', 'task' => $taskWithObjectives], 201);
+    }
+
+    public function completeTask($id)
+    {
+        $task = Tasks::findOrFail($id);
+        // Determinar EXP por dificultad
+        $expMap = ['facil' => 10, 'medio' => 15, 'dificil' => 20];
+        $exp = $expMap[$task->difficulty] ?? 10;
+
+        // Añadir EXP al usuario
+        $user = Auth::user();
+        $user->addExperience($exp);
+
+        return response()->json(['message' => 'Tarea completada', 'user' => $user]);
     }
 
     // Eliminar una tarea
