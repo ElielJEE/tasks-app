@@ -32,13 +32,9 @@ class CheckQuestStatus extends Command
         ->get();
 
         foreach ($quests as $quest) {
-            // Marcar como fallida
-            $quest->update([
-                'status' => 'fallido',
-            ]);
             
             // Reducir vida del usuario
-            $user = $task->user;
+            $user = $quest->user;
             $damage = 15; // Ejemplo: 15% de daño al fallar
             $user->$setCurrentLife($damage);
 
