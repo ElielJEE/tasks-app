@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->enum('difficulty', ['Facil', 'Medio', 'Dificil']);
-            $table->enum('status', ['Activo', 'Completo'])->default('Activo');
+            $table->enum('difficulty', ['facil', 'medio', 'dificil']);
+            $table->enum('status', ['activo', 'completo'])->default('activo');
             $table->date('start_date'); // Fecha de inicio definida por el usuario
             $table->date('end_date');   // Fecha de finalización definida por el usuario
             $table->timestamps();

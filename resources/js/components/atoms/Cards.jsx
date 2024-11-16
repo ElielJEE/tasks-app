@@ -5,7 +5,7 @@ import { useActive } from '../hooks';
 
 export default function TaskCard({ title, description, difficulty, status, id, objectives }) {
   const [isCompleted, setIsCompleted] = useState(false);
-  const [isCompletedObj, setIsCompletedObj] = useState(objectives.map(() => false));
+  const [isCompletedObj, setIsCompletedObj] = useState(objectives.map((item) => item.completed === 'completado' ? true : false));
   const { deleteTask, updateTask } = useContext(TaskContext);
   const { active, activeHandle } = useActive();
   const [taskDataUpdate, setTaskDataUpdate] = useState({
@@ -15,10 +15,11 @@ export default function TaskCard({ title, description, difficulty, status, id, o
     estimatedTime: '',
     status: status || 'pendiente',
     objectives: (objectives && objectives.length > 0)
-      ? objectives.map(obj => ({ description: obj.description || '', completed: obj.completed || 'pendiente' }))
-      : [{ description: '', completed: 'pendiente' }]
+      ? objectives.map(obj => ({ description: obj.description || '', completed: obj.completed || 'pendiente', id: obj.id }))
+      : [{ description: '', completed: 'pendiente', id: '' }]
   })
-  console.log(taskDataUpdate.objectives);
+  console.log("desde taskDataUpdate: ", taskDataUpdate.objectives);
+  console.log("desde el prop: ", objectives);
 
   const handleSubmit = async (e = null, updateStatus = isCompleted, updateStatusObj = isCompletedObj) => {
     if (e) e.preventDefault();
@@ -38,10 +39,7 @@ export default function TaskCard({ title, description, difficulty, status, id, o
     dataToUpdate = {
       ...taskDataUpdate,
       status: updateStatus ? 'completado' : 'pendiente',
-      objectives: filterObjectives.map((objective) => ({
-        ...objective,
-        completed: updateStatusObj ? 'completado' : 'pendiente',
-      })),
+      objectives: filterObjectives,
       id,
     };
     console.log(filterObjectives);
@@ -49,6 +47,7 @@ export default function TaskCard({ title, description, difficulty, status, id, o
     try {
       console.log(dataToUpdate);
       await updateTask(dataToUpdate, token);
+      setTaskDataUpdate(dataToUpdate);
       activeHandle(0);
     } catch (error) {
       console.error('Error al actualizar la tarea:', error);
@@ -75,25 +74,36 @@ export default function TaskCard({ title, description, difficulty, status, id, o
     handleSubmit(null, updatedStatus);
   };
 
-  const handleCheckboxObjectivesChange = (index) => {
-    console.log(index);
-    setIsCompletedObj(prevState => {
-      // Copia el estado anterior y cambia solo el objetivo específico en el índice proporcionado
-      const updatedObjectives = [...prevState];
-      updatedObjectives[index] = !updatedObjectives[index];
+  const handleCheckboxObjectivesChange = async (idObj, index) => {
+    /* const updatedObjectives = {...isCompletedObj, [idObj]: !isCompletedObj[idObj]};
+    console.log(idObj); */
+    // Solo actualizar el objetivo específico en dataToUpdate antes de enviarlo
+    const updatedIsCompletedObj = [...isCompletedObj]
+    updatedIsCompletedObj[index] = !updatedIsCompletedObj[index]
+    console.log("estado de isCompletedObj:", updatedIsCompletedObj);
+    setIsCompletedObj(updatedIsCompletedObj);
+    const updatedObjectives = taskDataUpdate.objectives.map(objective => (
+      objective.id === idObj
+        ? { ...objective, completed: !isCompletedObj[index] ? 'completado' : 'pendiente' }
+        : objective
+    ))
 
-      // Llama a handleSubmit con los objetivos actualizados
-      handleSubmit(null, null, updatedObjectives);
+    console.log(updatedObjectives);
 
-      return updatedObjectives; // Actualiza el estado con los objetivos modificados
-    });
+    try {
+      const token = localStorage.getItem('token');
+      const dataToUpdate = { ...taskDataUpdate, objectives: updatedObjectives, id }
+      await updateTask(dataToUpdate, token);
+      setTaskDataUpdate(dataToUpdate)
+      console.log("Objetivo actualizado con éxito");
+    } catch (error) {
+      console.error('Error al actualizar el objetivo:', error);
+    }
   };
 
   const handleDelete = () => {
     deleteTask(id)
   }
-
-  console.log(active);
 
   const addObjective = (e) => {
     console.log('hola');
@@ -212,7 +222,7 @@ export default function TaskCard({ title, description, difficulty, status, id, o
                               <input
                                 type="checkbox"
                                 checked={item.completed === 'completado'} className='task-card__info-container__task-objectives-list__task-objective-item__task-objective-checkbox'
-                                onChange={() => handleCheckboxObjectivesChange(index)}
+                                onChange={() => handleCheckboxObjectivesChange(item.id, index)}
                               />
                               <span className="task-card__info-container__task-objectives-list__task-objective-item__task-objective-title">
                                 {item.description}
@@ -256,7 +266,7 @@ export default function TaskCard({ title, description, difficulty, status, id, o
             </>
           )
         }
-      </div >
+      </div>
     </>
   );
 }

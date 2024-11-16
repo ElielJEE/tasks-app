@@ -13,6 +13,7 @@ class Quests extends Model
         'user_id',
         'name',
         'description',
+        'difficulty',
         'status',
         'start_date',
         'end_date'
@@ -25,6 +26,6 @@ class Quests extends Model
 
     public function objectives()
     {
-        return $this->morphMany(Objectives::class, 'related_id');
+        return $this->morphMany(Objectives::class, 'related');
     }
 }
