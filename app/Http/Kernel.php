@@ -72,6 +72,7 @@ class Kernel extends HttpKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('tasks:check-status')->dailyAt('02:00')->timezone('America/Managua');
+        $schedule->command('quests:check-status')->hourly();
     }
 
 }

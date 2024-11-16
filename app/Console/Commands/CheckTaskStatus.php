@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\Tasks;
+use App\Models\User;
 
 class CheckTaskStatus extends Command
 {
@@ -25,13 +27,30 @@ class CheckTaskStatus extends Command
      */
     public function handle()
     {
-        $tasks = Tasks::all();
+        $tasks = Tasks::where('status', 'pendiente')->get();
 
         foreach ($tasks as $task) {
-            // Reactivar la tarea si fue completada y han pasado 24 horas
-            if ($task->needsReactivation()) {
-                $task->update(['completed' => false, 'last_completed_at' => Carbon::now()]);
-                Log::info("Tarea reactivada para el usuario: {$task->user_id}, Tarea: {$task->title}");
+            // Obtener la fecha y hora actual en la zona horaria de Nicaragua
+            $now = now()->setTimezone('America/Managua');
+    
+            // Calcular el tiempo límite para la tarea (2:00 AM del día siguiente al de creación)
+            $taskDeadline = $now->copy()->startOfDay()->addHours(2);
+    
+            // Si la fecha actual es igual o mayor al límite y la tarea sigue pendiente
+            if ($now->greaterThanOrEqualTo($taskDeadline)) {
+                // Marcar como fallida
+                $task->update(['status' => 'fallida']);
+    
+                // Reducir vida del usuario
+                $user = $task->user;
+                $damage = 15; // Ejemplo: 15% de daño al fallar
+                $user->$setCurrentLife($damage);
+    
+                // Reactivar la tarea tras 10 minutos
+                $reactivateTime = $now->copy()->addMinutes(10);
+                dispatch(function () use ($task) {
+                    $task->update(['status' => 'pendiente']);
+                })->delay($reactivateTime);
             }
         }
         return Command::SUCCESS;

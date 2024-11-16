@@ -13,11 +13,18 @@ class AuthController extends Controller
     public function register(UserRegisterRequest $request)
     {
         $validateData = $request->validated();
+        $maxhp = 100;
+        $hp = $maxhp;
+        $level = 1;
 
         $user = User::create([
             'name' => $validateData['name'],
             'email' => $validateData['email'],
             'password' => bcrypt($validateData['password']),
+            'maxhp' => $maxhp,
+            'hp' => $hp,
+            'level' => $level,
+            'exp' => $exp,
         ]);
 
         $token = auth('api')->login($user);

@@ -86,12 +86,15 @@ class HabitsController extends Controller
         $habit = Habit::findOrFail($id);
 
         if ($habit->user_id != Auth::id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return response()->json(['error' => 'No autorizado para modificar este hábito'], 403);
         }
 
         $habit->increment('count');
+        // Ganar EXP
+        $user = Auth::user();
+        $user->addExperience(10); // Método previamente definido para manejar la EXP
 
-        return response()->json(['message' => 'Habit count incremented', 'habit' => $habit], 200);
+        return response()->json(['message' => 'Hábito incrementado y EXP ganada', 'habit' => $habit], 200);
     }
 
     // Decrementar el contador de un hábito
@@ -100,11 +103,21 @@ class HabitsController extends Controller
         $habit = Habit::findOrFail($id);
 
         if ($habit->user_id != Auth::id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return response()->json(['error' => 'No autorizado para modificar este hábito'], 403);
         }
 
-        $habit->decrement('count');
+         // No permitir valores negativos en el contador
+        if ($habit->count > 0) {
+            $habit->decrement('count');
 
-        return response()->json($habit, 200);
+            // Perder vida (15% de la vida actual)
+            $user = Auth::user();
+            $damage = 15;
+            $user->setCurrentLife($damage); // Método previamente definido para manejar la vida
+
+            return response()->json(['message' => 'Hábito decrementado y vida reducida', 'habit' => $habit], 200);
+        }
+
+        return response()->json(['message' => 'El contador no puede ser negativo'], 400);
     }
 }

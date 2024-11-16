@@ -61,6 +61,60 @@ class UsersController extends Controller
         }
     }
 
+    // Método para añadir experiencia
+    public function addExperience($exp)
+    {
+        $this->exp += $exp;
+
+        // Calcular el EXP necesario para el próximo nivel
+        $expForNextLevel = $this->calculateExpForNextLevel();
+
+        // Subir de nivel si el EXP excede el necesario
+        while ($this->experience >= $expForNextLevel) {
+            $this->level++;
+            $this->exp -= $expForNextLevel;
+            $expForNextLevel = $this->calculateExpForNextLevel();
+        }
+
+        $this->save();
+        return response()->json(['Experience' => ($this->exp / $this->calculateExpForNextLevel()) * 100], 200);
+    }
+
+    // Calcular el EXP necesario para el próximo nivel
+    private function calculateExpForNextLevel()
+    {
+        // Incremento del 25% por nivel
+        return (int)(50 * pow(1.25, $this->level - 1));
+    }
+
+    // Calcula el porcentaje de vida
+    public function getLifePercentageAttribute()
+    {
+        return response()->json(['life' => ($this->hp / $this->maxhp) * 100], 200);
+    }
+
+    public function setCurrentLife($damage)
+    {
+        $this->hp -= $damage;
+
+        $this->save();
+        $this->checkLife();
+        $this->getLifePercentageAttribute();
+        // return response()->json(['life' => ($this->hp / $this->maxhp)], 200);
+    }
+
+    // Verifica si la vida ha llegado a 0
+    public function checkLife()
+    {
+        if ($this->hp <= 0) {
+            $this->hp = $this->maxhp; // Rellenar vida al máximo
+            if ($this->level > 1) {
+                $this->level -= 1; // Reducir un nivel si está por encima de 1
+            }
+        }
+        $this->save();
+    }
+
     public function destroy(Request $request)
     {
         $user = auth('api')->user();

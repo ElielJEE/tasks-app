@@ -107,6 +107,8 @@ class QuestsController extends Controller
             'end_date' => $validatedData['end_date'] ?? $quest->end_date,
         ]);
 
+        completeQuest($quest->id);
+
         // Actualizar, crear o eliminar objetivos (si existen)
         if (!empty($validatedData['objectives'])) {
             $existingObjectiveIds = [];
@@ -136,6 +138,26 @@ class QuestsController extends Controller
 
         return response()->json(['message' => 'Quest and objectives updated successfully', 'quest' => $quest], 200);
     }
+
+    public function completeQuest($id)
+    {
+        $quest = Quests::findOrFail($id);
+
+        if ($quest->status === 'pendiente') {
+            return response()->json(['message' => 'La quest sigue pendiente'], 400);
+        }
+
+        // Determinar EXP por dificultad
+        $expMap = ['Facil' => 10, 'Medio' => 15, 'Dificil' => 20];
+        $exp = $expMap[$quest->difficulty] ?? 10;
+
+        // Añadir EXP al usuario
+        $user = Auth::user();
+        $user->addExperience($exp);
+
+        return response()->json(['message' => 'Quest completada', 'user' => $user]);
+    }
+
 
     // Eliminar una quest
     public function destroy($id)
