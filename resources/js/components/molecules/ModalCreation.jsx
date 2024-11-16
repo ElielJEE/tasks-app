@@ -21,15 +21,14 @@ export default function ModalCreation({ showModal, comp }) {
 		<>
 			{
 				shouldShowModal || comp ? (
-					<div className="create-task-modal-container active-modal-creation">
-						<button className="create-task-modal-container__close-modal" onClick={handleCloseModal}>
-							Cerrar
-						</button>
-						{
-							comp ? (comp) : (<CreateTaskView setCloseModal />)
-						}
-
-					</div>
+					<>
+						<div className="create-modal-container active-modal-creation" onClick={handleCloseModal}>
+							<button className="create-modal-container__close-modal" onClick={handleCloseModal}>
+								Cerrar
+							</button>
+						</div>
+						{comp ? comp : <CreateTaskView setCloseModal />}
+					</>
 				) : ('')
 			}
 		</>

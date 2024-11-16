@@ -1,4 +1,5 @@
-.task-card {
+.task-card,
+.quest-card {
 	position: relative;
 	display: flex;
 	background-color: $s-color;
@@ -40,7 +41,8 @@
 			background-color: #ef4444;
 		}
 
-		&__task-checkbox {
+		&__task-checkbox,
+		&__quest-checkbox {
 			margin-top: 8px;
 			-webkit-appearance: none;
 			-moz-appearance: none;
@@ -81,12 +83,14 @@
 		padding: 1.7rem 1rem 1rem 1rem;
 		width: 100%;
 
-		&__task-title {
+		&__task-title,
+		&__quest-name {
 			font-size: 1.25rem;
 			font-weight: 600;
 		}
 
-		&__task-card-input {
+		&__task-card-input,
+		&__quest-card-input {
 			background-color: $t-alt-color;
 			border: none;
 			font-size: 1rem;
@@ -97,25 +101,43 @@
 			margin-top: 5px;
 		}
 
-		&__task-description {
+		&__task-description,
+		&__quest-description {
 			font-size: 0.875rem;
 			color: $f-color;
 		}
 
-		&__task-objectives-title {
+		&__quest-start-date-title,
+		&__quest-end-date-title {
+			display: flex;
+			flex-direction: column;
+			margin-top: 5px;
+			
+			&__start-date,
+			&__end-date {
+				font-size: 0.8rem;
+				color: $f-color;
+			}
+		}
+
+		&__task-objectives-title,
+		&__quest-objectives-title {
 			margin-top: 10px;
 		}
 
-		&__task-objectives-list {
+		&__task-objectives-list,
+		&__quest-objectives-list {
 			list-style: none;
 
-			&__task-objective-item {
+			&__task-objective-item,
+			&__quest-objective-item {
 				display: flex;
 				align-items: center;
 				gap: 7px;
 				padding: 10px 10px 0 10px;
 
-				&__task-objective-input {
+				&__task-objective-input,
+				&__quest-objective-input {
 					background-color: $t-alt-color;
 					border: none;
 					font-size: 1rem;
@@ -125,7 +147,8 @@
 					width: 100%;
 				}
 
-				&__task-objective-checkbox[type='checkbox'] {
+				&__task-objective-checkbox[type='checkbox'],
+				&__quest-objective-checkbox[type='checkbox'] {
 					-webkit-appearance: none;
 					-moz-appearance: none;
 					appearance: none;
@@ -160,7 +183,8 @@
 					}
 				}
 
-				&__task-objective-title {
+				&__task-objective-title,
+				&__quest-objective-title {
 					font-size: .85rem;
 				}
 			}
@@ -219,7 +243,9 @@
 	}
 
 	&:hover .task-card__edit-btn,
-	&:hover .task-card__delete-btn {
+	&:hover .task-card__delete-btn,
+	&:hover .quest-card__edit-btn,
+	&:hover .quest-card__delete-btn {
 		opacity: 1;
 	}
 }

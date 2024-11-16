@@ -5,8 +5,6 @@ import Masonry from 'react-masonry-css';
 
 export default function TaskCards() {
 	const { tasks, loading } = useContext(TaskContext);
-
-	console.log("Tasks after update:", tasks);
 	if (loading) return <p>Cargando tareas...</p>;
 
 	const hasTask = Array.isArray(tasks) && tasks.length > 0;
