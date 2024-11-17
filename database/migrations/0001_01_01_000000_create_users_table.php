@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('level')->default(1);//Por defecto lo deje en 1
             $table->integer('xp')->default(0);//Falta trabajo en el controlador
             $table->integer('hp')->default(100);//Falta trabajo en el controlador, pero por defecto es 100
+            $table->integer('maxhp')->default(100);//Falta trabajo en el controlador, pero por defecto es 100
             $table->integer('coins')->default(0);//No se si iran monedas pero ahi borralo si no lo quieres
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

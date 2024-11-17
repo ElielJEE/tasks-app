@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tasks extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'title', 'description', 'difficulty', 'estimated_time', 'status', 'completed', 'last_completed_at'];
+    protected $fillable = ['user_id', 'title', 'description', 'difficulty', 'estimated_time', 'status', 'completed'];
 
     //Esto es para la foreignKey
     public function user()
