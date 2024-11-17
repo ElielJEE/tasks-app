@@ -24,7 +24,6 @@ class AuthController extends Controller
             'maxhp' => $maxhp,
             'hp' => $hp,
             'level' => $level,
-            'exp' => $exp,
         ]);
 
         $token = auth('api')->login($user);
