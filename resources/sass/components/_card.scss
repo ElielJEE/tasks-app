@@ -112,7 +112,7 @@
 			display: flex;
 			flex-direction: column;
 			margin-top: 5px;
-			
+
 			&__start-date,
 			&__end-date {
 				font-size: 0.8rem;
@@ -135,6 +135,23 @@
 				align-items: center;
 				gap: 7px;
 				padding: 10px 10px 0 10px;
+
+				&__task-objective-btn {
+					width: 20px;
+					height: 20px;
+					background-color: transparent;
+					border: none;
+					transition: all 0.2s ease-in-out;
+					cursor: pointer;
+
+					svg {
+						fill: white;
+
+						&:hover {
+							fill: $fi-color;
+						}
+					}
+				}
 
 				&__task-objective-input,
 				&__quest-objective-input {
@@ -187,6 +204,11 @@
 				&__quest-objective-title {
 					font-size: .85rem;
 				}
+			}
+
+			&__task-objective-item {
+				padding-left: 0;
+				padding-right: 0;
 			}
 		}
 
