@@ -126,38 +126,42 @@ class TasksController extends Controller
             'status' => $request->status ?? 'pendiente'
         ]);
 
-          // Si la tarea se completa, actualizar el `last_completed_at`
+        // Si la tarea se completa, actualizar el `last_completed_at`
         if ($task->status === 'completado') {
             $task->last_completed_at = $now;
             $task->save();
         }
 
         // Actualizar, crear o eliminar objetivos (si existen)
-        if (!empty($validatedData['objectives'])) {
-            $existingObjectiveIds = [];
-            foreach ($validatedData['objectives'] as $objectiveData) {
-                if (isset($objectiveData['id'])) {
-                    // Actualizar objetivo existente
-                    $objective = Objectives::find($objectiveData['id']);
-                    $objective->update([
-                        'description' => $objectiveData['description'],
-                        'completed' => $objectiveData['completed'] ?? 'pendiente',
-                    ]);
-                    $existingObjectiveIds[] = $objective->id;
-                } else {
-                    // Crear nuevo objetivo
-                    $newObjective = Objectives::create([
-                        'related_type' => Tasks::class,
-                        'related_id' => $task->id,
-                        'description' => $objectiveData['description'],
-                        'completed' => $objectiveData['completed'] ?? 'pendiente',
-                    ]);
-                    $existingObjectiveIds[] = $newObjective->id;
+        if (isset($validatedData['objectives'])) {
+            if (!empty($validatedData['objectives'])) {
+                $existingObjectiveIds = [];
+                foreach ($validatedData['objectives'] as $objectiveData) {
+                    if (isset($objectiveData['id'])) {
+                        // Actualizar objetivo existente
+                        $objective = Objectives::find($objectiveData['id']);
+                        $objective->update([
+                            'description' => $objectiveData['description'],
+                            'completed' => $objectiveData['completed'] ?? 'pendiente',
+                        ]);
+                        $existingObjectiveIds[] = $objective->id;
+                    } else {
+                        // Crear nuevo objetivo
+                        $newObjective = Objectives::create([
+                            'related_type' => Tasks::class,
+                            'related_id' => $task->id,
+                            'description' => $objectiveData['description'],
+                            'completed' => $objectiveData['completed'] ?? 'pendiente',
+                        ]);
+                        $existingObjectiveIds[] = $newObjective->id;
+                    }
                 }
-            }
 
-            // Eliminar objetivos que no fueron enviados
-            Objectives::where('related_id', $task->id)->whereNotIn('id', $existingObjectiveIds)->delete();
+                // Eliminar objetivos que no fueron enviados
+                Objectives::where('related_id', $task->id)->whereNotIn('id', $existingObjectiveIds)->delete();
+            } else {
+                Objectives::where('related_id', $task->id)->delete();
+            }
         }
 
         $taskWithObjectives = Tasks::with('objectives')->find($task->id);

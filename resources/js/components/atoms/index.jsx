@@ -4,3 +4,4 @@ export { default as Loading } from './Loading';
 export { default as Cards } from './Cards';
 export { default as HabitsCards } from './HabitsCards';
 export { default as QuestsCards } from './QuestsCards';
+export { default as LoadingBar } from './LoadingBar';

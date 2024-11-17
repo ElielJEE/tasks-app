@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { TaskContext } from '../services/TaskContext';
 import { useActive } from '../hooks';
 
@@ -115,7 +115,10 @@ export default function TaskCard({ title, description, difficulty, status, id, o
   };
   const removeObjective = (index) => {
     const newObjectives = taskDataUpdate.objectives.filter((_, i) => i !== index);
-    setTaskDataUpdate({ ...taskDataUpdate, objectives: newObjectives });
+    setTaskDataUpdate((prevState) => ({
+      ...prevState,
+      objectives: newObjectives,
+    }));
   };
 
   const handleObjectiveKeyPress = (e, index) => {
