@@ -17,10 +17,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->enum('difficulty', ['facil', 'medio', 'dificil']);
-            $table->integer('estimated_time')->default(24); // esto es en minutos
-            $table->enum('status', ['pendiente', 'completado'])->default('pendiente'); //Aqui por defecto iran los estatus de pendiente o completado, pero de base sera pendiente
-            $table->boolean('completed')->default(false); // Estado de la tarea (completada o no)
-            $table->timestamps();
+            $table->enum('status', ['pendiente', 'completado'])->default('pendiente');
+            $table->boolean('completed')->default(false);
         });
     }
 

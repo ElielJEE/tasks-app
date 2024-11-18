@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //Por el momento no agregare los objetivos de la Quest
         Schema::create('quests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');

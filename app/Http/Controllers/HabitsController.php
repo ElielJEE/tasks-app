@@ -6,6 +6,7 @@ use App\Models\Habits;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\StatsController;
 
 class HabitsController extends Controller
 {
@@ -39,6 +40,10 @@ class HabitsController extends Controller
             'description' => $validatedData['description'] ?? null,
             'count' => $validatedData['count'] ?? 0,
         ]);
+
+        $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+        $statistics->increment('habits_created');
+    
 
         return response()->json(['habits' => $habit], 201);
     }

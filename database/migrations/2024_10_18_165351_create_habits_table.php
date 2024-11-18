@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('habits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Relación con el usuario
-            $table->string('title'); // Título del hábito
-            $table->text('description')->nullable(); // Descripción del hábito
-            $table->integer('count')->default(0); // Contador para sumar/restar al hacer el hábito
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->integer('count')->default(0);
             $table->timestamps();
         });
     }

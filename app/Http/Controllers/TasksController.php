@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tasks;
+use App\Models\StatsController;
 use App\Models\Objetives;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\Objectives;
 use Carbon\Carbon;
@@ -44,7 +46,6 @@ class TasksController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'difficulty' => 'required|in:facil,medio,dificil',
-            'estimated_time' => 'nullable|integer',
             'status' => 'nullable|in:pendiente,completado',
             'objectives' => 'array|nullable', // Ahora los objetivos son opcionales
             'objectives.*.description' => 'required_with:objectives|string|max:255', // Solo requerido si se envían objetivos
@@ -57,7 +58,6 @@ class TasksController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'difficulty' => $request->difficulty,
-            'estimated_time' => $request->estimated_time ?? 24,
             'status' => $request->status ?? 'pendiente'
         ]);
 
@@ -74,6 +74,10 @@ class TasksController extends Controller
         }
 
         $taskWithObjectives = Tasks::with('objectives')->find($task->id);
+
+        $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+        $statistics->increment('tasks_created');
+        
         return response()->json(['message' => 'OK', 'task' => $taskWithObjectives], 201);
     }
 
@@ -110,7 +114,7 @@ class TasksController extends Controller
             'status' => $request->status ?? 'pendiente'
         ]);
 
-        // Si la tarea se completa, actualizar el `last_completed_at`
+
         if ($task->status === 'completado') {
             $this->completeTask($task->id);
         }

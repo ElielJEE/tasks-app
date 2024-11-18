@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Tasks;
 use App\Models\User;
+use App\Models\StatsController;
 
 class CheckTaskStatus extends Command
 {
@@ -45,6 +46,9 @@ class CheckTaskStatus extends Command
                 $user = $task->user;
                 $damage = 15; // Ejemplo: 15% de daño al fallar
                 $user->$setCurrentLife($damage);
+
+                $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+                $statistics->increment('tasks_failed');
     
                 // Reactivar la tarea tras 10 minutos
                 $reactivateTime = $now->copy()->addMinutes(10);
