@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\StatsController;
 
 class UsersController extends Controller
 {
@@ -64,9 +65,11 @@ class UsersController extends Controller
     // Método para añadir experiencia
     public function addExperience($exp)
     {
-        $this->exp += $exp;
+        // Incrementar la estadística de hábitos creados
+        $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+        $statistics->increment('total_experience', $exp);
 
-        // Calcular el EXP necesario para el próximo nivel
+        $this->exp += $exp;
         $expForNextLevel = $this->calculateExpForNextLevel();
 
         // Subir de nivel si el EXP excede el necesario
@@ -74,6 +77,10 @@ class UsersController extends Controller
             $this->level++;
             $this->exp -= $expForNextLevel;
             $expForNextLevel = $this->calculateExpForNextLevel();
+
+            // Incrementar la estadística de hábitos creados
+            $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+            $statistics->increment('current_level', $this->level);
         }
 
         $this->save();

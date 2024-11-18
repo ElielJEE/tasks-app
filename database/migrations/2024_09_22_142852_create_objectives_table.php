@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('objectives', function (Blueprint $table) {
             $table->id();
             $table->morphs('related');
-            $table->string('description')->nullable();  // Campo para la descripción del objetivo
-            $table->enum('completed', ['pendiente', 'completado'])->default('pendiente'); // Campo para el estado de completado
+            $table->string('description')->nullable();
+            $table->enum('completed', ['pendiente', 'completado'])->default('pendiente');
             $table->timestamps();
         });
     }
