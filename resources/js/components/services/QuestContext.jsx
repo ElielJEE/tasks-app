@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { getQuests, getUser } from '.';
+import { getQuests, getUser, deleteQuest as deleteQuestService } from '.';
+import { LoadingBar } from '../atoms';
 
 export const QuestContext = createContext({
 	quest: [],
@@ -12,6 +13,7 @@ export const QuestContext = createContext({
 export const QuestProvider = ({ children }) => {
 	const [quests, setQuests] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [loadingBar, setLoadingBar] = useState(false);
 	const { userId } = getUser();
 
 	const fetchQuests = async () => {
@@ -38,8 +40,21 @@ export const QuestProvider = ({ children }) => {
 		setQuests((prevQuests) => Array.isArray(prevQuests) ? [...prevQuests, newQuest] : [newQuest]);
 	}
 
+	const deleteQuest = async (questId) => {
+		setLoadingBar(true)
+		try {
+			await deleteQuestService(questId)
+			setQuests((preveQuests) => preveQuests.filter((quest) => quest.id !== questId))
+		} catch (error) {
+			console.error('Error al eliminar la quests:', error)
+		} finally {
+			setLoadingBar(false)
+		}
+	}
+
 	return (
-		<QuestContext.Provider value={{ quests, fetchQuests, loading, addQuest }}>
+		<QuestContext.Provider value={{ quests, fetchQuests, loading, addQuest, deleteQuest }}>
+			{loadingBar && <LoadingBar />}
 			{children}
 		</QuestContext.Provider>
 	)

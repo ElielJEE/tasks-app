@@ -1,5 +1,6 @@
 .task-card,
-.quest-card {
+.quest-card,
+.habitCard-container {
 	position: relative;
 	display: flex;
 	background-color: $s-color;
@@ -216,6 +217,8 @@
 
 	&__edit-btn,
 	&__delete-btn,
+	&__edit-btn-habit,
+	&__delete-btn-habit,
 	&__edit-btn-update {
 		position: absolute;
 		top: 8px;
@@ -248,6 +251,14 @@
 		right: 15px;
 	}
 
+	&__edit-btn-habit {
+		right: 80px;
+	}
+
+	&__delete-btn-habit {
+		right: 50px;
+	}
+
 	&__edit-btn-update {
 		opacity: 1;
 
@@ -267,7 +278,9 @@
 	&:hover .task-card__edit-btn,
 	&:hover .task-card__delete-btn,
 	&:hover .quest-card__edit-btn,
-	&:hover .quest-card__delete-btn {
+	&:hover .quest-card__delete-btn,
+	&:hover .habitCard-container__edit-btn-habit,
+	&:hover .habitCard-container__delete-btn-habit {
 		opacity: 1;
 	}
 }
