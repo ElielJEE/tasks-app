@@ -52,8 +52,58 @@ class User extends Authenticatable implements JWTSubject
 
     public function addExperience($amount)
     {
-        $this->xp += $amount; // Asegúrate de tener una columna 'experience' en tu tabla de usuarios
+            // Validar que la cantidad sea positiva
+        if ($amount <= 0) {
+            return;
+        }
+
+        // Incrementar la experiencia
+        $this->xp += (int) $amount;
+
+        // Calcular el EXP necesario para el próximo nivel
+        $expForNextLevel = $this->calculateExpForNextLevel();
+
+        // Subir de nivel si el EXP excede el necesario
+        while ($this->xp >= $expForNextLevel) {
+            $this->xp -= $expForNextLevel;
+            $this->level++;
+            $expForNextLevel = $this->calculateExpForNextLevel();
+        }
+
+        // Guardar los cambios
         $this->save();
+
+        // Actualizar estadísticas
+        $this->updateStatistics($amount);
+
+        ReturnExp();
+    }
+
+    // Método para calcular el EXP necesario
+    private function calculateExpForNextLevel()
+    {
+        return (int) floor(50 * pow(1.25, $this->level));
+    }
+
+    // Método para actualizar estadísticas
+    private function updateStatistics($amount)
+    {
+        $statistics = StatsController::firstOrCreate(['user_id' => this->id]);
+
+        // Incrementar experiencia total ganada
+        $statistics->increment('total_experience', $amount);
+
+        // Actualizar el nivel actual
+        $statistics->current_level = $this->level;
+        $statistics->save();
+    }
+
+    public function ReturnExp()
+    {
+        // Retornar la respuesta en porcentaje
+        $expPercentage = ($this->xp / $this->calculateExpForNextLevel()) * 100;
+
+        return response()->json(['Experience' => floor($expPercentage)], 200);
     }
 
     public function setCurrentLife($amount)
