@@ -81,7 +81,7 @@ class UsersController extends Controller
             $expForNextLevel = $this->calculateExpForNextLevel();
 
             // Incrementar la estadística de hábitos creados
-            $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+            $statistics = StatsController::firstOrCreate(['user_id' => Auth::id()]);
             $statistics->increment('current_level', $this->level);
         }
 

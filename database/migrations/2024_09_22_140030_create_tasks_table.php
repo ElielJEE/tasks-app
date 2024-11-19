@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('difficulty', ['facil', 'medio', 'dificil']);
             $table->enum('status', ['pendiente', 'completado'])->default('pendiente');
             $table->boolean('completed')->default(false);
+            $table->timestamps();
         });
     }
 
