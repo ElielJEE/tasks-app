@@ -56,6 +56,12 @@ class User extends Authenticatable implements JWTSubject
         $this->save();
     }
 
+    public function setCurrentLife($amount)
+    {
+        $this->hp -= $amount; // Asegúrate de tener una columna 'experience' en tu tabla de usuarios
+        $this->save();
+    }
+
     /**
      * Get the identifier that will be stored in the JWT token.
      *

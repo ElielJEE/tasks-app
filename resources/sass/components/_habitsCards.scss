@@ -34,6 +34,17 @@
 			width: 100%;
 		}
 
+		&__title-habit-input {
+			background-color: $t-alt-color;
+			border: none;
+			font-size: 1rem;
+			outline: none;
+			border-radius: 5px;
+			padding: 2px 10px;
+			width: 100%;
+			margin: 10px 0;
+		}
+
 		&__count-container {
 			display: flex;
 			flex-direction: row;

@@ -44,7 +44,7 @@ class HabitsController extends Controller
 
         $statistics = StatsController::firstOrCreate(['user_id' => Auth::id()]);
         $statistics->increment('habits_created');
-    
+
 
         return response()->json(['habits' => $habit], 201);
     }
@@ -73,7 +73,7 @@ class HabitsController extends Controller
             'count' => $validatedData['count'] ?? $habit->count,
         ]);
 
-        return response()->json(['habits' => $habit], 200);
+        return response()->json(['habits' => $habit, 'user' => $user], 200);
     }
 
     // Eliminar un hábito
@@ -94,6 +94,7 @@ class HabitsController extends Controller
     // Incrementar el contador de un hábito
     public function incrementCount($id)
     {
+        $user = auth('api')->user();
         $habit = Habits::findOrFail($id);
 
         if ($habit->user_id != Auth::id()) {
@@ -105,23 +106,25 @@ class HabitsController extends Controller
         $user = Auth::user();
         $user->addExperience(10); // Método previamente definido para manejar la EXP
 
-        return response()->json(['message' => 'Hábito incrementado y EXP ganada', 'habit' => $habit], 200);
+        return response()->json(['message' => 'Hábito incrementado y EXP ganada', 'habit' => $habit, 'user' => $user], 200);
     }
 
     // Decrementar el contador de un hábito
     public function decrementCount($id)
     {
+        $user = auth('api')->user();
+
         $habit = Habits::findOrFail($id);
 
         if ($habit->user_id != Auth::id()) {
             return response()->json(['error' => 'No autorizado para modificar este hábito'], 403);
         }
         $habit->decrement('count');
-            // Perder vida (15% de la vida actual)
+        // Perder vida (15% de la vida actual)
         $user = Auth::user();
         $damage = 15;
         $user->setCurrentLife($damage); // Método previamente definido para manejar la vida
 
-        return response()->json(['message' => 'Hábito decrementado y vida reducida', 'habit' => $habit], 200);
+        return response()->json(['message' => 'Hábito decrementado y vida reducida', 'habit' => $habit, 'user' => $user], 200);
     }
 }
