@@ -73,7 +73,7 @@ class UsersController extends Controller
         $expForNextLevel = $this->calculateExpForNextLevel();
 
         // Subir de nivel si el EXP excede el necesario
-        while ($this->experience >= $expForNextLevel) {
+        while ($this->exp >= $expForNextLevel) {
             $this->level++;
             $this->exp -= $expForNextLevel;
             $expForNextLevel = $this->calculateExpForNextLevel();
