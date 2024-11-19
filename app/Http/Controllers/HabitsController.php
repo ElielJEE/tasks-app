@@ -96,6 +96,7 @@ class HabitsController extends Controller
     {
         $habit = Habits::findOrFail($id);
         $user = auth('api')->user();
+        $statistics = StatsController::firstOrCreate(['user_id' => $user->id]);
 
         if ($habit->user_id != Auth::id()) {
             return response()->json(['error' => 'No autorizado para modificar este hábito'], 403);
@@ -104,6 +105,10 @@ class HabitsController extends Controller
         $habit->increment('count');
         // Ganar EXP
         $user->addExperience(10); // Método previamente definido para manejar la EXP
+
+
+        // Incrementar experiencia total ganada
+        $statistics->updateStatistics('total_experience', 10);
 
         return response()->json(['message' => 'Hábito incrementado y EXP ganada', 'habit' => $habit, 'user' => $user], 200);
     }

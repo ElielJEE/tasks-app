@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\StatsController;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -53,7 +54,8 @@ class User extends Authenticatable implements JWTSubject
 
     public function addExperience($amount)
     {
-            // Validar que la cantidad sea positiva
+        $statistics = StatsController::firstOrCreate(['user_id' => $this->id]);
+        // Validar que la cantidad sea positiva
         if ($amount <= 0) {
             return;
         }
@@ -70,10 +72,11 @@ class User extends Authenticatable implements JWTSubject
             $this->level++;
             $this->hp = $this->maxhp;
             $expForNextLevel = (int) floor(50 * pow(1.25, $this->level));
+            $statistics->increment('current_level');
         }
-
+        
         // Actualizar estadísticas
-        // $this->updateStatistics($amount);
+        // $this->updateStatistics((int)$amount);
         $expPercentage = ($this->xp / (int) floor(50 * pow(1.25, $this->level))) * 100;
 
         $this->xppercent = $expPercentage;
@@ -93,11 +96,10 @@ class User extends Authenticatable implements JWTSubject
         $statistics = StatsController::firstOrCreate(['user_id' => this->id]);
 
         // Incrementar experiencia total ganada
-        $statistics->increment('total_experience', $amount);
+        $statistics->updateStatistics('total_experience', $amount);
 
         // Actualizar el nivel actual
-        $statistics->current_level = $this->level;
-        $statistics->save();
+        $statistics->updateStatistics('current_level', $amount);
     }
 
     public function ReturnExp()
@@ -110,6 +112,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function setCurrentLife($damage)
     {
+        $statistics = StatsController::firstOrCreate(['user_id' => $this->id]);
         $this->hp -= (int) $damage;
         $user = auth('api')->user();
 
@@ -117,6 +120,7 @@ class User extends Authenticatable implements JWTSubject
             $user->hp = $user->maxhp;
             if ($user->level > 1) {
                 $user->level--;
+                $statistics->decrement('current_level');
             }
         }
 

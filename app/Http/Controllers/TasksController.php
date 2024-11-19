@@ -160,6 +160,7 @@ class TasksController extends Controller
     {
         $task = Tasks::findOrFail($id);
         $user = auth('api')->user();
+        $statistics = StatsController::firstOrCreate(['user_id' => $user->id]);
 
         if ($task->user_id != $user->id) {
             return response()->json(['error' => 'No autorizado para completar esta tarea'], 403);
@@ -170,6 +171,9 @@ class TasksController extends Controller
 
         // Añadir EXP al usuario
         $user->addExperience($exp);
+
+        // Incrementar experiencia total ganada
+        $statistics->updateStatistics('total_experience', $exp);
 
         $statistics = StatsController::firstOrCreate(['user_id' => $user->id]);
         $statistics->increment('tasks_completed');

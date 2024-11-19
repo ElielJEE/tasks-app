@@ -160,21 +160,21 @@ class QuestsController extends Controller
     {
         $quest = Quests::findOrFail($id);
         $user = auth('api')->user();
+        $statistics = StatsController::firstOrCreate(['user_id' => $user->id]);
 
         if ($quest->status === 'pendiente') {
             return response()->json(['message' => 'La quest sigue pendiente'], 400);
         }
 
         // Determinar EXP por dificultad
-        $expMap = ['Facil' => 10, 'Medio' => 15, 'Dificil' => 20];
+        $expMap = ['facil' => 10, 'medio' => 15, 'dificil' => 20];
         $exp = $expMap[$quest->difficulty] ?? 10;
 
         // Añadir EXP al usuario
-        /* $user = Auth::user(); */
         $user->addExperience($exp);
 
-        $statistics = StatsController::firstOrCreate(['user_id' => Auth::id()]);
         $statistics->increment('quests_completed');
+        $statistics->updateStatistics('total_experience', $exp);
 
         return response()->json(['message' => 'Quest completada', 'user' => $user]);
     }
