@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->integer('level')->default(1);
             $table->integer('xp')->default(0);
+            $table->integer('xppercent')->default(0);
             $table->integer('hp')->default(100);
             $table->integer('maxhp')->default(100);
             $table->timestamp('email_verified_at')->nullable();

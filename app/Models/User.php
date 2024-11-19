@@ -24,6 +24,7 @@ class User extends Authenticatable implements JWTSubject
         'avatar',
         'level',
         'xp',
+        'xppercent',
         'maxhp',
         'hp',
         'email',
@@ -67,17 +68,17 @@ class User extends Authenticatable implements JWTSubject
         while ($this->xp >= $expForNextLevel) {
             $this->xp -= $expForNextLevel;
             $this->level++;
+            $this->hp = $this->maxhp;
             $expForNextLevel = (int) floor(50 * pow(1.25, $this->level));
         }
-
-        // Guardar los cambios
-        $this->save();
 
         // Actualizar estadísticas
         // $this->updateStatistics($amount);
         $expPercentage = ($this->xp / (int) floor(50 * pow(1.25, $this->level))) * 100;
 
-        return response()->json(['Experience' => floor($expPercentage)], 200);
+        $this->xppercent = $expPercentage;
+        
+        $this->save();
     }
 
     // Método para calcular el EXP necesario

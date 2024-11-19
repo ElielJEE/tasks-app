@@ -94,8 +94,8 @@ class HabitsController extends Controller
     // Incrementar el contador de un hábito
     public function incrementCount($id)
     {
-        $user = auth('api')->user();
         $habit = Habits::findOrFail($id);
+        $user = auth('api')->user();
 
         if ($habit->user_id != Auth::id()) {
             return response()->json(['error' => 'No autorizado para modificar este hábito'], 403);
@@ -104,6 +104,7 @@ class HabitsController extends Controller
         $habit->increment('count');
         // Ganar EXP
         $user->addExperience(10); // Método previamente definido para manejar la EXP
+
         return response()->json(['message' => 'Hábito incrementado y EXP ganada', 'habit' => $habit, 'user' => $user], 200);
     }
 
