@@ -39,7 +39,7 @@ class CheckQuestStatus extends Command
             $damage = 15; // Ejemplo: 15% de daño al fallar
             $user->$setCurrentLife($damage);
 
-            $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+            $statistics = StartsController::firstOrCreate(['user_id' => Auth::id()]);
             $statistics->increment('quests_failed');
 
             // Eliminar la quest

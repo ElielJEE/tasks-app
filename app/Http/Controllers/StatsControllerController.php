@@ -16,7 +16,7 @@ class StatsControllerController extends Controller
     public function index()
     {
         //$userId = Auth::id();
-        $statistics = UserStatistic::where('user_id', $userId)->firstOrFail();
+        $statistics = StatsController::where('user_id', $userId)->firstOrFail();
 
         return response()->json([
             'statistics' => $statistics,
@@ -26,17 +26,23 @@ class StatsControllerController extends Controller
     public function incrementStat($type)
     {
         $userId = Auth::id();
-        $statistics = UserStatistic::firstOrCreate(['user_id' => $userId]);
+        $statistics = StatsController::firstOrCreate(['user_id' => $userId]);
 
         switch ($type) {
             case 'tasks_created':
                 $statistics->increment('tasks_created');
+                break;
+            case 'tasks_completed':
+                $statistics->increment('tasks_completed');
                 break;
             case 'tasks_failed':
                 $statistics->increment('tasks_failed');
                 break;
             case 'quests_created':
                 $statistics->increment('quests_created');
+                break;
+            case 'quests_completed':
+                $statistics->increment('quests_completed');
                 break;
             case 'quests_failed':
                 $statistics->increment('quests_failed');

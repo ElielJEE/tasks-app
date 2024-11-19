@@ -76,7 +76,7 @@ class QuestsController extends Controller
 
         $questWithObjectives = Quests::with('objectives')->find($quest->id);
 
-        $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+        $statistics = StatsController::firstOrCreate(['user_id' => Auth::id()]);
         $statistics->increment('quests_created');
 
         return response()->json(['message' => 'OK', 'quests' => $questWithObjectives], 201);
@@ -162,6 +162,9 @@ class QuestsController extends Controller
         // Añadir EXP al usuario
         $user = Auth::user();
         $user->addExperience($exp);
+
+        $statistics = StatsController::firstOrCreate(['user_id' => Auth::id()]);
+        $statistics->increment('quests_completed');
 
         return response()->json(['message' => 'Quest completada', 'user' => $user]);
     }

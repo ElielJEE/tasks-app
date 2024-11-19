@@ -75,7 +75,7 @@ class TasksController extends Controller
 
         $taskWithObjectives = Tasks::with('objectives')->find($task->id);
 
-        $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+        $statistics = StatsController::firstOrCreate(['user_id' => Auth::id()]);
         $statistics->increment('tasks_created');
         
         return response()->json(['message' => 'OK', 'task' => $taskWithObjectives], 201);
@@ -170,6 +170,9 @@ class TasksController extends Controller
         // Añadir EXP al usuario
         /* $user = Auth::user(); */
         $user->addExperience($exp);
+
+        $statistics = StatsController::firstOrCreate(['user_id' => Auth::id()]);
+        $statistics->increment('tasks_completed');
 
         return response()->json(['message' => 'Tarea completada', 'user' => $user]);
     }
