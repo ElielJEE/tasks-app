@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser, ValidateInputs } from "../components/services";
 import { useActive } from "../components/hooks";
+import { UserContext } from "../components/services/UserContext";
 
 export default function Login() {
   const navigate = useNavigate();
   const { validateInputs } = ValidateInputs();
   const { toggle, toggleActive } = useActive();
+  const { login } = useContext(UserContext)
 
   const [userData, setUserData] = useState({
     email: '',
@@ -36,6 +38,7 @@ export default function Login() {
     const result = await loginUser(userData);
 
     if (result.success) {
+      login(result.data.access_token)
       navigate('/')
     } else {
       setErrors(result.errors)

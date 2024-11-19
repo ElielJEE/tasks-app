@@ -33,5 +33,12 @@ export default function GetUser() {
 		userDataHeader();
 	}, []);
 
+	/* const updateUser = (updatedUser) => {
+		setUser((prevUser) => ({
+			...prevUser,
+			...updatedUser,
+		}));
+	}; */
+
 	return { user, userId }
 }
