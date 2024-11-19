@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
+            $table->integer('estimated_time')->default(24);
             $table->enum('difficulty', ['facil', 'medio', 'dificil']);
             $table->enum('status', ['pendiente', 'completado'])->default('pendiente');
             $table->boolean('completed')->default(false);
