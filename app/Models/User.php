@@ -26,8 +26,6 @@ class User extends Authenticatable implements JWTSubject
         'xp',
         'maxhp',
         'hp',
-        'maxhp',
-        'coins',//Tambien si no te gusta la idea borrala de aqui
         'email',
         'password',
     ];

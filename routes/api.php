@@ -8,6 +8,7 @@ use App\Http\Controllers\QuestsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserStatisticController;
 
 Route::middleware(['auth:api'])->group(function(){
    Route::post('logout', [AuthController::class, 'Logout']);
@@ -44,4 +45,8 @@ Route::middleware(['auth:api'])->group(function () {
    // Rutas para incrementar y decrementar el contador
    Route::post('habits/{id}/increment', [HabitsController::class, 'incrementCount'])->name('habits.increment');
    Route::post('habits/{id}/decrement', [HabitsController::class, 'decrementCount'])->name('habits.decrement');
+});
+
+Route::middleware(['auth:api'])->group(function () {
+   Route::post('/user/statistics', [UserStatisticController::class, 'index']);
 });

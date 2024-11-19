@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Quests;
 use App\Models\User;
+use App\Models\StatsController;
 
 class CheckQuestStatus extends Command
 {
@@ -37,6 +38,9 @@ class CheckQuestStatus extends Command
             $user = $quest->user;
             $damage = 15; // Ejemplo: 15% de daño al fallar
             $user->$setCurrentLife($damage);
+
+            $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+            $statistics->increment('quests_failed');
 
             // Eliminar la quest
             $quest->delete();

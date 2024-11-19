@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Quests;
 use App\Models\Objetives;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\Objectives;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\StatsController;
 
 class QuestsController extends Controller
 {
@@ -73,6 +75,10 @@ class QuestsController extends Controller
         }
 
         $questWithObjectives = Quests::with('objectives')->find($quest->id);
+
+        $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+        $statistics->increment('quests_created');
+
         return response()->json(['message' => 'OK', 'quests' => $questWithObjectives], 201);
     }
 
