@@ -24,11 +24,11 @@ class QuestsController extends Controller
 
         // Obtener todas las quests asociadas a este usuario
         $quests = Quests::where('user_id', Auth::id())->with('objectives')->get();
-        
+
         if ($quests->isEmpty()) {
             return response()->json(['message' => 'No quests found'], 200);
         }
-        
+
         return response()->json([
             'message' => 'Succesful',
             'quests' => $quests
@@ -57,7 +57,7 @@ class QuestsController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'difficulty' => $request->difficulty,
-            'status' => $request->status ?? 'active',
+            'status' => $request->status ?? 'activo',
             'start_date' => $validatedData['start_date'],
             'end_date' => $validatedData['end_date'],
         ]);
@@ -87,6 +87,7 @@ class QuestsController extends Controller
     {
         // Buscar la Quest
         $quest = Quests::findOrFail($id);
+        $user = auth('api')->user();
 
         // Verificar que la quest pertenezca al usuario autenticado
         if ($quest->user_id != Auth::id()) {
@@ -97,59 +98,68 @@ class QuestsController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'nullable|in:active,completed',
+            'status' => 'nullable|in:activo,completo',
             'start_date' => 'nullable|date|after_or_equal:today', // Permitir modificar si la fecha aún no ha pasado
             'end_date' => 'nullable|date|after:start_date', // end_date debe ser posterior a start_date
             'objectives' => 'array|nullable', // Objetivos son opcionales
             'objectives.*.id' => 'nullable|exists:objectives,id', // Validar si el objetivo ya existe
             'objectives.*.description' => 'required_with:objectives|string|max:255', // Solo si se envían objetivos
-            'objectives.*.completed' => 'required_with:objectives|boolean', // Estado del objetivo (completado o no)
+            'objectives.*.completed' => 'nullable|in:pendiente,completado', // Estado del objetivo (completado o no)
         ]);
 
         // Actualizar la Quest
         $quest->update([
             'name' => $validatedData['name'],
             'description' => $validatedData['description'],
-            'status' => $request->status ?? 'active',
+            'status' => $request->status ?? 'activo',
             'start_date' => $quest->start_date > now() ? $validatedData['start_date'] : $quest->start_date, // Solo actualizar si no ha pasado la fecha de inicio
             'end_date' => $validatedData['end_date'] ?? $quest->end_date,
         ]);
 
-        completeQuest($quest->id);
-
-        // Actualizar, crear o eliminar objetivos (si existen)
-        if (!empty($validatedData['objectives'])) {
-            $existingObjectiveIds = [];
-            foreach ($validatedData['objectives'] as $objectiveData) {
-                if (isset($objectiveData['id'])) {
-                    // Actualizar objetivo existente
-                    $objective = Objectives::find($objectiveData['id']);
-                    $objective->update([
-                        'description' => $objectiveData['description'],
-                        'completed' => $objectiveData['completed'] ?? false,
-                    ]);
-                    $existingObjectiveIds[] = $objective->id;
-                } else {
-                    // Crear nuevo objetivo
-                    $newObjective = Objectives::create([
-                        'quest_id' => $quest->id,
-                        'description' => $objectiveData['description'],
-                        'completed' => $objectiveData['completed'] ?? false,
-                    ]);
-                    $existingObjectiveIds[] = $newObjective->id;
-                }
-            }
-
-            // Eliminar objetivos que no fueron enviados
-            Objectives::where('quest_id', $quest->id)->whereNotIn('id', $existingObjectiveIds)->delete();
+        if ($quest->status === 'completo') {
+            $this->completeQuest($quest->id);
         }
 
-        return response()->json(['message' => 'Quest and objectives updated successfully', 'quest' => $quest], 200);
+        // Actualizar, crear o eliminar objetivos (si existen)
+        if (isset($validatedData['objectives'])) {
+            if (!empty($validatedData['objectives'])) {
+                $existingObjectiveIds = [];
+                foreach ($validatedData['objectives'] as $objectiveData) {
+                    if (isset($objectiveData['id'])) {
+                        // Actualizar objetivo existente
+                        $objective = Objectives::find($objectiveData['id']);
+                        $objective->update([
+                            'description' => $objectiveData['description'],
+                            'completed' => $objectiveData['completed'] ?? 'pendiente',
+                        ]);
+                        $existingObjectiveIds[] = $objective->id;
+                    } else {
+                        // Crear nuevo objetivo
+                        $newObjective = Objectives::create([
+                            'related_type' => Quests::class,
+                            'related_id' => $quest->id,
+                            'description' => $objectiveData['description'],
+                            'completed' => $objectiveData['completed'] ?? 'pendiente',
+                        ]);
+                        $existingObjectiveIds[] = $newObjective->id;
+                    }
+                }
+
+                // Eliminar objetivos que no fueron enviados
+                Objectives::where('related_id', $quest->id)->whereNotIn('id', $existingObjectiveIds)->delete();
+            } else {
+                Objectives::where('related_id', $quest->id)->delete();
+            }
+        }
+
+        $questWithObjectives = Quests::with('objectives')->find($quest->id);
+        return response()->json(['message' => 'Quest and objectives updated successfully', 'quest' => $questWithObjectives, 'user' => $user], 200);
     }
 
     public function completeQuest($id)
     {
         $quest = Quests::findOrFail($id);
+        $user = auth('api')->user();
 
         if ($quest->status === 'pendiente') {
             return response()->json(['message' => 'La quest sigue pendiente'], 400);
@@ -160,7 +170,7 @@ class QuestsController extends Controller
         $exp = $expMap[$quest->difficulty] ?? 10;
 
         // Añadir EXP al usuario
-        $user = Auth::user();
+        /* $user = Auth::user(); */
         $user->addExperience($exp);
 
         $statistics = StatsController::firstOrCreate(['user_id' => Auth::id()]);
