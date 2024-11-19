@@ -46,6 +46,7 @@ class TasksController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'difficulty' => 'required|in:facil,medio,dificil',
+            'estimated_time' => 'nullable|integer',
             'status' => 'nullable|in:pendiente,completado',
             'objectives' => 'array|nullable', // Ahora los objetivos son opcionales
             'objectives.*.description' => 'required_with:objectives|string|max:255', // Solo requerido si se envían objetivos
@@ -98,8 +99,8 @@ class TasksController extends Controller
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'difficulty' => 'nullable|in:facil,medio,dificil',
-            'estimated_time' => 'nullable|integer',
             'status' => 'nullable|in:pendiente,completado',
+            'estimated_time' => 'nullable|integer',
             'objectives' => 'array|nullable', // Objetivos opcionales
             'objectives.*.id' => 'nullable|exists:objectives,id', // Validar si el objetivo ya existe
             'objectives.*.description' => 'required_with:objectives|string|max:255', // Requerido si se envían objetivos
