@@ -113,7 +113,7 @@ export default function TaskCard({ title, description, difficulty, status, id, o
       objectives: [...taskDataUpdate.objectives, { description: '' }]
     });
   };
-  
+
   const removeObjective = (index) => {
     const newObjectives = taskDataUpdate.objectives.filter((_, i) => i !== index);
     setTaskDataUpdate((prevState) => ({
@@ -134,7 +134,7 @@ export default function TaskCard({ title, description, difficulty, status, id, o
   return (
     <>
       <div className={`task-card ${taskDataUpdate.status === 'completado' ? 'completed' : ''}`}>
-        <div className={`task-card__checkbox-container  ${difficulty}`}>
+        <div className={`task-card__checkbox-container  ${difficulty} ${taskDataUpdate.status === 'completado' ? 'completed' : ''}`}>
           {
             active === 1 ? (
               ''
@@ -222,7 +222,7 @@ export default function TaskCard({ title, description, difficulty, status, id, o
                       <ul className="task-card__info-container__task-objectives-list">
                         {
                           objectives.map((item, index) => (
-                            <li className="task-card__info-container__task-objectives-list__task-objective-item" key={index}>
+                            <li className={`task-card__info-container__task-objectives-list__task-objective-item ${taskDataUpdate.status === 'completado' ? 'completed' : ''}`} key={index}>
                               <input
                                 type="checkbox"
                                 checked={item.completed === 'completado'} className='task-card__info-container__task-objectives-list__task-objective-item__task-objective-checkbox'

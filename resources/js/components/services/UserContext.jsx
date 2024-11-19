@@ -37,7 +37,7 @@ export const UserProvider = ({ children }) => {
 					setLevelLost(updatedUser.level)
 					playSound('/sounds/Lost-Level.mp3')
 					setTimeout(() => setLevelLost(0), 3000);
-				} else {
+				} else if(updatedUser.level > userData.level) {
 					setLevelUp(updatedUser.level);
 					playSound('/sounds/Level-Up.mp3');
 					setTimeout(() => setLevelUp(0), 3000);

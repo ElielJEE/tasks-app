@@ -68,7 +68,7 @@ export default function ({ name, id, description, objectives, status, difficulty
 		const updatedStatus = questDataUpdate.status !== 'completado';
 		setQuestDataUpdate(prev => ({ ...prev, status: updatedStatus ? 'completo' : 'activo' }));
 
-		
+
 
 		handleSubmit(null, updatedStatus);
 	};
@@ -130,7 +130,7 @@ export default function ({ name, id, description, objectives, status, difficulty
 	return (
 		<>
 			<div className={`quest-card ${questDataUpdate.status === 'completo' ? 'completed' : ''}`}>
-				<div className={`quest-card__checkbox-container ${difficulty}`}>
+				<div className={`quest-card__checkbox-container ${difficulty} ${questDataUpdate.status === 'completo' ? 'completed' : ''}`}>
 					{
 						active === 1 ? (
 							''
@@ -259,7 +259,7 @@ export default function ({ name, id, description, objectives, status, difficulty
 											<ul className="quest-card__info-container__quest-objectives-list">
 												{
 													objectives.map((item, index) => (
-														<li className="quest-card__info-container__quest-objectives-list__quest-objective-item" key={index}>
+														<li className={`quest-card__info-container__quest-objectives-list__quest-objective-item ${questDataUpdate.status === 'completo' ? 'completed' : ''}`} key={index}>
 															<input
 																type="checkbox"
 																className="quest-card__info-container__quest-objectives-list__quest-objective-item__quest-objective-checkbox"

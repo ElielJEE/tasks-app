@@ -22,9 +22,6 @@
 	&.completed {
 		opacity: 0.6;
 		transform: scale(1);
-		pointer-events: none;
-		user-select: none;
-		cursor: not-allowed;
 	}
 
 	&__checkbox-container {
@@ -32,6 +29,12 @@
 		width: 3rem;
 		justify-content: center;
 		align-items: start;
+
+		&.completed {
+			pointer-events: none;
+			user-select: none;
+			cursor: not-allowed;
+		}
 
 		&.facil {
 			background-color: #10b981;
@@ -144,12 +147,19 @@
 		&__quest-objectives-list {
 			list-style: none;
 
+			
 			&__task-objective-item,
 			&__quest-objective-item {
 				display: flex;
 				align-items: center;
 				gap: 7px;
 				padding: 10px 10px 0 10px;
+				
+				&.completed {
+					pointer-events: none;
+					user-select: none;
+					cursor: not-allowed;
+				}
 
 				&__task-objective-btn {
 					width: 20px;
