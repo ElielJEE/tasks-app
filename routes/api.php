@@ -7,8 +7,8 @@ use App\Http\Controllers\ObjectivesController;
 use App\Http\Controllers\QuestsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\StatsControllerController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserStatisticController;
 
 Route::middleware(['auth:api'])->group(function(){
    Route::post('logout', [AuthController::class, 'Logout']);
@@ -48,5 +48,5 @@ Route::middleware(['auth:api'])->group(function () {
 });
 
 Route::middleware(['auth:api'])->group(function () {
-   Route::post('/user/statistics', [UserStatisticController::class, 'index']);
+   Route::post('/user/stats', [StatsControllerController::class, 'index']);
 });

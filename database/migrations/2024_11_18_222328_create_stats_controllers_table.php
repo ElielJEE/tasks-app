@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('tasks_created')->default(0);
+            $table->integer('tasks_completed')->default(0);
             $table->integer('tasks_failed')->default(0);
             $table->integer('quests_created')->default(0);
+            $table->integer('quests_completed')->default(0);
             $table->integer('quests_failed')->default(0);
             $table->integer('habits_created')->default(0);
             $table->integer('current_level')->default(1);

@@ -47,7 +47,7 @@ class CheckTaskStatus extends Command
                 $damage = 15; // Ejemplo: 15% de daño al fallar
                 $user->$setCurrentLife($damage);
 
-                $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+                $statistics = StatsController::firstOrCreate(['user_id' => Auth::id()]);
                 $statistics->increment('tasks_failed');
     
                 // Reactivar la tarea tras 10 minutos

@@ -42,7 +42,7 @@ class HabitsController extends Controller
             'count' => $validatedData['count'] ?? 0,
         ]);
 
-        $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
+        $statistics = StatsController::firstOrCreate(['user_id' => Auth::id()]);
         $statistics->increment('habits_created');
     
 
