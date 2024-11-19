@@ -50,6 +50,12 @@ class User extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
+    public function addExperience($amount)
+    {
+        $this->xp += $amount; // Asegúrate de tener una columna 'experience' en tu tabla de usuarios
+        $this->save();
+    }
+
     /**
      * Get the identifier that will be stored in the JWT token.
      *

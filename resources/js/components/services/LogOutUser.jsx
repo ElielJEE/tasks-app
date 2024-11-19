@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import config from './Config';
+import { useContext } from 'react';
+import { UserContext } from './UserContext';
 
 const LogOutUser = async (navigate) => {
 	try {
 		const token = localStorage.getItem('token');
-		const response  = await fetch(`${config.apiBaseUrl}/logout`, {
+		const response = await fetch(`${config.apiBaseUrl}/logout`, {
 			method: 'POST',
 			headers: {
 				'Authorization': `Bearer ${token}`,

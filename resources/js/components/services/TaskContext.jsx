@@ -1,7 +1,8 @@
 // src/context/TaskContext.js
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import { getTasks, getUser, deleteTask as deleteTaskService, updateTask as updateTaskService } from '.';
 import { LoadingBar } from '../atoms';
+import { UserContext } from './UserContext';
 
 export const TaskContext = createContext({
 	tasks: [],
@@ -16,13 +17,14 @@ export const TaskProvider = ({ children }) => {
 	const [loading, setLoading] = useState(true);
 	const [loadingBar, setLoadingBar] = useState(false);
 	const { userId } = getUser();
+	const { updateUser } = useContext(UserContext)
 	// Función para cargar las tareas
 	const fetchTasks = async () => {
 		setLoading(true)
 		setLoadingBar(true)
 		try {
 			const token = localStorage.getItem('token');
-			if (!token)	throw new Error('No token found');
+			if (!token) throw new Error('No token found');
 
 			const data = await getTasks(token, userId);
 			setTasks(data.task || []);
@@ -62,6 +64,7 @@ export const TaskProvider = ({ children }) => {
 			const updatedTask = await updateTaskService(updatedTaskData, token, updatedTaskData.id); // Llama al servicio que actualiza en el backend
 			console.log("desde la api:", updatedTask);
 			if (updatedTask.success) {
+				updateUser(updatedTask.data.user)
 				const upTask = updatedTask.data.task;
 				console.log("desde la api:", updatedTaskData.id);
 				// Actualizar la lista de tareas en el estado

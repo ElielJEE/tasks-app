@@ -7,46 +7,49 @@ import { TaskProvider } from "./components/services/TaskContext";
 import { HabitProvider } from "./components/services/HabitContext";
 import ModalHabitCreation from "./components/molecules/ModalHabitCreation";
 import { QuestProvider } from "./components/services/QuestContext";
+import { UserProvider } from "./components/services/UserContext";
 
 export default function App() {
 	return (
 		<>
 			<BrowserRouter>
-				<Routes>
-					<Route element={<ProtectedRoute />}>
-						<Route path='/' element={<Tasks />}>
-							<Route index element={<Navigate to="tasks" replace />} />
-							<Route path="tasks" element={
-								<TaskProvider>
-									<TaskCards />
-									<ModalCreation />
-								</TaskProvider>
-							} />
-							<Route path="quests" element={
-								<QuestProvider>
-									<QuestCards />
-									<ModalQuestCreation />
-								</QuestProvider>
-							} />
-							<Route path="habits" element={
-								<HabitProvider>
-									<HabitCards />
-									<ModalHabitCreation />
-								</HabitProvider>
-							} />
+				<UserProvider>
+					<Routes>
+						<Route element={<ProtectedRoute />}>
+							<Route path='/' element={<Tasks />}>
+								<Route index element={<Navigate to="tasks" replace />} />
+								<Route path="tasks" element={
+									<TaskProvider>
+										<TaskCards />
+										<ModalCreation />
+									</TaskProvider>
+								} />
+								<Route path="quests" element={
+									<QuestProvider>
+										<QuestCards />
+										<ModalQuestCreation />
+									</QuestProvider>
+								} />
+								<Route path="habits" element={
+									<HabitProvider>
+										<HabitCards />
+										<ModalHabitCreation />
+									</HabitProvider>
+								} />
+							</Route>
+
+							<Route path="settings/*" element={<Settings />}>
+								<Route index element={<Navigate to="account" replace />}
+								/>
+								<Route path="account" element={<Account />} />
+								<Route path="site" element={<Site />} />
+							</Route>
 						</Route>
 
-						<Route path="settings/*" element={<Settings />}>
-							<Route index element={<Navigate to="account" replace />}
-							/>
-							<Route path="account" element={<Account />} />
-							<Route path="site" element={<Site />} />
-						</Route>
-					</Route>
-
-					<Route path='/login' element={<Login />} />
-					<Route path='/register' element={<Signup />} />
-				</Routes>
+						<Route path='/login' element={<Login />} />
+						<Route path='/register' element={<Signup />} />
+					</Routes>
+				</UserProvider>
 			</BrowserRouter>
 		</>
 	);

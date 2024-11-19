@@ -86,6 +86,7 @@ class TasksController extends Controller
     {
         // Buscar la Task
         $task = Tasks::findOrFail($id);
+        $user = auth('api')->user();
 
         // Verificar que la task pertenezca al usuario autenticado
         if ($task->user_id != Auth::id()) {
@@ -151,18 +152,23 @@ class TasksController extends Controller
         }
 
         $taskWithObjectives = Tasks::with('objectives')->find($task->id);
-        return response()->json(['message' => 'OK', 'task' => $taskWithObjectives], 201);
+        return response()->json(['message' => 'OK', 'task' => $taskWithObjectives, 'user' => $user], 201);
     }
 
     public function completeTask($id)
     {
         $task = Tasks::findOrFail($id);
+        $user = auth('api')->user();
+
+        if ($task->user_id != Auth::id()) {
+            return response()->json(['error' => 'No autorizado para completar esta tarea'], 403);
+        }
         // Determinar EXP por dificultad
         $expMap = ['facil' => 10, 'medio' => 15, 'dificil' => 20];
         $exp = $expMap[$task->difficulty] ?? 10;
 
         // Añadir EXP al usuario
-        $user = Auth::user();
+        /* $user = Auth::user(); */
         $user->addExperience($exp);
 
         return response()->json(['message' => 'Tarea completada', 'user' => $user]);

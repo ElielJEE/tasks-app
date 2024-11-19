@@ -8,6 +8,7 @@ const GetAuthUser = async (token) => {
 			headers: {
 				'Authorization': `Bearer ${token}`,
 				'Content-Type': 'application/json',
+				'Cache-Control': 'no-cache'
 			},
 		});
 

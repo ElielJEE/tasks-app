@@ -65,6 +65,8 @@ class UsersController extends Controller
     // Método para añadir experiencia
     public function addExperience($exp)
     {
+        $user = auth('api')->user();
+        $user->exp += $exp;
         // Incrementar la estadística de hábitos creados
         $statistics = UserStatistic::firstOrCreate(['user_id' => Auth::id()]);
         $statistics->increment('total_experience', $exp);
@@ -73,9 +75,9 @@ class UsersController extends Controller
         $expForNextLevel = $this->calculateExpForNextLevel();
 
         // Subir de nivel si el EXP excede el necesario
-        while ($this->exp >= $expForNextLevel) {
-            $this->level++;
-            $this->exp -= $expForNextLevel;
+        while ($user->experience >= $expForNextLevel) {
+            $user->level++;
+            $user->exp -= $expForNextLevel;
             $expForNextLevel = $this->calculateExpForNextLevel();
 
             // Incrementar la estadística de hábitos creados
@@ -84,39 +86,43 @@ class UsersController extends Controller
         }
 
         $this->save();
-        return response()->json(['Experience' => ($this->exp / $this->calculateExpForNextLevel()) * 100], 200);
+        return response()->json(['Experience' => ($user->exp / $this->calculateExpForNextLevel()) * 100], 200);
     }
 
     // Calcular el EXP necesario para el próximo nivel
     private function calculateExpForNextLevel()
     {
+        $user = auth('api')->user();
         // Incremento del 25% por nivel
-        return (int)(50 * pow(1.25, $this->level - 1));
+        return (int)(50 * pow(1.25, $user->level - 1));
     }
-
+    
     // Calcula el porcentaje de vida
     public function getLifePercentageAttribute()
     {
-        return response()->json(['life' => ($this->hp / $this->maxhp) * 100], 200);
+        $user = auth('api')->user();
+        return response()->json(['life' => ($user->hp / $user->maxhp) * 100], 200);
     }
-
+    
     public function setCurrentLife($damage)
     {
-        $this->hp -= $damage;
-
+        $user = auth('api')->user();
+        $user->hp -= $damage;
+        
         $this->save();
         $this->checkLife();
         $this->getLifePercentageAttribute();
         // return response()->json(['life' => ($this->hp / $this->maxhp)], 200);
     }
-
+    
     // Verifica si la vida ha llegado a 0
     public function checkLife()
     {
-        if ($this->hp <= 0) {
-            $this->hp = $this->maxhp; // Rellenar vida al máximo
-            if ($this->level > 1) {
-                $this->level -= 1; // Reducir un nivel si está por encima de 1
+        $user = auth('api')->user();
+        if ($user->hp <= 0) {
+            $user->hp = $user->maxhp; // Rellenar vida al máximo
+            if ($user->level > 1) {
+                $user->level -= 1; // Reducir un nivel si está por encima de 1
             }
         }
         $this->save();
@@ -134,7 +140,7 @@ class UsersController extends Controller
         //     return response()->json(['error' => 'La contraseña es incorrecta'], 403);
         // }
 
-        $user->delete();
+        $this->delete();
 
         return response()->json(['message' => 'Cuenta eliminada exitosamente'], 200);
     }
