@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { registerUser, ValidateInputs } from '../components/services';
 import { useActive } from '../components/hooks';
+import { UserContext } from '../components/services/UserContext';
 
 export default function Signup() {
+  const { login } = useContext(UserContext)
   const navigate = useNavigate();
   const { toggle, toggleActive } = useActive();
 
@@ -28,6 +30,7 @@ export default function Signup() {
     const result = await registerUser(userData);
 
     if (result.success) {
+      login(result.data.access_token)
       navigate('/')
     } else {
       console.log(result.errors);

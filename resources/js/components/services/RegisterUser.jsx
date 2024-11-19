@@ -13,7 +13,7 @@ const registerUser = async (userData) => {
 
 		if (response.ok) {
 			const data = await response.json();
-			localStorage.setItem('token', data.access_token);
+			/* localStorage.setItem('token', data.access_token); */
 			return { success: true, data };
 		} else {
 			const errorData = await response.json();
