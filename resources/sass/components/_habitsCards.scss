@@ -5,6 +5,7 @@
 	gap: 20px;
 	padding: 0 20px 0 20px;
 	padding-bottom: 20px;
+	justify-content: center;
 }
 
 .habitCard-container {
@@ -80,7 +81,12 @@
 	&__minus-counter {
 		margin-left: auto;
 	}
+
 }
+
+/* .disabled {
+	pointer-events: none;
+} */
 
 .best-color {
 	background-color: #50b5e9;

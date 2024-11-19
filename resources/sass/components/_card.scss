@@ -22,9 +22,6 @@
 	&.completed {
 		opacity: 0.6;
 		transform: scale(1);
-		pointer-events: none;
-		user-select: none;
-		cursor: not-allowed;
 	}
 
 	&__checkbox-container {
@@ -32,6 +29,12 @@
 		width: 3rem;
 		justify-content: center;
 		align-items: start;
+
+		&.completed {
+			pointer-events: none;
+			user-select: none;
+			cursor: not-allowed;
+		}
 
 		&.facil {
 			background-color: #10b981;
@@ -144,12 +147,19 @@
 		&__quest-objectives-list {
 			list-style: none;
 
+			
 			&__task-objective-item,
 			&__quest-objective-item {
 				display: flex;
 				align-items: center;
 				gap: 7px;
 				padding: 10px 10px 0 10px;
+
+				&.completed {
+					pointer-events: none;
+					user-select: none;
+					cursor: not-allowed;
+				}
 
 				&__task-objective-btn {
 					width: 20px;
@@ -296,50 +306,6 @@
 	&:hover .habitCard-container__edit-btn-habit,
 	&:hover .habitCard-container__delete-btn-habit {
 		opacity: 1;
-	}
-}
-
-.message-xp-alert {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 5px;
-	background-color: #10b981;
-	border-radius: 5px;
-	padding: 5px 15px;
-	width: max-content;
-	font-size: 1.1rem;
-	position: fixed;
-	right: 30px;
-	top: 100px;
-	z-index: 100;
-	opacity: 1;
-	transform: translateY(0);
-	animation: fadeSlide 2s ease-in-out forwards;
-	box-shadow: '0 4px 8px rgba(0, 0, 0, 0.2)';
-
-	svg {
-		fill: yellow;
-		width: 20px;
-		height: 20px;
-		transform: rotateZ(10deg);
-	}
-
-	@keyframes fadeSlide {
-		0% {
-			opacity: 1;
-			transform: translateY(0);
-		}
-
-		80% {
-			opacity: 1;
-			transform: translateY(-10px);
-		}
-
-		100% {
-			opacity: 0;
-			transform: translateY(-30px);
-		}
 	}
 }
 

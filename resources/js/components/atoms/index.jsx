@@ -5,3 +5,7 @@ export { default as Cards } from './Cards';
 export { default as HabitsCards } from './HabitsCards';
 export { default as QuestsCards } from './QuestsCards';
 export { default as LoadingBar } from './LoadingBar';
+export { default as XpMessage } from './XpMessage';
+export { default as LevelUp } from './LevelUp';
+export { default as LevelLost } from './LevelLost';
+export { default as LostHP } from './LostHP';

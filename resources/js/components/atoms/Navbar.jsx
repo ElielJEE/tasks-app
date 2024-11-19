@@ -17,9 +17,9 @@ export default function Navbar() {
 							<li className="navbar__container__list-container__nav-list__list-item">
 								<Link className='navbar__container__list-container__nav-list__list-item__item' to={'#'}>Tasks</Link>
 							</li>
-							<li className="navbar__container__list-container__nav-list__list-item">
+							{/* <li className="navbar__container__list-container__nav-list__list-item">
 								<Link className='navbar__container__list-container__nav-list__list-item__item' to={'#'}>Quests</Link>
-							</li>
+							</li> */}
 							<li className="navbar__container__list-container__nav-list__list-item">
 								<Link className='navbar__container__list-container__nav-list__list-item__item' to={'/settings'}>Settings</Link>
 							</li>

@@ -100,9 +100,18 @@ class User extends Authenticatable implements JWTSubject
         $statistics->save();
     }
 
-    public function setCurrentLife($amount)
+    public function ReturnExp()
+    {
+        // Retornar la respuesta en porcentaje
+        $expPercentage = ($this->xp / $this->calculateExpForNextLevel()) * 100;
+
+        return response()->json(['Experience' => floor($expPercentage)], 200);
+    }
+
+    public function setCurrentLife($damage)
     {
         $this->hp -= (int) $damage;
+        $user = auth('api')->user();
 
         if ($user->hp <= 0) {
             $user->hp = $user->maxhp;

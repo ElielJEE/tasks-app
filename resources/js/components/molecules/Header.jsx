@@ -34,7 +34,7 @@ export default function Header() {
 									</div>
 									<span className="header__user-container__bars__exp-title">XP</span>
 									<div className="header__user-container__bars__exp-bar-container">
-										<div className="header__user-container__bars__exp-bar-container__exp-bar" style={{ width: `${userData.xp}%` }}></div>
+										<div className="header__user-container__bars__exp-bar-container__exp-bar" style={{ width: `${userData.xppercent}%` }}></div>
 									</div>
 								</div>
 							</div>
