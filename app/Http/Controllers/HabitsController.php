@@ -103,13 +103,10 @@ class HabitsController extends Controller
 
         $habit->increment('count');
         // Ganar EXP
-        $user = Auth::user();
         $user->addExperience(10); // Método previamente definido para manejar la EXP
-
         return response()->json(['message' => 'Hábito incrementado y EXP ganada', 'habit' => $habit, 'user' => $user], 200);
     }
 
-    // Decrementar el contador de un hábito
     public function decrementCount($id)
     {
         $user = auth('api')->user();

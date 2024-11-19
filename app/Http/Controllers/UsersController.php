@@ -62,47 +62,6 @@ class UsersController extends Controller
         }
     }
 
-    // Método para añadir experiencia
-    public function ReturnExp($exp)
-    {
-        // Retornar la respuesta en porcentaje
-        $expPercentage = ($user->xp / $user->calculateExpForNextLevel()) * 100;
-
-        return response()->json(['Experience' => floor($expPercentage)], 200);
-    }
-
-    // Calcular el EXP necesario para el próximo nivel
-    private function calculateExpForNextLevel($level)
-    {
-        return (int) floor(50 * pow(1.25, $level));
-    }
-
-    private function updateStatistics($user, $exp)
-    {
-        $statistics = Stats::firstOrCreate(['user_id' => $user->id]);
-
-        $statistics->increment('total_experience', $exp);
-        $statistics->current_level = $user->level;
-        $statistics->save();
-    }
-
-    public function setCurrentLife($damage)
-    {
-        $user = auth('api')->user();
-        $user->hp -= (int) $damage;
-
-        if ($user->hp <= 0) {
-            $user->hp = $user->maxhp;
-            if ($user->level > 1) {
-                $user->level--;
-            }
-        }
-
-        $user->save();
-
-        return response()->json(['life' => ($user->hp / $user->maxhp) * 100], 200);
-    }
-
     public function destroy(Request $request)
     {
         $user = auth('api')->user();
