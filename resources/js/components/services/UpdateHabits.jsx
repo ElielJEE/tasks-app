@@ -17,7 +17,7 @@ const UpdateHabit = async (habitDataUpdate, token, habitId) => {
 			return { success: true, data };
 		} else {
 			const errorData = await response.json();
-			return { success: false, errors: errorData.errors || ['update of task failed'] };
+			return { success: false, errors: errorData.errors || ['update of habit failed'] };
 		}
 	} catch (error) {
 		return {

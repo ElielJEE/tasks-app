@@ -113,6 +113,7 @@ export default function TaskCard({ title, description, difficulty, status, id, o
       objectives: [...taskDataUpdate.objectives, { description: '' }]
     });
   };
+  
   const removeObjective = (index) => {
     const newObjectives = taskDataUpdate.objectives.filter((_, i) => i !== index);
     setTaskDataUpdate((prevState) => ({

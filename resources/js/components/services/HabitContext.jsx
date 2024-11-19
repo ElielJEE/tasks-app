@@ -1,7 +1,9 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { getHabits, getUser, deleteHabit as deleteHabitService } from ".";
 import { decrementHabit, incrementHabit } from "./UpdateHabits";
+import { updateHabit as updateHabitService } from ".";
 import { LoadingBar } from "../atoms";
+import { UserContext } from "./UserContext";
 
 export const HabitContext = createContext({
 	habits: [],
@@ -16,6 +18,7 @@ export const HabitProvider = ({ children }) => {
 	const [loading, setLoading] = useState(true);
 	const [loadingBar, setLoadingBar] = useState(false);
 	const { userId } = getUser();
+	const { updateUser } = useContext(UserContext)
 
 	const fetchHabits = async () => {
 		const token = localStorage.getItem('token');
@@ -48,6 +51,7 @@ export const HabitProvider = ({ children }) => {
 			const result = await incrementHabit(token, habitId);
 
 			if (result.success) {
+				updateUser(result.data.user)
 				setHabits((prevHabits) =>
 					prevHabits.map((habit) =>
 						habit.id === habitId ? { ...habit, count: habit.count + 1 } : habit
@@ -69,6 +73,7 @@ export const HabitProvider = ({ children }) => {
 			const token = localStorage.getItem('token');
 			const result = await decrementHabit(token, habitId);
 			if (result.success) {
+				updateUser(result.data.user)
 				setHabits((prevHabits) =>
 					prevHabits.map((habit) =>
 						habit.id === habitId ? { ...habit, count: habit.count - 1 } : habit
@@ -97,8 +102,32 @@ export const HabitProvider = ({ children }) => {
 		}
 	}
 
+	const updateHabit = async (updatedHabitData, token) => {
+		setLoadingBar(true)
+		try {
+			const updatedHabit = await updateHabitService(updatedHabitData, token, updatedHabitData.id)
+
+			if (updatedHabit.success) {
+				const upHabit = updatedHabit.data.habits;
+
+				setHabits((prevHabits) =>
+					prevHabits.map((habit) =>
+						habit.id === upHabit.id ? { ...habit, ...upHabit } : habit
+					)
+				)
+			} else {
+				console.error("error:", updatedHabit.errors)
+			}
+
+		} catch (error) {
+			console.error("error:", error)
+		} finally {
+			setLoadingBar(false)
+		}
+	}
+
 	return (
-		<HabitContext.Provider value={{ habits, fetchHabits, loading, addHabit, handleDecrement, handleIncrement, deleteHabit }} >
+		<HabitContext.Provider value={{ habits, fetchHabits, loading, addHabit, handleDecrement, handleIncrement, deleteHabit, updateHabit }} >
 			{loadingBar && <LoadingBar />}
 			{children}
 		</HabitContext.Provider>
