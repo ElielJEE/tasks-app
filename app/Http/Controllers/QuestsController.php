@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Quests;
 use App\Models\Objetives;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\Objectives;
 use Illuminate\Http\Request;
