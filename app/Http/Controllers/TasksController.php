@@ -173,8 +173,6 @@ class TasksController extends Controller
 
         $statistics = StatsController::firstOrCreate(['user_id' => $user->id]);
         $statistics->increment('tasks_completed');
-
-        return response()->json(['message' => 'Tarea completada', 'user' => $user]);
     }
 
     // Eliminar una tarea

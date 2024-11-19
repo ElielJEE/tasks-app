@@ -61,28 +61,29 @@ class User extends Authenticatable implements JWTSubject
         $this->xp += (int) $amount;
 
         // Calcular el EXP necesario para el próximo nivel
-        $expForNextLevel = $this->calculateExpForNextLevel();
+        $expForNextLevel = (int) floor(50 * pow(1.25, $this->level));
 
         // Subir de nivel si el EXP excede el necesario
         while ($this->xp >= $expForNextLevel) {
             $this->xp -= $expForNextLevel;
             $this->level++;
-            $expForNextLevel = $this->calculateExpForNextLevel();
+            $expForNextLevel = (int) floor(50 * pow(1.25, $this->level));
         }
 
         // Guardar los cambios
         $this->save();
 
         // Actualizar estadísticas
-        $this->updateStatistics($amount);
+        // $this->updateStatistics($amount);
+        $expPercentage = ($this->xp / (int) floor(50 * pow(1.25, $this->level))) * 100;
 
-        ReturnExp();
+        return response()->json(['Experience' => floor($expPercentage)], 200);
     }
 
     // Método para calcular el EXP necesario
     private function calculateExpForNextLevel()
     {
-        return (int) floor(50 * pow(1.25, $this->level));
+        // return (int) floor(50 * pow(1.25, $this->level));
     }
 
     // Método para actualizar estadísticas
@@ -108,9 +109,19 @@ class User extends Authenticatable implements JWTSubject
 
     public function setCurrentLife($amount)
     {
-        $this->hp -= $amount; // Asegúrate de tener una columna 'experience' en tu tabla de usuarios
-        $this->save();
+        $this->hp -= (int) $damage;
+
+        if ($user->hp <= 0) {
+            $user->hp = $user->maxhp;
+            if ($user->level > 1) {
+                $user->level--;
+            }
+        }
+
+        $user->save();
     }
+
+    
 
     /**
      * Get the identifier that will be stored in the JWT token.
