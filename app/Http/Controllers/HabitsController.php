@@ -119,7 +119,6 @@ class HabitsController extends Controller
         }
         $habit->decrement('count');
         // Perder vida (15% de la vida actual)
-        $user = Auth::user();
         $damage = 15;
         $user->setCurrentLife($damage); // Método previamente definido para manejar la vida
 
