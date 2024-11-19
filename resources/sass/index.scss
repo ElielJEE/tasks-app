@@ -144,7 +144,7 @@ body {
 
 .my-masonry-grid {
 	display: flex;
-  width: 100%;
+	width: 100%;
 	gap: 10px;
 }
 
@@ -152,5 +152,83 @@ body {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-  background-clip: padding-box;
+	background-clip: padding-box;
+}
+
+.message-xp-alert,
+.message-levelup-alert,
+.message-hp-alert,
+.message-levellost-alert {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	border-radius: 5px;
+	padding: 5px 15px;
+	width: max-content;
+	font-size: 1.1rem;
+	position: fixed;
+	right: 30px;
+	top: 100px;
+	z-index: 100;
+	opacity: 1;
+	transform: translateY(0);
+	animation: fadeSlide 2s ease-in-out forwards;
+	box-shadow: '0 4px 8px rgba(0, 0, 0, 0.2)';
+
+	svg {
+		width: 20px;
+		height: 20px;
+	}
+
+	@keyframes fadeSlide {
+		0% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		80% {
+			opacity: 1;
+			transform: translateY(-10px);
+		}
+
+		100% {
+			opacity: 0;
+			transform: translateY(-30px);
+		}
+	}
+}
+
+.message-xp-alert {
+	background-color: #10b981;
+
+	svg {
+		transform: rotateZ(10deg);
+		fill: yellow;
+	}
+}
+
+.message-levelup-alert {
+	background-color: #179fe4;
+
+	svg {
+		fill: white;
+	}
+}
+
+.message-levellost-alert {
+	background-color: blue;
+
+	svg {
+		fill: white;
+		transform: rotateZ(180deg);
+	}
+}
+
+.message-hp-alert {
+	background-color: #701616;
+
+	svg {
+		fill: red;
+	}
 }
