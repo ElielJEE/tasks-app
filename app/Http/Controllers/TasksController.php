@@ -161,7 +161,7 @@ class TasksController extends Controller
         $task = Tasks::findOrFail($id);
         $user = auth('api')->user();
 
-        if ($task->user_id != Auth::id()) {
+        if ($task->user_id != $user->id) {
             return response()->json(['error' => 'No autorizado para completar esta tarea'], 403);
         }
         // Determinar EXP por dificultad
@@ -169,10 +169,9 @@ class TasksController extends Controller
         $exp = $expMap[$task->difficulty] ?? 10;
 
         // Añadir EXP al usuario
-        /* $user = Auth::user(); */
         $user->addExperience($exp);
 
-        $statistics = StatsController::firstOrCreate(['user_id' => Auth::id()]);
+        $statistics = StatsController::firstOrCreate(['user_id' => $user->id]);
         $statistics->increment('tasks_completed');
 
         return response()->json(['message' => 'Tarea completada', 'user' => $user]);

@@ -62,4 +62,12 @@ class StatsControllerController extends Controller
 
         return response()->json(['message' => 'Statistic updated successfully', 'statistics' => $statistics]);
     }
+
+    public function incrementExp($exp)
+    {
+        $userId = Auth::id();
+        $statistics = StatsController::firstOrCreate(['user_id' => $userId]);
+        $statistics->increment('total_experience', $exp);
+        $this->save();
+    }
 }
