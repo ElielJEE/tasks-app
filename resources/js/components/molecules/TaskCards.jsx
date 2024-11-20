@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Cards } from '../atoms'
+import { BouncingElement, Cards } from '../atoms'
 import { TaskContext } from '../services/TaskContext';
 import Masonry from 'react-masonry-css';
 
@@ -32,7 +32,7 @@ export default function TaskCards() {
 							}
 						</Masonry>
 					) : (
-						<p className='task-cards-container__message'>No se encontraron tareas.</p>  // Mensaje cuando no hay tareas
+						<BouncingElement txtOne={"Comienza a crear tareas"} txtTwo={"diarias para organizarte."}/> // Mensaje cuando no hay tareas
 					)
 				}
 			</div>

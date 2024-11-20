@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getStats } from '../services'
+import { BouncingElement } from '../atoms';
 
 export default function Stats() {
 	const [dataStats, setDataStats] = useState();
@@ -33,7 +34,7 @@ export default function Stats() {
 	return (
 		<>
 			{
-				dataStats && (
+				dataStats ? (
 					<div className="stats-settings s-container">
 						<h2 className="stats-settings__title-page">Estadisticas del jugador</h2>
 						<ul className="stats-settings__list-stats">
@@ -96,7 +97,7 @@ export default function Stats() {
 							<li className="stats-settings__list-stats__list-item">
 								<h3 className="stats-settings__list-stats__list-item__title">
 									Misiones falladas
-								</h3>	
+								</h3>
 								<span className="stats-settings__list-stats__list-item__info">
 									{dataStats.statistics.quests_failed}
 								</span>
@@ -111,6 +112,8 @@ export default function Stats() {
 							</li>
 						</ul>
 					</div>
+				) : (
+					<BouncingElement txtOne={"Interactua con el sitio"} txtTwo={"para ver tus estadisticas"}/>
 				)
 			}
 		</>

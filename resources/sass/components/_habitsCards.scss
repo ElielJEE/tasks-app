@@ -1,7 +1,7 @@
 .habitCards-container {
 	display: flex;
 	width: 100%;
-	height: 100%;
+	height: calc(100vh - 333px);
 	gap: 20px;
 	padding: 0 20px 0 20px;
 	padding-bottom: 20px;

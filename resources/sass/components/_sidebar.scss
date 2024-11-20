@@ -41,7 +41,7 @@
 
 				&:hover {
 					transition: all .5s ease-in-out;
-					background: linear-gradient(90deg, $fi-color 0%, #010103 100%);
+					background: linear-gradient(90deg, $fi-color 0%, #01010300 100%);
 					cursor: pointer;
 					width: 80%;
 				}
@@ -62,7 +62,7 @@
 
 			.active {
 				transition: all .5s ease-in-out;
-				background: linear-gradient(90deg, $fi-color 0%, #010103 100%);
+				background: linear-gradient(90deg, $fi-color 0%, #01010300 100%);
 				width: 100%;
 				height: 50px;
 				padding: 10px 1.1rem;

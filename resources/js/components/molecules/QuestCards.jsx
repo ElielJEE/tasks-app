@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { QuestContext } from '../services/QuestContext'
 import { array } from 'i/lib/util';
 import Masonry from 'react-masonry-css';
-import { QuestsCards } from '../atoms';
+import { BouncingElement, QuestsCards } from '../atoms';
 
 export default function QuestCards() {
 	const { quests, loading } = useContext(QuestContext);
@@ -36,9 +36,7 @@ export default function QuestCards() {
 							}
 						</Masonry>
 					) : (
-						<p className="quest-cards-container__message">
-							No se han encontrado misiones.
-						</p>
+						<BouncingElement txtOne={"Comienza a crear tus propias"} txtTwo={"misiones y desafiate a completarlas."}/>
 					)
 				}
 			</div>

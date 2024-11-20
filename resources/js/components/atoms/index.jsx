@@ -9,3 +9,4 @@ export { default as XpMessage } from './XpMessage';
 export { default as LevelUp } from './LevelUp';
 export { default as LevelLost } from './LevelLost';
 export { default as LostHP } from './LostHP';
+export { default as BouncingElement } from './BouncingElement';

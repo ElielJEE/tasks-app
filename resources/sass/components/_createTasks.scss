@@ -7,7 +7,10 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   font-family: Arial, sans-serif;
   z-index: 200;
-  top: 25%;
+  top: 20%;
+  max-height: 500px;
+  overflow: scroll;
+  scrollbar-width: none;
 
   h2 {
     text-align: center;
@@ -103,4 +106,22 @@
   color: red;
   list-style-type: none;
   padding: 0;
+}
+
+/* Personalización del scrollbar en Webkit (Chrome, Safari, Edge) */
+.form-quest-container::-webkit-scrollbar {
+  width: 8px; /* Define el tamaño del scrollbar */
+  height: 8px; /* Si quieres personalizar el scroll horizontal */
+  opacity: 0; /* Ocultamos el scrollbar */
+}
+
+.form-quest-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3); /* Color del thumb del scrollbar */
+  border-radius: 10px;
+  transition: opacity 0.2s ease;
+}
+
+/* Mostrar el scrollbar cuando se hace scroll */
+.form-quest-container:hover::-webkit-scrollbar {
+  opacity: 1; /* Hacemos visible el scrollbar al hacer hover */
 }

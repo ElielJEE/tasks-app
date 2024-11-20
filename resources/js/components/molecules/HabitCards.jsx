@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { HabitContext } from '../services/HabitContext'
-import { HabitsCards } from '../atoms';
+import { BouncingElement, HabitsCards } from '../atoms';
 import Masonry from 'react-masonry-css';
 
 export default function HabitCards() {
@@ -37,7 +37,7 @@ export default function HabitCards() {
 							}
 						</Masonry>
 					) : (
-						<p>No se encontraron habitos.</p>
+						<BouncingElement txtOne={"Crea los habitos que"} txtTwo={"deseas mejorar en tu vida."}/>
 					)
 				}
 			</div>
