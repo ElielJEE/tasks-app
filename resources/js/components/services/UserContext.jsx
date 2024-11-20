@@ -1,7 +1,8 @@
 // src/context/UserContext.js
 import React, { createContext, useState, useEffect } from 'react';
-import { getAuthUser } from '.';
-import { LevelLost, LevelUp, LostHP, XpMessage } from '../atoms';
+import { getAuthUser, logOutUser } from '.';
+import { GameOver, LevelLost, LevelUp, LostHP, XpMessage } from '../atoms';
+import { useNavigate } from 'react-router-dom';
 
 export const UserContext = createContext({
 	user: null,
@@ -14,6 +15,8 @@ export const UserProvider = ({ children }) => {
 	const [levelUp, setLevelUp] = useState(0);
 	const [levelLost, setLevelLost] = useState(0);
 	const [lostHP, setLostHP] = useState(0)
+	const [gameOver, setGameOver] = useState(false)
+	const navigate = useNavigate();
 
 	const updateUser = (updatedUser) => {
 		const xpRest = updatedUser.xp - userData.xp
@@ -41,11 +44,23 @@ export const UserProvider = ({ children }) => {
 					setLevelUp(updatedUser.level);
 					playSound('/sounds/Level-Up.mp3');
 					setTimeout(() => setLevelUp(0), 3000);
+				} else {
+					playSound('/sounds/GameOver.mp3');
+					setGameOver(true);
 				}
 			}
 		}
 		setUserData((prevUser) => ({ ...prevUser, ...updatedUser }));
 	};
+
+	const handleContinue = () => {
+		setGameOver(false);
+	}
+
+	const handleExit = () => {
+		logOutUser(navigate)
+		setGameOver(false)
+	}
 
 	const fetchUserData = async () => {
 		try {
@@ -79,6 +94,7 @@ export const UserProvider = ({ children }) => {
 			{levelUp !== 0 && <LevelUp level={levelUp} />}
 			{levelLost !== 0 && <LevelLost level={levelLost} />}
 			{lostHP !== 0 && <LostHP hp={lostHP} />}
+			{gameOver && <GameOver onContinue={handleContinue} onExit={handleExit} />}
 			{children}
 		</UserContext.Provider>
 	);

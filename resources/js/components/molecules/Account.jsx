@@ -335,11 +335,11 @@ export default function Account() {
 										</tr>
 									</tbody>
 								</table>
-								<button className="account-settings__account-form__delete-btn" type='button'>
+								{/* <button className="account-settings__account-form__delete-btn" type='button'>
 									<span className="account-settings__account-form__delete-btn__delete-span">
 										Eliminar cuenta
 									</span>
-								</button>
+								</button> */}
 							</form>
 						</div>
 					)}
