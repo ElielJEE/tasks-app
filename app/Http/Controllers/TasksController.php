@@ -174,8 +174,6 @@ class TasksController extends Controller
 
         // Incrementar experiencia total ganada
         $statistics->updateStatistics('total_experience', $exp);
-
-        $statistics = StatsController::firstOrCreate(['user_id' => $user->id]);
         $statistics->increment('tasks_completed');
     }
 
