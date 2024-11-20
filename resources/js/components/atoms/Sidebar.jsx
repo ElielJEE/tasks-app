@@ -15,7 +15,7 @@ export default function Sidebar() {
 
 	const index = {
 		'/settings/account': 0,
-		'/settings/site': 1
+		'/settings/stats': 1
 	}
 
 	useEffect(() => {
@@ -39,7 +39,7 @@ export default function Sidebar() {
 							: "sidebar__list-container__list__list-item"}
 					>
 						<Link to={'account'} className="sidebar__list-container__list__list-item__item">
-							Account
+							Cuenta
 						</Link>
 					</li>
 					<li className={
@@ -47,8 +47,8 @@ export default function Sidebar() {
 							? "sidebar__list-container__list__list-item active"
 							: "sidebar__list-container__list__list-item"}
 					>
-						<Link to={'site'} className="sidebar__list-container__list__list-item__item">
-							Site
+						<Link to={'stats'} className="sidebar__list-container__list__list-item__item">
+							Estadisticas
 						</Link>
 					</li>
 				</ul>

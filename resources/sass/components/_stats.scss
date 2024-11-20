@@ -1,0 +1,22 @@
+.stats-settings {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 1rem 1.5rem;
+	width: 40%;
+	gap: 10px;
+
+	&__list-stats {
+		list-style: none;
+		width: 100%;
+
+		&__list-item {
+			display: flex;
+			border-bottom: solid 2px white;
+			justify-content: space-between;
+			padding: 10px;
+			align-items: center;
+		}
+	}
+}

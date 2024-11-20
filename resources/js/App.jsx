@@ -2,7 +2,7 @@ import React from "react";
 import { Login, Settings, Signup, Tasks } from "./pages";
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./components/hooks";
-import { Account, CreateTaskView, HabitCards, ModalCreation, ModalQuestCreation, QuestCards, Site, TaskCards } from "./components/molecules";
+import { Account, CreateTaskView, HabitCards, ModalCreation, ModalQuestCreation, QuestCards, Stats, TaskCards } from "./components/molecules";
 import { TaskProvider } from "./components/services/TaskContext";
 import { HabitProvider } from "./components/services/HabitContext";
 import ModalHabitCreation from "./components/molecules/ModalHabitCreation";
@@ -42,7 +42,7 @@ export default function App() {
 								<Route index element={<Navigate to="account" replace />}
 								/>
 								<Route path="account" element={<Account />} />
-								<Route path="site" element={<Site />} />
+								<Route path="stats" element={<Stats />} />
 							</Route>
 						</Route>
 

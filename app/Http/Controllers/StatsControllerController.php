@@ -15,7 +15,8 @@ class StatsControllerController extends Controller
      */
     public function index()
     {
-        //$userId = Auth::id();
+        $userId = Auth::id();
+
         $statistics = StatsController::where('user_id', $userId)->firstOrFail();
 
         return response()->json([
