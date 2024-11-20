@@ -114,12 +114,22 @@ export default function TaskCard({ title, description, difficulty, status, id, o
     });
   };
 
+  console.log(taskDataUpdate.objectives.length);
+
   const removeObjective = (index) => {
-    const newObjectives = taskDataUpdate.objectives.filter((_, i) => i !== index);
-    setTaskDataUpdate((prevState) => ({
-      ...prevState,
-      objectives: newObjectives,
-    }));
+    if (taskDataUpdate.objectives.length === 1) {
+      setTaskDataUpdate({
+        ...taskDataUpdate,
+        objectives: [{ description: '' }]
+      })
+      console.log('hola desde remove');
+    } else {
+      const newObjectives = taskDataUpdate.objectives.filter((_, i) => i !== index);
+      setTaskDataUpdate((prevState) => ({
+        ...prevState,
+        objectives: newObjectives,
+      }));
+    }
   };
 
   const handleObjectiveKeyPress = (e, index) => {

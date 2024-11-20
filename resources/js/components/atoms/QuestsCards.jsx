@@ -43,11 +43,18 @@ export default function ({ name, id, description, objectives, status, difficulty
 	};
 
 	const removeObjective = (index) => {
-		const newObjectives = questDataUpdate.objectives.filter((_, i) => i !== index);
-		setQuestDataUpdate((prevState) => ({
-			...prevState,
-			objectives: newObjectives,
-		}));
+		if (questDataUpdate.objectives.length === 1) {
+			setQuestDataUpdate({
+				...questDataUpdate,
+				objectives: [{ description: '' }]
+			})
+		} else {
+			const newObjectives = questDataUpdate.objectives.filter((_, i) => i !== index);
+			setQuestDataUpdate((prevState) => ({
+				...prevState,
+				objectives: newObjectives,
+			}));
+		}
 	};
 
 	const handleChange = (e) => {
