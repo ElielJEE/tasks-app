@@ -39,8 +39,6 @@ class CheckTaskStatus extends Command
     
             // Si la fecha actual es igual o mayor al límite y la tarea sigue pendiente
             if ($now->greaterThanOrEqualTo($taskDeadline)) {
-                // Marcar como fallida
-                $task->update(['status' => 'fallida']);
     
                 // Reducir vida del usuario
                 $user = $task->user;
