@@ -51,7 +51,7 @@ class StatsController extends Model
                 $statistics->increment('total_experience', $amount);
                 break;
             case 'current_level':
-                $statistics->update(['current_level' => $this->level]);
+                $statistics->update(['current_level', $amount]);
                 break;
             default:
                 throw new \InvalidArgumentException('Invalid statistic type');
