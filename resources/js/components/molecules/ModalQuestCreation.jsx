@@ -18,6 +18,7 @@ export default function ModalQuestCreation({ showModal }) {
 		status: 'activo',
 		objectives: [{ description: '' }]
 	})
+	const [errors, setErrors] = useState({})
 
 	const handleCloseModal = () => {
 		setCloseModal(false)
@@ -38,6 +39,7 @@ export default function ModalQuestCreation({ showModal }) {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		setErrors({})
 
 		const filterObjectives = questData.objectives.filter(
 			(objective) => objective.description.trim() !== ''
@@ -71,6 +73,7 @@ export default function ModalQuestCreation({ showModal }) {
 			setCloseModal(false)
 			navigate('/quests', { state: { showModal: false } })
 		} else {
+			setErrors(result.errors)
 			console.log(result.errors);
 		}
 	}
@@ -119,6 +122,11 @@ export default function ModalQuestCreation({ showModal }) {
 						onChange={handleChange}
 					/>
 				</div>
+				{errors.name && (
+					<span className="field-container__field-error">
+						{errors.name}
+					</span>
+				)}
 				<div className="form-quest-container__form-row">
 					<textarea
 						className="form-quest-container__form-row__textarea-quest"
@@ -156,6 +164,11 @@ export default function ModalQuestCreation({ showModal }) {
 						onChange={handleChange}
 					/>
 				</div>
+				{errors.start_date && (
+					<span className="field-container__field-error">
+						{errors.start_date}
+					</span>
+				)}
 				<div className="form-quest-container__form-row">
 					<label className="form-quest-container__form-row__label-quest" htmlFor="end_date">Fecha limite:</label>
 					<input
@@ -167,6 +180,11 @@ export default function ModalQuestCreation({ showModal }) {
 						onChange={handleChange}
 					/>
 				</div>
+				{errors.end_date && (
+					<span className="field-container__field-error">
+						{errors.end_date}
+					</span>
+				)}
 				{
 					questData.objectives.map((item, index) => (
 						<div key={index} className="form-quest-container__form-row">

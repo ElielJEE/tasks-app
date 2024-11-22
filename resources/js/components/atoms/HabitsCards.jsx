@@ -64,6 +64,7 @@ export default function HabitsCards({ title, count, id }) {
 
 		const dataToUpdate = {
 			...habitDataUpdate,
+			count: count,
 			id
 		}
 

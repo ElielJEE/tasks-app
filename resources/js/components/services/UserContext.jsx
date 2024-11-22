@@ -44,10 +44,10 @@ export const UserProvider = ({ children }) => {
 					setLevelUp(updatedUser.level);
 					playSound('/sounds/Level-Up.mp3');
 					setTimeout(() => setLevelUp(0), 3000);
-				} else {
+				} /* else {
 					playSound('/sounds/GameOver.mp3');
 					setGameOver(true);
-				}
+				} */
 			}
 		}
 		setUserData((prevUser) => ({ ...prevUser, ...updatedUser }));
