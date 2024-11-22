@@ -16,6 +16,7 @@ const CreateTask = async (token, data) => {
 			const data = await response.json();
 			return { success: true, data };
 		} else {
+			console.log("hola desde create")
 			const errorData = await response.json();
 			return { success: false, errors: errorData.errors || ['Creation of task failed'] };
 		}

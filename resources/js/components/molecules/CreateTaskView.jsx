@@ -98,11 +98,12 @@ export default function CreateTaskView({ func }) {
       navigate('/tasks', { state: { showModal: false } })
     } else {
       setErrors(result.errors)
+      console.log(result.errors)
     }
 
   };
 
-  console.log(taskData);
+  console.log(errors);
 
   return (
     <div className="form-task-container s-container">
@@ -129,7 +130,11 @@ export default function CreateTaskView({ func }) {
             placeholder='Titulo de la tarea'
           />
         </div>
-
+        {errors.title && (
+          <span className="field-container__field-error">
+            {errors.title}
+          </span>
+        )}
         <div className="form-task-container__form-task__form-row">
           <textarea
             className="form-task-container__form-task__form-row__textarea-task"

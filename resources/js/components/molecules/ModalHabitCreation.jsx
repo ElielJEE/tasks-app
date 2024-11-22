@@ -78,6 +78,11 @@ export default function ModalHabitCreation({ showModal }) {
 						placeholder='Titulo del habito'
 					/>
 				</div>
+				{errors.title && (
+					<span className="field-container__field-error">
+						{errors.title}
+					</span>
+				)}
 				<button
 					type="button"
 					className="form-habit-container__submit-btn"
